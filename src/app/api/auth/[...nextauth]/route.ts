@@ -1,5 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { getInjection } from "../../../../../di/container";
 
 export const authOptions = {
     providers: [
@@ -9,8 +10,17 @@ export const authOptions = {
         })
     ],
     callbacks: {
-        signIn(params) {
-            console.log("signIn", params);
+        async signIn({user}) {
+            const authService = getInjection("IAuthService");
+            const userReturned = await authService.signIn({
+                image: user.image,
+                name: user.name!,
+                email: user.email!,
+                role: "STUDENT"
+            });
+
+            console.log("signIn", userReturned);
+
             return true;
         },
     }

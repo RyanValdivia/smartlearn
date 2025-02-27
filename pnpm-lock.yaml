@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@evyweb/ioctopus':
+        specifier: ^1.2.0
+        version: 1.2.0
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
@@ -17,6 +20,9 @@ importers:
       drizzle-orm:
         specifier: ^0.39.3
         version: 0.39.3(pg@8.13.3)(postgres@3.4.5)
+      drizzle-zod:
+        specifier: ^0.7.0
+        version: 0.7.0(drizzle-orm@0.39.3(pg@8.13.3)(postgres@3.4.5))(zod@3.24.2)
       next:
         specifier: 15.1.7
         version: 15.1.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -391,6 +397,9 @@ packages:
   '@eslint/plugin-kit@0.2.7':
     resolution: {integrity: sha512-JubJ5B2pJ4k4yGxaNLdbjrnk9d/iDz6/q8wOilpIowd6PJPgaxCuHBnBszq7Ce2TyMrywm5r4PnKm6V3iiZF+g==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@evyweb/ioctopus@1.2.0':
+    resolution: {integrity: sha512-OIISYUx7WZDm6uxQkVsKmNF13tEiA3gbUeboTkr4LUTmJffhSVswiWAs8Ng5DoyvUlmgteTYcHP5XzOtrPTxLw==}
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -1037,6 +1046,12 @@ packages:
         optional: true
       sqlite3:
         optional: true
+
+  drizzle-zod@0.7.0:
+    resolution: {integrity: sha512-xgCRYYVEzRkeXTS33GSMgoowe3vKsMNBjSI+cwG1oLQVEhAWWbqtb/AAMlm7tkmV4fG/uJjEmWzdzlEmTgWOoQ==}
+    peerDependencies:
+      drizzle-orm: '>=0.36.0'
+      zod: '>=3.0.0'
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -2441,6 +2456,8 @@ snapshots:
       '@eslint/core': 0.12.0
       levn: 0.4.1
 
+  '@evyweb/ioctopus@1.2.0': {}
+
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.6':
@@ -2988,6 +3005,11 @@ snapshots:
     optionalDependencies:
       pg: 8.13.3
       postgres: 3.4.5
+
+  drizzle-zod@0.7.0(drizzle-orm@0.39.3(pg@8.13.3)(postgres@3.4.5))(zod@3.24.2):
+    dependencies:
+      drizzle-orm: 0.39.3(pg@8.13.3)(postgres@3.4.5)
+      zod: 3.24.2
 
   dunder-proto@1.0.1:
     dependencies:
