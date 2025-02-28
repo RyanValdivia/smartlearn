@@ -43,7 +43,7 @@ importers:
         version: 3.24.2
     devDependencies:
       '@eslint/eslintrc':
-        specifier: ^3
+        specifier: ^3.3.0
         version: 3.3.0
       '@types/node':
         specifier: ^20
@@ -54,12 +54,21 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.0.4(@types/react@19.0.10)
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^8.25.0
+        version: 8.25.0(@typescript-eslint/parser@8.25.0(eslint@9.21.0(jiti@1.21.7))(typescript@5.7.3))(eslint@9.21.0(jiti@1.21.7))(typescript@5.7.3)
+      '@typescript-eslint/parser':
+        specifier: ^8.25.0
+        version: 8.25.0(eslint@9.21.0(jiti@1.21.7))(typescript@5.7.3)
       eslint:
         specifier: ^9.21.0
         version: 9.21.0(jiti@1.21.7)
       eslint-config-next:
         specifier: 15.1.7
         version: 15.1.7(eslint@9.21.0(jiti@1.21.7))(typescript@5.7.3)
+      eslint-plugin-custom-rules:
+        specifier: ^0.0.0
+        version: 0.0.0
       postcss:
         specifier: ^8
         version: 8.5.3
@@ -1167,6 +1176,10 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
 
+  eslint-plugin-custom-rules@0.0.0:
+    resolution: {integrity: sha512-AWzQCMQK36n/Jv0ClVdVIBo8PZ2CtxQ8zejuVC6eh0vwVeZ3F9SY5ZoNULpu/E06nYN+bZ1EfEudGQPSR3AxZA==}
+    engines: {node: '>=0.10.0'}
+
   eslint-plugin-import@2.31.0:
     resolution: {integrity: sha512-ixmkI62Rbc2/w8Vfxyh1jQRTdRTF52VxwRVHl/ykPAmqG+Nb7/kNn+byLP0LxPgI7zWA16Jt82SybJInmMia3A==}
     engines: {node: '>=4'}
@@ -1545,6 +1558,10 @@ packages:
     resolution: {integrity: sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA==}
     hasBin: true
 
+  jsx-ast-utils@1.4.1:
+    resolution: {integrity: sha512-0LwSmMlQjjUdXsdlyYhEfBJCn2Chm0zgUBmfmf1++KUULh+JOdlzrZfiwe2zmlVJx44UF+KX/B/odBoeK9hxmw==}
+    engines: {node: '>=4.0'}
+
   jsx-ast-utils@3.3.5:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
@@ -1576,6 +1593,9 @@ packages:
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
+
+  lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
 
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -1931,6 +1951,10 @@ packages:
   regexp.prototype.flags@1.5.4:
     resolution: {integrity: sha512-dYqgNSZbDwkaJ2ceRd9ojCGjBq+mOm9LmtXnAnEGyHhN/5R7iDW2TRw3h+o/jCFxus3P2LfWIIiwowAjANm7IA==}
     engines: {node: '>= 0.4'}
+
+  requireindex@1.1.0:
+    resolution: {integrity: sha512-LBnkqsDE7BZKvqylbmn7lTIVdpx4K/QCduRATpO5R+wtPmky/a8pN1bO2D6wXppn1497AJF9mNjqAXr6bdl9jg==}
+    engines: {node: '>=0.10.5'}
 
   resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
@@ -3240,6 +3264,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  eslint-plugin-custom-rules@0.0.0:
+    dependencies:
+      jsx-ast-utils: 1.4.1
+      lodash: 4.17.21
+      object-assign: 4.1.1
+      requireindex: 1.1.0
+
   eslint-plugin-import@2.31.0(@typescript-eslint/parser@8.25.0(eslint@9.21.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-typescript@3.8.3)(eslint@9.21.0(jiti@1.21.7)):
     dependencies:
       '@rtsao/scc': 1.1.0
@@ -3709,6 +3740,8 @@ snapshots:
     dependencies:
       minimist: 1.2.8
 
+  jsx-ast-utils@1.4.1: {}
+
   jsx-ast-utils@3.3.5:
     dependencies:
       array-includes: 3.1.8
@@ -3740,6 +3773,8 @@ snapshots:
       p-locate: 5.0.0
 
   lodash.merge@4.6.2: {}
+
+  lodash@4.17.21: {}
 
   loose-envify@1.4.0:
     dependencies:
@@ -4094,6 +4129,8 @@ snapshots:
       get-proto: 1.0.1
       gopd: 1.2.0
       set-function-name: 2.0.2
+
+  requireindex@1.1.0: {}
 
   resolve-from@4.0.0: {}
 
