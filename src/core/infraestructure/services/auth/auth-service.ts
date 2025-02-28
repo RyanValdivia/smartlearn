@@ -1,6 +1,6 @@
-import { IUsersRepository } from "@/core/application/repositories/user/users-repository";
-import { IAuthService } from "@/core/application/services/auth/auth-service";
-import { CreateUser, User } from "@/core/entities/models/user/user";
+import { type IUsersRepository } from "@/core/application/repositories/user/users-repository";
+import { type IAuthService } from "@/core/application/services/auth/auth-service";
+import { type CreateUser, type User } from "@/core/entities/models/user/user";
 
 export class AuthService implements IAuthService {
     constructor(
