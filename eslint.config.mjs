@@ -1,24 +1,23 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
 const skipLint = false;
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "plugin:@typescript-eslint/recommended"),
   {
-    parser: "@typescript-eslint/parser",
-    parserOptions: {
-      tsconfigRootDir: __dirname,
+    languageOptions: {
+      parser: await import("@typescript-eslint/parser"),
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+      },
     },
-    plugins: ["@typescript-eslint", "custom-rules"],
+    plugins: {
+      "@typescript-eslint": await import("@typescript-eslint/eslint-plugin"),
+      "custom-rules": await import("eslint-plugin-custom-rules"),
+    },
     rules: {
       "@typescript-eslint/consistent-type-imports": skipLint
         ? "off"
@@ -34,7 +33,6 @@ const eslintConfig = [
         : ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
       "@typescript-eslint/no-explicit-any": skipLint ? "off" : "error",
       "custom-rules/no-object-concat": "off",
-      "custom-rules/no-prisma-enums": "error",
       "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/no-empty-interface": "off",
     },
