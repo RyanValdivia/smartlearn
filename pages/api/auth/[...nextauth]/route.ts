@@ -1,6 +1,6 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { getInjection } from "../../../../../di/container";
+import { getInjection } from "../../../../di/container";
 
 export const authOptions = {
     providers: [

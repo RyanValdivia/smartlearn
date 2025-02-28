@@ -11,6 +11,7 @@
     "migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.8.0",
     "@evyweb/ioctopus": "^1.2.0",
     "dotenv": "^16.4.7",
     "drizzle-kit": "^0.30.4",
