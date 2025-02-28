@@ -1,6 +1,6 @@
 import { usersTable } from "../../../../../drizzle";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { z } from "zod";
+import { type z } from "zod";
 
 export const userSchema = createSelectSchema(usersTable).omit(
     {
