@@ -1,3 +1,2 @@
 export { db } from "./client";
-export * from "./schemas/user";
-
+export * from "./schemas/auth";
