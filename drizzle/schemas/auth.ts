@@ -10,6 +10,7 @@ import { pgEnum } from "drizzle-orm/pg-core";
 import { timestamp } from "drizzle-orm/pg-core";
 import { uuid } from "drizzle-orm/pg-core";
 import { pgTable } from "drizzle-orm/pg-core";
+import { studentsTable } from "./student";
 
 export const usersRoles = pgEnum("user_role", ["ADMIN", "STUDENT", "TEACHER"]);
 
@@ -17,10 +18,10 @@ export const usersTable = pgTable("users", {
     id: uuid().defaultRandom().primaryKey(),
     name: varchar({ length: 255 }).notNull(),
     email: varchar({ length: 255 }).notNull().unique(),
-    emailVerified: timestamp("email_verified"),
+    emailVerified: timestamp(),
     image: varchar({ length: 255 }),
 
-    role: usersRoles("role").notNull().default("STUDENT"),
+    role: usersRoles().notNull().default("STUDENT"),
     createdAt: timestamp().defaultNow(),
     updatedAt: timestamp()
         .defaultNow()
@@ -30,19 +31,19 @@ export const usersTable = pgTable("users", {
 export const accountsTable = pgTable(
     "accounts",
     {
-        userId: uuid("user_id").notNull(),
+        userId: uuid().notNull(),
         type: varchar({ length: 255 }).notNull(),
         provider: varchar({ length: 255 }).notNull(),
-        providerAccountId: varchar("provider_account_id", {
+        providerAccountId: varchar({
             length: 255,
         }).notNull(),
-        refresh_token: text("refresh_token"),
-        access_token: text("access_token"),
-        expires_at: integer("expires_at"),
-        token_type: varchar("token_type", { length: 255 }),
+        refresh_token: text("refreshToken"),
+        access_token: text("accessToken"),
+        expires_at: integer("expiresAt"),
+        token_type: varchar("tokenType", { length: 255 }),
         scope: varchar({ length: 255 }),
-        id_token: text("id_token"),
-        session_state: varchar("session_state", { length: 255 }),
+        id_token: text("idToken"),
+        session_state: varchar("sessionState", { length: 255 }),
     },
     (account) => [
         primaryKey({
@@ -52,10 +53,8 @@ export const accountsTable = pgTable(
 );
 
 export const sessionsTable = pgTable("sessions", {
-    sessionToken: varchar("session_token", { length: 255 })
-        .notNull()
-        .primaryKey(),
-    userId: uuid("user_id").notNull(),
+    sessionToken: varchar({ length: 255 }).notNull().primaryKey(),
+    userId: uuid().notNull(),
     expires: timestamp().notNull(),
 });
 
@@ -75,9 +74,12 @@ export const verificationTokensTable = pgTable(
 
 // ? Relations
 
-export const usersRelations = relations(usersTable, ({ many }) => ({
+export const usersRelations = relations(usersTable, ({ one, many }) => ({
     accounts: many(accountsTable),
     sessions: many(sessionsTable),
+
+    student: one(studentsTable),
+    teacher: one(studentsTable),
 }));
 
 export const accountsRelations = relations(accountsTable, ({ one }) => ({
