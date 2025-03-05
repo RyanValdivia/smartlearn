@@ -1,5 +1,5 @@
 import { type IUsersRepository } from "@/core/application/repositories/user/users-repository";
-import { type CreateUser, type User } from "@/core/entities/models/user/schemas/user";
+import { type CreateUser, type User } from "@/core/components/user/schemas/user";
 import { db, usersTable } from "../../../../../drizzle";
 import { eq } from "drizzle-orm";
 

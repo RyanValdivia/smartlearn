@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { FcGoogle } from "react-icons/fc";
-import { LogInForm } from "../core/entities/models/user/forms/form";
+import { LogInForm } from "../core/components/user/forms/form";
 
 export default function SignInForm() {
     const searchParams = useSearchParams();
@@ -47,7 +47,9 @@ export default function SignInForm() {
                         Inicia sesión en tu cuenta para continuar
                     </p>
                 </div>
+
                 <LogInForm />
+                
                 <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                     <span className="relative z-10 bg-background px-2 text-muted-foreground">
                         O
