@@ -1,13 +1,13 @@
 import NextAuth, { NextAuthOptions, type AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { db } from "@@/drizzle/client";
 import {
     accountsTable,
-    db,
     sessionsTable,
     usersTable,
     verificationTokensTable,
-} from "../../../drizzle";
+} from "@@/drizzle/schemas/auth";
 
 export const authOptions = {
     providers: [

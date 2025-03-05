@@ -9,9 +9,9 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { logInSchema } from "./form-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { logInSchema } from "../schemas/user";
 
 function onSubmit(values: z.infer<typeof logInSchema>) {
     console.log(values);
