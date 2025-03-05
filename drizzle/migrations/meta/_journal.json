@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1740963440707,
+      "tag": "0000_add_auth_models",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1740973772814,
+      "tag": "0001_add_student_teacher_models",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1740977392871,
+      "tag": "0002_add_section_lecture_subject_models",
+      "breakpoints": true
+    }
+  ]
+}
