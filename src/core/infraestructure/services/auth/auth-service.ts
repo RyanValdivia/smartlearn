@@ -4,14 +4,14 @@ import { type CreateUser, type User } from "@/core/entities/models/user/user";
 
 export class AuthService implements IAuthService {
     constructor(
-        private readonly usersRepository: IUsersRepository 
+        private readonly usersRepository: IUsersRepository,
     ) {}
 
-    async signIn(input: CreateUser) : Promise<User> {
+    async signIn(input: CreateUser): Promise<User> {
         let user = await this.usersRepository.findUserByEmail(input.email);
 
         if (!user) {
-            user =  await this.usersRepository.createUser(input);
+            user = await this.usersRepository.createUser(input);
         }
 
         return user;
