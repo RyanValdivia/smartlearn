@@ -1,11 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-    integer,
-    primaryKey,
-    text,
-    unique,
-    varchar,
-} from "drizzle-orm/pg-core";
+import { integer, primaryKey, text, varchar } from "drizzle-orm/pg-core";
 import { pgEnum } from "drizzle-orm/pg-core";
 import { timestamp } from "drizzle-orm/pg-core";
 import { uuid } from "drizzle-orm/pg-core";
