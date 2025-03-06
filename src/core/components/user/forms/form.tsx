@@ -1,4 +1,3 @@
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -9,9 +8,10 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { logInSchema } from "./form-schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { logInSchema } from "../schemas/user";
+import { type z } from "zod";
 
 function onSubmit(values: z.infer<typeof logInSchema>) {
     console.log(values);

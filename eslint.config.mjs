@@ -2,6 +2,7 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import stylistic from "@stylistic/eslint-plugin";
+import prettier from "eslint-config-prettier";
 
 const skipLint = false;
 
@@ -9,7 +10,6 @@ const skipLint = false;
 export default [
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    "prettier",
     {
         files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
         languageOptions: { globals: globals.browser },
@@ -24,15 +24,18 @@ export default [
                           fixStyle: "inline-type-imports",
                       },
                   ],
-            "@typescript-eslint/no-unused-vars": skipLint
-                ? "off"
-                : [
-                      "error",
-                      {
-                          argsIgnorePattern: "^_",
-                          varsIgnorePattern: "^_",
-                      },
-                  ],
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    args: "all",
+                    argsIgnorePattern: "^_",
+                    caughtErrors: "all",
+                    caughtErrorsIgnorePattern: "^_",
+                    destructuredArrayIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    ignoreRestSiblings: true,
+                },
+            ],
             "@typescript-eslint/no-explicit-any": skipLint ? "off" : "error",
             "custom-rules/no-object-concat": "off",
             "@typescript-eslint/no-empty-object-type": "off",
@@ -67,4 +70,5 @@ export default [
             ],
         },
     },
+    prettier,
 ];
