@@ -1,7 +1,7 @@
 import { createModule } from "@evyweb/ioctopus";
 import { DI_SYMBOLS } from "../types";
-import { AuthService } from "@/core/infraestructure/services/auth/auth-service";
-import { UsersRepository } from "@/core/infraestructure/repositories/user/users-repository";
+import { UsersRepository } from "@/core/modules/auth/infraestructure/repositories/user-repository";
+import { AuthService } from "@/core/modules/auth/infraestructure/services/auth-service";
 
 export function createAuthModule() {
     const authModule = createModule();
@@ -9,9 +9,7 @@ export function createAuthModule() {
     if (process.env.NODE_ENV === "test") {
         // TODO: Implement test module
     } else {
-        authModule
-            .bind(DI_SYMBOLS.IUsersRepository)
-            .toClass(UsersRepository);
+        authModule.bind(DI_SYMBOLS.IUsersRepository).toClass(UsersRepository);
         authModule
             .bind(DI_SYMBOLS.IAuthService)
             .toClass(AuthService, [DI_SYMBOLS.IUsersRepository]);

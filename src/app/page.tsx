@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 export default function Home() {
     const { data: session } = useSession();
 
-    if (!!session) return redirect("/dashboard");
+    if (session) return redirect("/dashboard");
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
