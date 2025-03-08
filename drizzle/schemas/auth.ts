@@ -16,7 +16,7 @@ export const usersTable = pgTable("users", {
     image: varchar({ length: 255 }),
 
     dni: varchar({ length: 8 }).unique(),
-    password: varchar({ length: 255 }).notNull(),
+    password: varchar({ length: 255 }),
 
     role: usersRoles().notNull().default("STUDENT"),
     createdAt: timestamp().defaultNow(),

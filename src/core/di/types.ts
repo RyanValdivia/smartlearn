@@ -1,5 +1,5 @@
-import { type IUsersRepository } from "@/core/application/repositories/user/users-repository";
-import { type IAuthService } from "@/core/application/services/auth/auth-service";
+import { type IUsersRepository } from "../modules/auth/application/repositories/user-repository";
+import { type IAuthService } from "../modules/auth/application/services/auth-service";
 
 export const DI_SYMBOLS = {
     // Repositories

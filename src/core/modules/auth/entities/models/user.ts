@@ -17,10 +17,8 @@ export const createUserSchema = createInsertSchema(usersTable).omit({
 
 export type CreateUser = z.infer<typeof createUserSchema>;
 
-//auth schemas
-
 export const logInSchema = z.object({
-    userIdentificator: z
+    dni: z
         .string()
         .min(2, {
             message: "El identificador debe tener al menos 2 caracteres",
@@ -35,3 +33,5 @@ export const logInSchema = z.object({
             message: "La contraseña debe tener menos de 50 caracteres",
         }),
 });
+
+export type LogIn = z.infer<typeof logInSchema>;
