@@ -10,8 +10,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { logInSchema } from "../schemas/user";
 import { type z } from "zod";
+import { logInSchema } from "@/core/modules/auth/entities/models/user";
 
 function onSubmit(values: z.infer<typeof logInSchema>) {
     console.log(values);
@@ -21,7 +21,7 @@ export function LogInForm() {
     const form = useForm<z.infer<typeof logInSchema>>({
         resolver: zodResolver(logInSchema),
         defaultValues: {
-            userIdentificator: "",
+            dni: "",
             password: "",
         },
     });
@@ -31,7 +31,7 @@ export function LogInForm() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
-                    name="userIdentificator"
+                    name="dni"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Username</FormLabel>

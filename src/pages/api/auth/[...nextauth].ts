@@ -48,6 +48,9 @@ export const authOptions = {
             return !authService.userAlreadyExists(user.email || "");
         },
     },
+    pages: {
+        signIn: "/",
+    },
 } as NextAuthOptions;
 
 export default NextAuth(authOptions);
