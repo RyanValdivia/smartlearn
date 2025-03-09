@@ -11,9 +11,9 @@ import {
 } from "@@/drizzle/schemas/auth";
 import { getInjection } from "@/core/di/container";
 
-const authService = getInjection("IAuthService");
+const authController = getInjection("AuthController");
 
-export const authOptions = {
+const authOptions = {
     providers: [
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -26,14 +26,7 @@ export const authOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                if (!credentials) {
-                    return null;
-                }
-
-                return authService.logIn({
-                    password: credentials.password,
-                    dni: credentials.username,
-                });
+                return authController.logIn(credentials);
             },
         }),
     ],
@@ -45,7 +38,7 @@ export const authOptions = {
     }),
     callbacks: {
         async signIn({ user }) {
-            return !authService.userAlreadyExists(user.email || "");
+            return authController.userAlreadyExists(user.email);
         },
     },
     pages: {
@@ -53,4 +46,6 @@ export const authOptions = {
     },
 } as NextAuthOptions;
 
-export default NextAuth(authOptions);
+const handler = NextAuth(authOptions);
+
+export { handler as GET, handler as POST };
