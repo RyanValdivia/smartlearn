@@ -35,3 +35,8 @@ export const logInSchema = z.object({
 });
 
 export type LogIn = z.infer<typeof logInSchema>;
+
+export type GetAllResponse = {
+    users: User[];
+    total: number;
+};
