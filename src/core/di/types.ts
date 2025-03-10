@@ -1,3 +1,4 @@
+import { type IAccountsRepository } from "../modules/auth/application/repositories/account-repository";
 import { type IUsersRepository } from "../modules/auth/application/repositories/user-repository";
 import { type IAuthService } from "../modules/auth/application/services/auth-service";
 import { type IUsersService } from "../modules/auth/application/services/user-service";
@@ -7,6 +8,7 @@ import { type UsersController } from "../modules/auth/controllers/user-controlle
 export const DI_SYMBOLS = {
     // Repositories
     IUsersRepository: Symbol.for("IUserRepository"),
+    IAccountsRepository: Symbol.for("IAccountsRepository"),
 
     // Services
     IAuthService: Symbol.for("IAuthService"),
@@ -20,6 +22,7 @@ export const DI_SYMBOLS = {
 export interface DI_RETURN_TYPES {
     // Repositories
     IUsersRepository: IUsersRepository;
+    IAccountsRepository: IAccountsRepository;
 
     // Services
     IAuthService: IAuthService;

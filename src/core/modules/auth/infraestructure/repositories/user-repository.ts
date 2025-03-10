@@ -71,10 +71,13 @@ export class UsersRepository implements IUsersRepository {
 
         const total = await db.$count(usersTable, selectQuery);
 
-        const users = await db.query.users.findMany({
+        const users = await db.query.usersTable.findMany({
             where: selectQuery,
             limit: PAGE_SIZE,
             offset: page ? (page - 1) * PAGE_SIZE : 0,
+            with: {
+                accounts: true,
+            },
         });
 
         return {

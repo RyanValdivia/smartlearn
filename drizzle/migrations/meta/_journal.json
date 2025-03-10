@@ -29,6 +29,13 @@
       "when": 1741312961852,
       "tag": "0003_modify_user_model",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1741571432168,
+      "tag": "0004_modify_dni_field_user_model",
+      "breakpoints": true
     }
   ]
 }
