@@ -4,7 +4,6 @@ import tseslint from "typescript-eslint";
 import stylistic from "@stylistic/eslint-plugin";
 import prettier from "eslint-config-prettier";
 import pluginQuery from "@tanstack/eslint-plugin-query";
-
 const skipLint = false;
 
 /** @type {import('eslint').Linter.Config[]} */

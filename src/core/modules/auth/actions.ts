@@ -1,9 +1,9 @@
-"use server";
+// "use server";
 
-import { getInjection } from "@/core/di/container";
+// import { getInjection } from "@/core/di/container";
 
-export async function signIn() {
-    const userController = getInjection("UsersController");
+// export async function signIn() {
+//     const userController = getInjection("UsersController");
 
-    return await userController.createUser({});
-}
+//     return await userController.createUser({});
+// }

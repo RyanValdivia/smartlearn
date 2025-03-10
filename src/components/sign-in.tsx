@@ -1,21 +1,10 @@
 "use client";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { toast } from "sonner";
 import { FcGoogle } from "react-icons/fc";
 import { LogInForm } from "../core/components/user/forms/form";
 
 export default function SignInForm() {
-    const searchParams = useSearchParams();
-
-    useEffect(() => {
-        if (searchParams?.get("message") === "authentication_required") {
-            toast.error("Debes iniciar sesión para continuar");
-        }
-    }, [searchParams]);
-
     const handleGoogleLogin = async () => {
         await signIn("google");
     };

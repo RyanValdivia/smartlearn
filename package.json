@@ -62,6 +62,7 @@
     "devDependencies": {
         "@eslint/eslintrc": "^3.3.0",
         "@eslint/js": "^9.21.0",
+        "@next/eslint-plugin-next": "^15.2.1",
         "@tanstack/eslint-plugin-query": "^5.67.2",
         "@types/node": "^20",
         "@types/pg": "^8.11.11",
