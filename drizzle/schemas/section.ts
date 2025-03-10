@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import {
-    boolean,
     integer,
     pgTable,
     primaryKey,
@@ -10,7 +9,7 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 import { cyclesTable } from "./cycle";
-import { usersTable } from "./auth";
+import { studentsTable } from "./student";
 
 export const sectionsTable = pgTable("sections", {
     id: serial().primaryKey(),
@@ -54,9 +53,9 @@ export const sectionsToStudentsRelations = relations(
             fields: [sectionsToStudentsTable.sectionId],
             references: [sectionsTable.id],
         }),
-        student: one(usersTable, {
+        student: one(studentsTable, {
             fields: [sectionsToStudentsTable.studentId],
-            references: [usersTable.id],
+            references: [studentsTable.id],
         }),
     }),
 );

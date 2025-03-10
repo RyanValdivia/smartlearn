@@ -1,0 +1,1 @@
+ALTER TABLE "sessions" ALTER COLUMN "sessionRole" DROP NOT NULL;

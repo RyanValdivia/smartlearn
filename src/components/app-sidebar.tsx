@@ -1,0 +1,157 @@
+"use client";
+
+import * as React from "react";
+import {
+    BookOpen,
+    Bot,
+    Frame,
+    Map,
+    PieChart,
+    Settings2,
+    SquareTerminal,
+} from "lucide-react";
+
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarRail,
+} from "@/components/ui/sidebar";
+import { RoleSwitcher } from "./role-switcher";
+import { type AdapterUser } from "next-auth/adapters";
+import { logger } from "@/core/logger";
+import { type UserRole } from "@@/drizzle/schemas/auth";
+const data = {
+    navMain: [
+        {
+            title: "Playground",
+            url: "#",
+            icon: SquareTerminal,
+            isActive: true,
+            items: [
+                {
+                    title: "History",
+                    url: "#",
+                },
+                {
+                    title: "Starred",
+                    url: "#",
+                },
+                {
+                    title: "Settings",
+                    url: "#",
+                },
+            ],
+        },
+        {
+            title: "Models",
+            url: "#",
+            icon: Bot,
+            items: [
+                {
+                    title: "Genesis",
+                    url: "#",
+                },
+                {
+                    title: "Explorer",
+                    url: "#",
+                },
+                {
+                    title: "Quantum",
+                    url: "#",
+                },
+            ],
+        },
+        {
+            title: "Documentation",
+            url: "#",
+            icon: BookOpen,
+            items: [
+                {
+                    title: "Introduction",
+                    url: "#",
+                },
+                {
+                    title: "Get Started",
+                    url: "#",
+                },
+                {
+                    title: "Tutorials",
+                    url: "#",
+                },
+                {
+                    title: "Changelog",
+                    url: "#",
+                },
+            ],
+        },
+        {
+            title: "Settings",
+            url: "#",
+            icon: Settings2,
+            items: [
+                {
+                    title: "General",
+                    url: "#",
+                },
+                {
+                    title: "Team",
+                    url: "#",
+                },
+                {
+                    title: "Billing",
+                    url: "#",
+                },
+                {
+                    title: "Limits",
+                    url: "#",
+                },
+            ],
+        },
+    ],
+    projects: [
+        {
+            name: "Design Engineering",
+            url: "#",
+            icon: Frame,
+        },
+        {
+            name: "Sales & Marketing",
+            url: "#",
+            icon: PieChart,
+        },
+        {
+            name: "Travel",
+            url: "#",
+            icon: Map,
+        },
+    ],
+};
+
+export function AppSidebar({
+    accessibleRoles,
+    user,
+    ...props
+}: React.ComponentProps<typeof Sidebar> & {
+    accessibleRoles: UserRole[];
+    user: AdapterUser;
+}) {
+    logger.debug("Accessible roles", accessibleRoles);
+    return (
+        <Sidebar collapsible="icon" {...props}>
+            <SidebarHeader>
+                <RoleSwitcher roles={accessibleRoles} />
+            </SidebarHeader>
+            <SidebarContent>
+                <NavMain items={data.navMain} />
+            </SidebarContent>
+            <SidebarFooter>
+                <NavUser user={user} />
+            </SidebarFooter>
+            <SidebarRail />
+        </Sidebar>
+    );
+}

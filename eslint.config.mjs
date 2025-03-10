@@ -3,6 +3,7 @@ import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import stylistic from "@stylistic/eslint-plugin";
 import prettier from "eslint-config-prettier";
+import pluginQuery from "@tanstack/eslint-plugin-query";
 
 const skipLint = false;
 
@@ -71,4 +72,5 @@ export default [
         },
     },
     prettier,
+    ...pluginQuery.configs["flat/recommended"],
 ];

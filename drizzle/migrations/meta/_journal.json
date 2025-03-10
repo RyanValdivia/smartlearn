@@ -36,6 +36,55 @@
       "when": 1741571432168,
       "tag": "0004_modify_dni_field_user_model",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1741617537613,
+      "tag": "0005_careful_fantastic_four",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1741617598288,
+      "tag": "0006_medical_kronos",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1741617643825,
+      "tag": "0007_goofy_professor_monster",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1741618063524,
+      "tag": "0008_romantic_tusk",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1741618287320,
+      "tag": "0009_wealthy_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1741619128849,
+      "tag": "0010_mixed_joshua_kane",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1741636966734,
+      "tag": "0011_curvy_tomas",
+      "breakpoints": true
     }
   ]
 }

@@ -5,8 +5,16 @@ import { timestamp } from "drizzle-orm/pg-core";
 import { uuid } from "drizzle-orm/pg-core";
 import { pgTable } from "drizzle-orm/pg-core";
 import { studentsTable } from "./student";
+import { enumToPgEnum } from "@/utils/types";
+import { cyclesTable } from "./cycle";
 
-export const usersRoles = pgEnum("user_role", ["ADMIN", "STUDENT", "TEACHER"]);
+export enum UserRole {
+    ADMIN = "ADMIN",
+    STUDENT = "STUDENT",
+    TEACHER = "TEACHER",
+}
+
+export const usersRoles = pgEnum("user_role", enumToPgEnum(UserRole));
 
 export const usersTable = pgTable("users", {
     id: uuid().defaultRandom().primaryKey(),
@@ -18,7 +26,7 @@ export const usersTable = pgTable("users", {
     dni: varchar({ length: 8 }).notNull().unique(),
     password: varchar({ length: 255 }),
 
-    role: usersRoles().notNull().default("STUDENT"),
+    role: usersRoles().notNull().default(UserRole.STUDENT),
     createdAt: timestamp().defaultNow(),
     updatedAt: timestamp()
         .defaultNow()
@@ -48,11 +56,13 @@ export const accountsTable = pgTable(
         }),
     ],
 );
-
+// permite nulos hasta que haigan mas datos en la bd
 export const sessionsTable = pgTable("sessions", {
     sessionToken: varchar({ length: 255 }).notNull().primaryKey(),
     userId: uuid().notNull(),
     expires: timestamp().notNull(),
+    sessionRole: usersRoles(),
+    cycleId: integer(),
 });
 
 export const verificationTokensTable = pgTable(
@@ -90,5 +100,9 @@ export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
     user: one(usersTable, {
         fields: [sessionsTable.userId],
         references: [usersTable.id],
+    }),
+    cycle: one(cyclesTable, {
+        fields: [sessionsTable.cycleId],
+        references: [cyclesTable.id],
     }),
 }));

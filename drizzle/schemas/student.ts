@@ -5,7 +5,10 @@ import { sectionsToStudentsTable } from "./section";
 
 export const studentsTable = pgTable("students", {
     id: uuid().primaryKey(),
-    userId: uuid().notNull().unique(),
+    userId: uuid()
+        .notNull()
+        .unique()
+        .references(() => usersTable.id, { onDelete: "cascade" }),
     dni: varchar({ length: 8 }).notNull(),
 
     createdAt: timestamp().defaultNow(),

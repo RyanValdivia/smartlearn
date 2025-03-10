@@ -1,4 +1,3 @@
-import { db } from "@/core/server/db";
 import {
     type GetAllResponse,
     type CreateUser,
@@ -9,6 +8,7 @@ import { eq, like, or } from "drizzle-orm";
 import { type IUsersRepository } from "../../application/repositories/user-repository";
 import { hashPassword } from "../../entities/models/hash";
 import { PAGE_SIZE } from "@/core/constants";
+import { db } from "@@/drizzle/client";
 
 export class UsersRepository implements IUsersRepository {
     async createUser(input: CreateUser): Promise<User> {

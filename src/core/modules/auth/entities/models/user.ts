@@ -1,4 +1,6 @@
 import { usersTable } from "@@/drizzle/schemas/auth";
+import { studentsTable } from "@@/drizzle/schemas/student";
+import { teachersTable } from "@@/drizzle/schemas/teacher";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -39,4 +41,24 @@ export type LogIn = z.infer<typeof logInSchema>;
 export type GetAllResponse = {
     users: User[];
     total: number;
+};
+
+//MOVE FILE TO A BEST ARCHITECTURE
+
+export const teacherSchema = createSelectSchema(teachersTable).omit({
+    createdAt: true,
+    updatedAt: true,
+});
+
+export type Teacher = z.infer<typeof teacherSchema>;
+
+export const studentSchema = createSelectSchema(studentsTable).omit({
+    createdAt: true,
+    updatedAt: true,
+});
+
+export type Student = z.infer<typeof studentSchema>;
+
+export type Admin = {
+    //TODO
 };
