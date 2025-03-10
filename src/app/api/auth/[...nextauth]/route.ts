@@ -37,12 +37,12 @@ const authOptions = {
         verificationTokensTable: verificationTokensTable,
     }),
     callbacks: {
-        async signIn({ user }) {
-            return authController.userAlreadyExists(user.email);
+        async signIn({ user, account }) {
+            return await authController.signIn(user.email, account!);
         },
     },
     pages: {
-        signIn: "/",
+        // signIn: "/",
     },
 } as NextAuthOptions;
 

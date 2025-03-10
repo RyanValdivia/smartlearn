@@ -5,6 +5,7 @@ import { AuthService } from "@/core/modules/auth/infraestructure/services/auth-s
 import { AuthController } from "@/core/modules/auth/controllers/auth-controller";
 import { UsersService } from "@/core/modules/auth/infraestructure/services/user-service";
 import { UsersController } from "@/core/modules/auth/controllers/user-controller";
+import { AccountsRepository } from "@/core/modules/auth/infraestructure/repositories/account-repository";
 
 export function createAuthModule() {
     const authModule = createModule();
@@ -13,10 +14,16 @@ export function createAuthModule() {
         // TODO: Implement test module
     } else {
         authModule.bind(DI_SYMBOLS.IUsersRepository).toClass(UsersRepository);
+        authModule
+            .bind(DI_SYMBOLS.IAccountsRepository)
+            .toClass(AccountsRepository);
 
         authModule
             .bind(DI_SYMBOLS.IAuthService)
-            .toClass(AuthService, [DI_SYMBOLS.IUsersRepository]);
+            .toClass(AuthService, [
+                DI_SYMBOLS.IUsersRepository,
+                DI_SYMBOLS.IAccountsRepository,
+            ]);
         authModule
             .bind(DI_SYMBOLS.IUsersService)
             .toClass(UsersService, [DI_SYMBOLS.IUsersRepository]);
