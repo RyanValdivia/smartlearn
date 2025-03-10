@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/sidebar";
 import { RoleSwitcher } from "./role-switcher";
 import { type AdapterUser } from "next-auth/adapters";
-import { logger } from "@/core/logger";
 import { type UserRole } from "@@/drizzle/schemas/auth";
 const data = {
     navMain: [
@@ -139,7 +138,6 @@ export function AppSidebar({
     accessibleRoles: UserRole[];
     user: AdapterUser;
 }) {
-    logger.debug("Accessible roles", accessibleRoles);
     return (
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
