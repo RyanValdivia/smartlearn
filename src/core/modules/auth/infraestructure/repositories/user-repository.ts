@@ -1,4 +1,4 @@
-import { db } from "@@/drizzle/client";
+import { db } from "@/core/server/db";
 import {
     type GetAllResponse,
     type CreateUser,
