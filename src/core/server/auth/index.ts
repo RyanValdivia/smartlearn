@@ -16,7 +16,7 @@ import {
     verificationTokensTable,
 } from "@@/drizzle/schemas/auth";
 import { getInjection } from "@/core/di/container";
-import { type Session } from "../../modules/auth/entities/models/session";
+import { type Session } from "../../api/session";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/core/routes";
 import { db } from "@@/drizzle/client";

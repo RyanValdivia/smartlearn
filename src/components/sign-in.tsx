@@ -2,7 +2,7 @@
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
-import { LogInForm } from "../core/components/user/forms/form";
+import { LogInForm } from "../core/api/users/components/form";
 
 export default function SignInForm() {
     const handleGoogleLogin = async () => {

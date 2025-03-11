@@ -1,9 +1,9 @@
-import { type IAccountsRepository } from "../modules/auth/application/repositories/account-repository";
-import { type IUsersRepository } from "../modules/auth/application/repositories/user-repository";
-import { type IAuthService } from "../modules/auth/application/services/auth-service";
-import { type IUsersService } from "../modules/auth/application/services/user-service";
-import { type AuthController } from "../modules/auth/controllers/auth-controller";
-import { type UsersController } from "../modules/auth/controllers/user-controller";
+import { type IAccountsRepository } from "../modules/auth/Domain/account-repository";
+import { type IUsersRepository } from "../modules/auth/Domain/user-repository";
+import { type IAuthService } from "../modules/auth/Domain/auth-service";
+import { type IUsersService } from "../modules/auth/Domain/user-service";
+import { type AuthController } from "../modules/auth/Application/Controllers/auth-controller";
+import { type UsersController } from "../modules/auth/Application/Controllers/user-controller";
 
 export const DI_SYMBOLS = {
     // Repositories

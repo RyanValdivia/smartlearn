@@ -1,35 +1,20 @@
-import {
-    type GetAllResponse,
-    type CreateUser,
-    type User,
-} from "../../entities/models/user";
-import { usersTable } from "@@/drizzle/schemas/auth";
-import { eq, like, or } from "drizzle-orm";
-import { type IUsersRepository } from "../../application/repositories/user-repository";
-import { hashPassword } from "../../entities/models/hash";
-import { PAGE_SIZE } from "@/core/constants";
+import { type GetManyUsersParams, type User } from "@/core/api/users/types";
+import { type IUsersRepository } from "../../Domain/user-repository";
 import { db } from "@@/drizzle/client";
-
+import { count, ilike, or, eq } from "drizzle-orm";
+import { usersTable } from "@@/drizzle/schemas/auth";
+import { type PaginationResponse } from "@/core/api";
+import { MAX_PAGINATION_SIZE } from "@/core/constants";
 export class UsersRepository implements IUsersRepository {
-    async createUser(input: CreateUser): Promise<User> {
-        if (input.dni && this.isValidDni(input.dni)) {
-            throw new Error("Invalid DNI");
-        }
-
-        const password = input.password
-            ? await hashPassword(input.password)
-            : "";
-
+    async existsUserByEmail(email: string): Promise<boolean> {
         const [user] = await db
-            .insert(usersTable)
-            .values({
-                ...input,
-                password,
-            })
-            .returning();
-        return user;
+            .select()
+            .from(usersTable)
+            .where(eq(usersTable.email, email))
+            .limit(1);
+        return !!user;
     }
-
+    
     async findUserByDni(dni: string): Promise<User | null> {
         const [user] = await db
             .select()
@@ -47,46 +32,63 @@ export class UsersRepository implements IUsersRepository {
             .limit(1);
         return user;
     }
+    async getMany(
+        params?: GetManyUsersParams,
+    ): Promise<PaginationResponse<User[]>> {
+        const { filters } = params || {};
+        const [users, totalResult] = await Promise.all([
+            db
+                .select()
+                .from(usersTable)
+                .where(
+                    filters?.fullTextSearch
+                        ? or(
+                              ilike(
+                                  usersTable.name,
+                                  `%${filters.fullTextSearch}%`,
+                              ),
+                              ilike(
+                                  usersTable.email,
+                                  `%${filters.fullTextSearch}%`,
+                              ),
+                              ilike(
+                                  usersTable.dni,
+                                  `%${filters.fullTextSearch}%`,
+                              ),
+                          )
+                        : undefined,
+                )
+                .limit(MAX_PAGINATION_SIZE)
+                .offset(
+                    filters?.page
+                        ? (filters.page - 1) * MAX_PAGINATION_SIZE
+                        : 0,
+                ),
+            db
+                .select({ count: count() })
+                .from(usersTable)
+                .where(
+                    filters?.fullTextSearch
+                        ? or(
+                              ilike(
+                                  usersTable.name,
+                                  `%${filters.fullTextSearch}%`,
+                              ),
+                              ilike(
+                                  usersTable.email,
+                                  `%${filters.fullTextSearch}%`,
+                              ),
+                              ilike(
+                                  usersTable.dni,
+                                  `%${filters.fullTextSearch}%`,
+                              ),
+                          )
+                        : undefined,
+                ),
+        ]);
 
-    async existsUserByEmail(email: string): Promise<boolean> {
-        const [user] = await db
-            .select()
-            .from(usersTable)
-            .where(eq(usersTable.email, email))
-            .limit(1);
-        return !!user;
-    }
+        const total = totalResult[0]?.count ?? 0;
 
-    async getFilteredUsers(
-        query: string | null,
-        page: number | null,
-    ): Promise<GetAllResponse> {
-        const selectQuery = query
-            ? or(
-                  like(usersTable.name, `%${query}%`),
-                  like(usersTable.email, `%${query}%`),
-                  like(usersTable.dni, `%${query}%`),
-              )
-            : undefined;
-
-        const total = await db.$count(usersTable, selectQuery);
-
-        const users = await db.query.usersTable.findMany({
-            where: selectQuery,
-            limit: PAGE_SIZE,
-            offset: page ? (page - 1) * PAGE_SIZE : 0,
-            with: {
-                accounts: true,
-            },
-        });
-
-        return {
-            total,
-            users,
-        };
-    }
-
-    private isValidDni(dni: string): boolean {
-        return /^\d+$/.test(dni) && dni.length === 8;
+        return { data: users, total };
     }
 }

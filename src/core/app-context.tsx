@@ -51,8 +51,8 @@ export const AppProvider = React.memo(
                 cycleId,
             } satisfies UpdateSessionPayload);
 
-            setRedirect(ROUTES.dashboard);
-            router.push(ROUTES.dashboard);
+            setRedirect(ROUTES.dashboard.url);
+            router.push(ROUTES.dashboard.url);
             router.refresh();
         }
 
@@ -62,8 +62,8 @@ export const AppProvider = React.memo(
                 ...SessionRoles[role],
             } satisfies UpdateSessionPayload);
 
-            setRedirect(ROUTES.dashboard);
-            router.push(ROUTES.dashboard);
+            setRedirect(ROUTES.dashboard.url);
+            router.push(ROUTES.dashboard.url);
             router.refresh();
         }
 

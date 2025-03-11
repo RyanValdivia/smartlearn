@@ -1,10 +1,12 @@
-import { type Session } from "@/core/modules/auth/entities/models/session";
+import { type Session } from "@/core/api/session";
 import {
     type Admin,
-    type Student,
-    type Teacher,
-    type User,
 } from "@/core/modules/auth/entities/models/user";
+import {
+    type Student,
+    type Teacher
+} from "@/core/api/users/types";
+import { type User } from "@/core/api/users/types";
 import { UserRole } from "@@/drizzle/schemas/auth";
 import { GraduationCap, ShieldUser, User as UserIcon } from "lucide-react";
 
