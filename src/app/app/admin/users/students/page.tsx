@@ -14,15 +14,15 @@ import React from "react";
 export default async function Page({
     searchParams,
 }: {
-    searchParams: Record<string, string | undefined>;
+    searchParams: Promise<Record<string, string | undefined>>;
 }) {
     const params = await searchParams;
     const fullTextSearch = params[FULL_TEXT_SEARCH_PARAM_NAME] ?? "";
     const page = parseInt(params[PAGINATION_PARAM_NAME] ?? "1", 10);
     return (
         <MainLayout>
-            <MainLayoutTitle>Usuarios</MainLayoutTitle>
-            <div>
+            <div className="flex items-center justify-between">
+                <MainLayoutTitle>Usuarios</MainLayoutTitle>
                 <SearchBarContainer>
                     <SearchBar
                         inputProps={{

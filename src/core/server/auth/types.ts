@@ -1,7 +1,5 @@
 import { type Session } from "@/core/api/session";
-import {
-    type Admin,
-} from "@/core/modules/auth/entities/models/user";
+
 import {
     type Student,
     type Teacher
@@ -51,10 +49,12 @@ export type OwnSession = Session & {
     cycleId: number;
 };
 
+//TODO ADMIN TIPE
 export type SessionUser = Omit<User, "password"> & {
     teacher: Teacher | null;
     student: Student | null;
-    admin: Admin | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    admin: any | null;
 };
 
 export enum UpdateSessionType {
