@@ -1,11 +1,11 @@
 import { createModule } from "@evyweb/ioctopus";
 import { DI_SYMBOLS } from "../types";
-import { UsersRepository } from "@/core/modules/auth/Infraestructure/repositories/user-repository";
+import { UsersRepository } from "@/core/modules/auth/Infraestructure/Repositories/user-repository";
 import { AuthService } from "@/core/modules/auth/Application/Services/auth-service";
 import { AuthController } from "@/core/modules/auth/Application/Controllers/auth-controller";
 import { UsersService } from "@/core/modules/auth/Application/Services/user-service";
 import { UsersController } from "@/core/modules/auth/Application/Controllers/user-controller";
-import { AccountsRepository } from "@/core/modules/auth/Infraestructure/repositories/account-repository";
+import { AccountsRepository } from "@/core/modules/auth/Infraestructure/Repositories/account-repository";
 
 export function createAuthModule() {
     const authModule = createModule();

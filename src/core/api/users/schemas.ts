@@ -29,6 +29,7 @@ export const studentSchema = createSelectSchema(studentsTable).omit({
     createdAt: true,
     updatedAt: true,
 });
+
 export const logInSchema = z.object({
     dni: z.string().length(8, { message: "El DNI debe tener 8 caracteres" }),
     password: z

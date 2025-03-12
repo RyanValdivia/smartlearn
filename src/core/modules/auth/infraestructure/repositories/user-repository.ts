@@ -1,4 +1,8 @@
-import { type GetManyUsersParams, type User } from "@/core/api/users/types";
+import {
+    type CreateUser,
+    type GetManyUsersParams,
+    type User,
+} from "@/core/api/users/types";
 import { type IUsersRepository } from "../../Domain/user-repository";
 import { db } from "@@/drizzle/client";
 import { count, ilike, or, eq } from "drizzle-orm";
@@ -14,7 +18,7 @@ export class UsersRepository implements IUsersRepository {
             .limit(1);
         return !!user;
     }
-    
+
     async findUserByDni(dni: string): Promise<User | null> {
         const [user] = await db
             .select()
@@ -32,6 +36,7 @@ export class UsersRepository implements IUsersRepository {
             .limit(1);
         return user;
     }
+
     async getMany(
         params?: GetManyUsersParams,
     ): Promise<PaginationResponse<User[]>> {
@@ -90,5 +95,10 @@ export class UsersRepository implements IUsersRepository {
         const total = totalResult[0]?.count ?? 0;
 
         return { data: users, total };
+    }
+
+    async createUser(input: CreateUser): Promise<User> {
+        const [user] = await db.insert(usersTable).values(input).returning();
+        return user;
     }
 }
