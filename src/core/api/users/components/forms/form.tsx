@@ -8,23 +8,15 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { type z } from "zod";
-import { logInSchema } from "../schemas";
+import { type logInSchema, useLogInForm } from "../../forms";
 
 function onSubmit(values: z.infer<typeof logInSchema>) {
     console.log(values);
 }
 
 export function LogInForm() {
-    const form = useForm<z.infer<typeof logInSchema>>({
-        resolver: zodResolver(logInSchema),
-        defaultValues: {
-            dni: "",
-            password: "",
-        },
-    });
+    const { form } = useLogInForm();
 
     return (
         <Form {...form}>
@@ -34,7 +26,7 @@ export function LogInForm() {
                     name="dni"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Username</FormLabel>
+                            <FormLabel>DNI</FormLabel>
                             <FormControl>
                                 <Input
                                     placeholder="Escribe tu numero de identificación"
@@ -50,7 +42,7 @@ export function LogInForm() {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel>Contraseña</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"

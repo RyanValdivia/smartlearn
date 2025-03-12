@@ -4,7 +4,6 @@ import React from "react";
 import { ROUTES } from "./routes";
 import { UserRole } from "@@/drizzle/schemas/auth";
 import {
-    SessionRoles,
     type UpdateSessionPayload,
     UpdateSessionType,
 } from "./server/auth/types";
@@ -57,11 +56,14 @@ export const AppProvider = React.memo(
         }
 
         async function selectRole(role: UserRole) {
+            console.log("role", role);
+
             const _newSession = await update({
                 type: UpdateSessionType.ACCESS,
-                ...SessionRoles[role],
-            } satisfies UpdateSessionPayload);
+                access: role,
+            });
 
+            console.log("newSession", _newSession);
             setRedirect(ROUTES.dashboard.url);
             router.push(ROUTES.dashboard.url);
             router.refresh();

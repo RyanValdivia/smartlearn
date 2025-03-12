@@ -12,6 +12,7 @@ export function enumToPgEnum<T extends Record<string, any>>(
 ): [T[keyof T], ...T[keyof T][]] {
     return Object.values(myEnum).map((value: any) => `${value}`) as any;
 }
+
 export type TypedClient<
     T extends AppRouter,
     TClientArgs extends InitClientArgs = InitClientArgs,

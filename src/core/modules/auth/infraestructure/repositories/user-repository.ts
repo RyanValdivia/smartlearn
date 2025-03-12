@@ -1,15 +1,20 @@
 import {
+<<<<<<< HEAD
     type UpdateUser,
+=======
+    type UserQueryFilters,
+>>>>>>> 0c79d4ed5c8a1e51c66d635d3d212c54d544de27
     type CreateUser,
     type GetManyUsersParams,
     type User,
 } from "@/core/api/users/types";
 import { type IUsersRepository } from "../../Domain/user-repository";
 import { db } from "@@/drizzle/client";
-import { count, ilike, or, eq } from "drizzle-orm";
+import { count, ilike, or, eq, and } from "drizzle-orm";
 import { usersTable } from "@@/drizzle/schemas/auth";
 import { type PaginationResponse } from "@/core/api";
 import { MAX_PAGINATION_SIZE } from "@/core/constants";
+import { type PaginationParams } from "@/utils/types";
 export class UsersRepository implements IUsersRepository {
     async existsUserByEmail(email: string): Promise<boolean> {
         const [user] = await db
@@ -42,28 +47,12 @@ export class UsersRepository implements IUsersRepository {
         params?: GetManyUsersParams,
     ): Promise<PaginationResponse<User[]>> {
         const { filters } = params || {};
+
         const [users, totalResult] = await Promise.all([
             db
                 .select()
                 .from(usersTable)
-                .where(
-                    filters?.fullTextSearch
-                        ? or(
-                              ilike(
-                                  usersTable.name,
-                                  `%${filters.fullTextSearch}%`,
-                              ),
-                              ilike(
-                                  usersTable.email,
-                                  `%${filters.fullTextSearch}%`,
-                              ),
-                              ilike(
-                                  usersTable.dni,
-                                  `%${filters.fullTextSearch}%`,
-                              ),
-                          )
-                        : undefined,
-                )
+                .where(filters ? this._createWhere(filters) : undefined)
                 .limit(MAX_PAGINATION_SIZE)
                 .offset(
                     filters?.page
@@ -103,6 +92,7 @@ export class UsersRepository implements IUsersRepository {
         return user;
     }
 
+<<<<<<< HEAD
     async updateUser(id: string, input: UpdateUser): Promise<User> {
         const [user] = await db
             .select()
@@ -124,5 +114,30 @@ export class UsersRepository implements IUsersRepository {
 
     async deleteUser(id: string): Promise<void> {
         await db.delete(usersTable).where(eq(usersTable.id, id));
+=======
+    private _createWhere(filters: PaginationParams<UserQueryFilters>) {
+        if (filters.fullTextSearch && filters.role) {
+            return and(
+                eq(usersTable.role, filters.role),
+                or(
+                    ilike(usersTable.name, `%${filters.fullTextSearch}%`),
+                    ilike(usersTable.email, `%${filters.fullTextSearch}%`),
+                    ilike(usersTable.dni, `%${filters.fullTextSearch}%`),
+                ),
+            );
+        }
+
+        if (filters.fullTextSearch) {
+            return or(
+                ilike(usersTable.name, `%${filters.fullTextSearch}%`),
+                ilike(usersTable.email, `%${filters.fullTextSearch}%`),
+                ilike(usersTable.dni, `%${filters.fullTextSearch}%`),
+            );
+        }
+
+        if (filters.role) {
+            return eq(usersTable.role, filters.role);
+        }
+>>>>>>> 0c79d4ed5c8a1e51c66d635d3d212c54d544de27
     }
 }

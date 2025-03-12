@@ -4,17 +4,20 @@ import type {
     createUserSchema,
     teacherSchema,
     studentSchema,
-    logInSchema,
     updateUserSchema,
 } from "./schemas";
+import type { logInSchema } from "./forms";
 import { type APIPaginationResponse } from "..";
 import { type PaginationParams } from "@/utils/types";
+import { type UserRole } from "@@/drizzle/schemas/auth";
 
 export type User = z.infer<typeof userSchema>;
 
 export type CreateUser = z.infer<typeof createUserSchema>;
 
 export type UpdateUser = z.infer<typeof updateUserSchema>;
+
+export type CreateUserForm = z.input<typeof createUserSchema>;
 
 export type Teacher = z.infer<typeof teacherSchema>;
 
@@ -24,6 +27,7 @@ export type LogIn = z.infer<typeof logInSchema>;
 
 export type UserQueryFilters = {
     fullTextSearch?: string;
+    role?: UserRole;
 };
 
 export type GetManyUsersParams = {

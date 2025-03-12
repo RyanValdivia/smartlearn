@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sidebar";
 import { RoleSwitcher } from "./components/role-switcher";
 import { type AdapterUser } from "next-auth/adapters";
-import { type UserRole } from "@@/drizzle/schemas/auth";
+import { UserRole } from "@@/drizzle/schemas/auth";
 import { NavRoutes } from "./components/nav-routes";
 import { ROUTES } from "@/core/routes";
 const data = {
@@ -45,10 +45,12 @@ const panelAdmin = [
 export function AppSidebar({
     accessibleRoles,
     user,
+    sessionRole,
     ...props
 }: React.ComponentProps<typeof Sidebar> & {
     accessibleRoles: UserRole[];
     user: AdapterUser;
+    sessionRole: UserRole;
 }) {
     return (
         <Sidebar collapsible="icon" {...props}>
@@ -56,7 +58,9 @@ export function AppSidebar({
                 <RoleSwitcher roles={accessibleRoles} />
             </SidebarHeader>
             <SidebarContent>
-                <NavMain items={panelAdmin} label={"Panel Admin"} />
+                {sessionRole === UserRole.ADMIN && (
+                    <NavMain items={panelAdmin} label={"Panel Admin"} />
+                )}
                 <NavRoutes items={data.basicRoutes} />
             </SidebarContent>
             <SidebarFooter>
