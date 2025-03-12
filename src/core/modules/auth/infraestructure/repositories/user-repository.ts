@@ -1,9 +1,6 @@
 import {
-<<<<<<< HEAD
     type UpdateUser,
-=======
     type UserQueryFilters,
->>>>>>> 0c79d4ed5c8a1e51c66d635d3d212c54d544de27
     type CreateUser,
     type GetManyUsersParams,
     type User,
@@ -92,7 +89,6 @@ export class UsersRepository implements IUsersRepository {
         return user;
     }
 
-<<<<<<< HEAD
     async updateUser(id: string, input: UpdateUser): Promise<User> {
         const [user] = await db
             .select()
@@ -114,7 +110,8 @@ export class UsersRepository implements IUsersRepository {
 
     async deleteUser(id: string): Promise<void> {
         await db.delete(usersTable).where(eq(usersTable.id, id));
-=======
+    }
+
     private _createWhere(filters: PaginationParams<UserQueryFilters>) {
         if (filters.fullTextSearch && filters.role) {
             return and(
@@ -138,6 +135,5 @@ export class UsersRepository implements IUsersRepository {
         if (filters.role) {
             return eq(usersTable.role, filters.role);
         }
->>>>>>> 0c79d4ed5c8a1e51c66d635d3d212c54d544de27
     }
 }
