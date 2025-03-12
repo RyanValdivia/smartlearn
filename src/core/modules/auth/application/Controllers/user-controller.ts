@@ -8,9 +8,12 @@ export class UsersController {
 
     async getMany(req: NextRequest): Promise<Response> {
         try {
-            const parse = userQueryFilters.safeParse(
-                Object.fromEntries(req.nextUrl.searchParams.entries()),
+            const urlParams: Record<string, string> = Object.fromEntries(
+                req.nextUrl.searchParams.entries(),
             );
+
+            const parse = userQueryFilters.safeParse(urlParams);
+
             if (!parse.success) {
                 throw new Error(
                     "Hubo un error en la validación de los datos " +
@@ -18,12 +21,12 @@ export class UsersController {
                 );
             }
             const queries = parse.data;
-
             const { data: users, total } = await this.usersService.getMany({
                 params: {
                     filters: queries,
                 },
             });
+
             return CommonResponse.successful({
                 data: users,
                 total,

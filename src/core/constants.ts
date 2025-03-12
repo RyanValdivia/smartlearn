@@ -5,3 +5,4 @@ export const COMPANY_LOGO_URL =
 export const MAX_PAGINATION_SIZE = 2;
 export const PAGINATION_PARAM_NAME = "p";
 export const FULL_TEXT_SEARCH_PARAM_NAME = "fullTextSearch";
+export const ROLE_PARAM_NAME = "role";
