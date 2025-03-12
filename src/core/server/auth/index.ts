@@ -5,13 +5,19 @@ import {
 } from "next-auth";
 import type { AdapterUser } from "next-auth/adapters";
 import React from "react";
-import { roleAccessMap, type OwnSession, type SessionUser } from "./types";
+import {
+    roleAccessMap,
+    type UpdateSessionPayload,
+    type OwnSession,
+    type SessionUser,
+} from "./types";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import {
     accountsTable,
     sessionsTable,
+    type UserRole,
     usersTable,
     verificationTokensTable,
 } from "@@/drizzle/schemas/auth";
@@ -20,6 +26,10 @@ import { type Session } from "../../api/session";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/core/routes";
 import { db } from "@@/drizzle/client";
+import { eq } from "drizzle-orm";
+import { getSessionTokenCookie } from "./utils";
+import { cookies } from "next/headers";
+import { logger } from "@/core/logger";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -50,7 +60,7 @@ declare module "next-auth/adapters" {
  * @see https://next-auth.js.org/configuration/options
  */
 const authController = getInjection("AuthController");
-
+//TODO SESSION TIME OUT
 export const authOptions = {
     providers: [
         GoogleProvider({
@@ -78,14 +88,59 @@ export const authOptions = {
         async signIn({ user, account }) {
             return await authController.signIn(user.email, account!);
         },
-        async session({ session, user }) {
-            if (session.user) {
-                session.own = {
-                    ...session.own,
-                    sessionRole: user.role,
-                    accesibleRoles: roleAccessMap[user.role],
-                };
+        async session({ session, user, trigger, newSession }) {
+            const sessionToken = getSessionTokenCookie(await cookies());
+
+            if (!sessionToken) {
+                logger.error("Session token not found");
+                session.error = "SessionTokenNotFound";
+
+                return session;
             }
+
+            const s = await db.query.sessionsTable.findFirst({
+                where: eq(sessionsTable.sessionToken, sessionToken),
+            });
+
+            const accessibleRoles = roleAccessMap[user.role];
+
+            session.own = {
+                ...session.own,
+                accesibleRoles: accessibleRoles,
+                cycleId: s?.cycleId || 0,
+                sessionToken,
+                userId: user.id,
+                sessionRole: s?.sessionRole || null,
+            } satisfies OwnSession;
+
+            if (trigger === "update" && newSession) {
+                const updatePayload = newSession as UpdateSessionPayload;
+
+                if (updatePayload.type === "ACCESS") {
+                    const role = updatePayload.access;
+
+                    const updatedSession: {
+                        sessionRole: UserRole | null;
+                    }[] = await db
+                        .update(sessionsTable)
+                        .set({
+                            sessionRole: role,
+                        })
+                        .where(eq(sessionsTable.sessionToken, sessionToken))
+                        .returning({
+                            sessionRole: sessionsTable.sessionRole,
+                        });
+
+                    session.own = {
+                        ...session.own,
+                        sessionRole: updatedSession[0].sessionRole,
+                    };
+                    //TODO UPDATE CYCLEID
+                    //TODO UPDATE USERID
+                    return session;
+                }
+            }
+
             return session;
         },
     },
@@ -111,5 +166,5 @@ export async function getSession() {
         redirect(ROUTES.login);
     }
 
-    return session; // Retorna la sesión validada
+    return session;
 }

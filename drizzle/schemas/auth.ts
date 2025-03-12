@@ -56,7 +56,7 @@ export const accountsTable = pgTable(
         }),
     ],
 );
-// permite nulos hasta que haigan mas datos en la bd
+//TODO permite nulos hasta que hayan mas datos en la bd
 export const sessionsTable = pgTable("sessions", {
     sessionToken: varchar({ length: 255 }).notNull().primaryKey(),
     userId: uuid().notNull(),
