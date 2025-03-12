@@ -61,7 +61,7 @@ export const userQueryFilters = z.object<
 export const userRouter = contract.router({
     getMany: {
         method: "GET",
-        path: "/api/users",
+        path: "/api/admin/users",
         headers: z.object({
             "Content-Type": z.literal("application/json"),
         }),

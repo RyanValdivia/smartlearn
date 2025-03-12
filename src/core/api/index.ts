@@ -27,8 +27,13 @@ const defaultFetcher = async (...args: Parameters<typeof fetch>) => {
 };
 export const zodFetcher = createZodFetcher(defaultFetcher);
 
-export type APIResponse<D> = {
+export type APIPaginationResponse<D> = {
     response: PaginationResponse<D>;
+    message: string;
+};
+
+export type APIResponse<D> = {
+    data: D;
     message: string;
 };
 
