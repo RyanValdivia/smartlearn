@@ -17,11 +17,24 @@ export default async function DashboardLayout({
     children: React.ReactNode;
 }>) {
     const cookieStore = await cookies();
+
     const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
+
     const { user, own } = await getSession();
+    if (!own.sessionRole)
+        return (
+            <>
+                <div>No hay rol de session</div>
+            </>
+        );
+
     return (
         <SidebarProvider defaultOpen={defaultOpen}>
-            <AppSidebar user={user} accessibleRoles={own.accesibleRoles} />
+            <AppSidebar
+                user={user}
+                sessionRole={own.sessionRole}
+                accessibleRoles={own.accesibleRoles}
+            />
             <NextTopLoader />
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

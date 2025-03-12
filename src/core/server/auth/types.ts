@@ -1,9 +1,6 @@
 import { type Session } from "@/core/api/session";
 
-import {
-    type Student,
-    type Teacher
-} from "@/core/api/users/types";
+import { type Student, type Teacher } from "@/core/api/users/types";
 import { type User } from "@/core/api/users/types";
 import { UserRole } from "@@/drizzle/schemas/auth";
 import { GraduationCap, ShieldUser, User as UserIcon } from "lucide-react";
@@ -38,23 +35,14 @@ export const roleAccessMap = {
     [UserRole.STUDENT]: [UserRole.STUDENT],
 };
 
-export type AccessibleRole = {
-    label: string;
-    access: UserRole;
-    logo: React.ElementType;
-};
-
 export type OwnSession = Session & {
     accesibleRoles: UserRole[];
     cycleId: number;
 };
 
-//TODO ADMIN TIPE
 export type SessionUser = Omit<User, "password"> & {
     teacher: Teacher | null;
     student: Student | null;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    admin: any | null;
 };
 
 export enum UpdateSessionType {
@@ -65,7 +53,8 @@ export enum UpdateSessionType {
 
 export type UpdateSessionAccess = {
     type: UpdateSessionType.ACCESS;
-} & AccessibleRole;
+    access: UserRole;
+};
 
 export type UpdateSessionUser = {
     type: typeof UpdateSessionType.USER;
@@ -85,7 +74,6 @@ export type UpdateSessionPayload =
 type AdminAccess = {
     access: UserRole.ADMIN;
     cycleId: null;
-    adminId: string;
     studentId: null;
     teacherId: null;
 };
@@ -93,7 +81,6 @@ type AdminAccess = {
 type TeacherAccess = {
     access: UserRole.TEACHER;
     teacherId: string;
-    adminId: null;
     studentId: null;
 };
 
@@ -102,7 +89,6 @@ type StudentAccess = {
     cycleId: number;
     studentId: string;
     teacherId: null;
-    adminId: null;
 };
 
 export type StrictOwnSession = AdminAccess | TeacherAccess | StudentAccess;
