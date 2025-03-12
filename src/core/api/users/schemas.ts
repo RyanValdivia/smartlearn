@@ -2,7 +2,11 @@ import { contract } from "@/core/ts-rest";
 import { usersTable } from "@@/drizzle/schemas/auth";
 import { studentsTable } from "@@/drizzle/schemas/student";
 import { teachersTable } from "@@/drizzle/schemas/teacher";
-import { createSelectSchema, createInsertSchema } from "drizzle-zod";
+import {
+    createSelectSchema,
+    createInsertSchema,
+    createUpdateSchema,
+} from "drizzle-zod";
 import { z } from "zod";
 import { type TypedAppRouter } from "../../../utils/types";
 import { type GetManyUsersParams, type UserAPI } from "./types";
@@ -15,6 +19,12 @@ export const userSchema = createSelectSchema(usersTable).omit({
 });
 
 export const createUserSchema = createInsertSchema(usersTable).omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+});
+
+export const updateUserSchema = createUpdateSchema(usersTable).omit({
     id: true,
     createdAt: true,
     updatedAt: true,

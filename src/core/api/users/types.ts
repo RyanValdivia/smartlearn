@@ -5,6 +5,7 @@ import type {
     teacherSchema,
     studentSchema,
     logInSchema,
+    updateUserSchema,
 } from "./schemas";
 import { type APIPaginationResponse } from "..";
 import { type PaginationParams } from "@/utils/types";
@@ -12,6 +13,8 @@ import { type PaginationParams } from "@/utils/types";
 export type User = z.infer<typeof userSchema>;
 
 export type CreateUser = z.infer<typeof createUserSchema>;
+
+export type UpdateUser = z.infer<typeof updateUserSchema>;
 
 export type Teacher = z.infer<typeof teacherSchema>;
 

@@ -1,4 +1,5 @@
 import {
+    type UpdateUser,
     type CreateUser,
     type GetManyUsersParams,
     type User,
@@ -100,5 +101,28 @@ export class UsersRepository implements IUsersRepository {
     async createUser(input: CreateUser): Promise<User> {
         const [user] = await db.insert(usersTable).values(input).returning();
         return user;
+    }
+
+    async updateUser(id: string, input: UpdateUser): Promise<User> {
+        const [user] = await db
+            .select()
+            .from(usersTable)
+            .where(eq(usersTable.id, id));
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        const [newUser] = await db
+            .update(usersTable)
+            .set(input)
+            .where(eq(usersTable.id, id))
+            .returning();
+
+        return newUser;
+    }
+
+    async deleteUser(id: string): Promise<void> {
+        await db.delete(usersTable).where(eq(usersTable.id, id));
     }
 }
