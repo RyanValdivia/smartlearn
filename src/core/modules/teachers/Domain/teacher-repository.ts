@@ -10,5 +10,5 @@ export interface ITeachersRepository {
         params?: GetManyTeachersParams,
     ): Promise<PaginationResponse<Teacher[]>>;
 
-    createTeacher(userId: string, input: CreateTeacher): Promise<Teacher>;
+    createTeacher(input: CreateTeacher): Promise<Teacher>;
 }

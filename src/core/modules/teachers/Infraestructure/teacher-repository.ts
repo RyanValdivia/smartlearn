@@ -58,15 +58,22 @@ export class TeachersRepository implements ITeachersRepository {
         };
     }
 
-    async createTeacher(
-        userId: string,
-        _input: CreateTeacher,
-    ): Promise<Teacher> {
-        const [teacher] = await db.insert(teachersTable).values({
-            userId: userId,
-        });
+    async createTeacher(input: CreateTeacher): Promise<Teacher> {
+        const [teacher] = await db
+            .insert(teachersTable)
+            .values(input)
+            .returning();
 
-        return teacher;
+        const [user] = await db
+            .select()
+            .from(usersTable)
+            .where(eq(usersTable.id, teacher.userId));
+
+        return {
+            id: teacher.id,
+            userId: teacher.userId,
+            user,
+        };
     }
 
     private _createWhere(filters: PaginationParams<TeacherQueryFilters>) {
