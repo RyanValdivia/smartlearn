@@ -1,11 +1,5 @@
 import { type z } from "zod";
-import type {
-    userSchema,
-    createUserSchema,
-    teacherSchema,
-    studentSchema,
-    updateUserSchema,
-} from "./schemas";
+import type { userSchema, createUserSchema, updateUserSchema } from "./schemas";
 import type { logInSchema } from "./forms";
 import { type APIPaginationResponse } from "..";
 import { type PaginationParams } from "@/utils/types";
@@ -18,10 +12,6 @@ export type CreateUser = z.infer<typeof createUserSchema>;
 export type UpdateUser = z.infer<typeof updateUserSchema>;
 
 export type CreateUserForm = z.input<typeof createUserSchema>;
-
-export type Teacher = z.infer<typeof teacherSchema>;
-
-export type Student = z.infer<typeof studentSchema>;
 
 export type LogIn = z.infer<typeof logInSchema>;
 

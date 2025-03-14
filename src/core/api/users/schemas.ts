@@ -1,7 +1,5 @@
 import { contract } from "@/core/ts-rest";
 import { UserRole, usersTable } from "@@/drizzle/schemas/auth";
-import { studentsTable } from "@@/drizzle/schemas/student";
-import { teachersTable } from "@@/drizzle/schemas/teacher";
 import {
     createSelectSchema,
     createInsertSchema,
@@ -36,16 +34,6 @@ export const createUserSchema = createInsertSchema(usersTable)
 
 export const updateUserSchema = createUpdateSchema(usersTable).omit({
     id: true,
-    createdAt: true,
-    updatedAt: true,
-});
-
-export const teacherSchema = createSelectSchema(teachersTable).omit({
-    createdAt: true,
-    updatedAt: true,
-});
-
-export const studentSchema = createSelectSchema(studentsTable).omit({
     createdAt: true,
     updatedAt: true,
 });

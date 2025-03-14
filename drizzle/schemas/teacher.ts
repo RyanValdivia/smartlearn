@@ -1,18 +1,11 @@
 import { relations } from "drizzle-orm";
-import {
-    integer,
-    pgTable,
-    timestamp,
-    uuid,
-    varchar,
-} from "drizzle-orm/pg-core";
+import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { usersTable } from "./auth";
 import { lecturesTable } from "./lecture";
 
 export const teachersTable = pgTable("teachers", {
-    id: uuid().primaryKey(),
+    id: uuid().defaultRandom().primaryKey(),
     userId: uuid().notNull().unique(),
-    dni: varchar({ length: 8 }).notNull(),
 
     createdAt: timestamp().defaultNow(),
     updatedAt: timestamp()

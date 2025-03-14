@@ -1,9 +1,6 @@
 import { db } from "@@/drizzle/client";
-import { type IAccountsRepository } from "../../Domain/account-repository";
-import {
-    type CreateAccount,
-    type Account,
-} from "../../../../api/account";
+import { type IAccountsRepository } from "../Domain/account-repository";
+import { type CreateAccount, type Account } from "../../../api/account";
 import { accountsTable } from "@@/drizzle/schemas/auth";
 import { eq } from "drizzle-orm";
 

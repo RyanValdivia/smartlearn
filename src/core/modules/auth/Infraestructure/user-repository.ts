@@ -5,7 +5,7 @@ import {
     type GetManyUsersParams,
     type User,
 } from "@/core/api/users/types";
-import { type IUsersRepository } from "../../Domain/user-repository";
+import { type IUsersRepository } from "../Domain/user-repository";
 import { db } from "@@/drizzle/client";
 import { count, ilike, or, eq, and } from "drizzle-orm";
 import { usersTable } from "@@/drizzle/schemas/auth";

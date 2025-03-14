@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { usersTable } from "./auth";
 import { sectionsToStudentsTable } from "./section";
 
@@ -9,7 +9,6 @@ export const studentsTable = pgTable("students", {
         .notNull()
         .unique()
         .references(() => usersTable.id, { onDelete: "cascade" }),
-    dni: varchar({ length: 8 }).notNull(),
 
     createdAt: timestamp().defaultNow(),
     updatedAt: timestamp()
