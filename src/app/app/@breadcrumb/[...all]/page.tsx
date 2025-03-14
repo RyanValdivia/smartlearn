@@ -19,7 +19,7 @@ export default async function BreadcrumbSlot({
     let breadcrumbPage: ReactElement = <></>;
     for (let i = 1; i < all.length; i++) {
         const route = all[i];
-        const href = `/${all.at(0)}/${route}`;
+        const href = `/app/${all.slice(1, i + 1).join("/")}`;
         if (i === all.length - 1) {
             breadcrumbPage = (
                 <BreadcrumbItem>

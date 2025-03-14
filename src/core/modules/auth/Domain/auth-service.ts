@@ -1,4 +1,4 @@
-import { type Account } from "../../../api/account";
+import { type Account } from "../../../api/accounts/account";
 import { type LogIn } from "@/core/api/users/types";
 import { type User } from "@/core/api/users/types";
 

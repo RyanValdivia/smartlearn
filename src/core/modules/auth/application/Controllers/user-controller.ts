@@ -2,12 +2,19 @@ import { createUserSchema, userQueryFilters } from "@/core/api/users/schemas";
 import { type IUsersService } from "../../Domain/user-service";
 import { CommonResponse } from "@/utils/common-response";
 import { type NextRequest } from "next/server";
+import { isAdminServerAuthSession } from "@/core/server/auth";
 
 export class UsersController {
     constructor(private readonly usersService: IUsersService) {}
 
     async getMany(req: NextRequest): Promise<Response> {
         try {
+            const isAdmin = await isAdminServerAuthSession();
+
+            if (!isAdmin) {
+                return CommonResponse.unauthorized();
+            }
+
             const urlParams: Record<string, string> = Object.fromEntries(
                 req.nextUrl.searchParams.entries(),
             );
@@ -21,6 +28,7 @@ export class UsersController {
                 );
             }
             const queries = parse.data;
+
             const { data: users, total } = await this.usersService.getMany({
                 params: {
                     filters: queries,

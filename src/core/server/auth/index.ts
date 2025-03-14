@@ -17,12 +17,12 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import {
     accountsTable,
     sessionsTable,
-    type UserRole,
+    UserRole,
     usersTable,
     verificationTokensTable,
 } from "@@/drizzle/schemas/auth";
 import { getInjection } from "@/core/di/container";
-import { type Session } from "../../api/session";
+import { type Session } from "../../api/sessions/types";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/core/routes";
 import { db } from "@@/drizzle/client";
@@ -158,6 +158,17 @@ export const authOptions = {
 export const getServerAuthSession = React.cache(() =>
     getServerSession(authOptions),
 );
+
+export const isAdminServerAuthSession = async () => {
+    const session = await getServerAuthSession();
+    if (!session) {
+        return false;
+    }
+    if (session.own.sessionRole !== UserRole.ADMIN) {
+        return false;
+    }
+    return true;
+};
 
 export async function getSession() {
     const session = await getServerAuthSession();

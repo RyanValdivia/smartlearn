@@ -14,19 +14,19 @@ export class UserClass
     async getMany(
         params: GetManyUsersParams,
     ): Promise<APIPaginationResponse<User[]>> {
-        const rest = await this._client.getMany({
+        const res = await this._client.getMany({
             headers: {
                 "content-type": "application/json",
             },
             query: params.filters,
         });
 
-        if (rest.status === 200) {
-            return rest.body;
+        if (res.status === 200) {
+            return res.body;
         }
 
         throw new APIError(
-            (rest.body as APIPaginationResponse<undefined>).message,
+            (res.body as APIPaginationResponse<undefined>).message,
         );
     }
 }

@@ -4,6 +4,8 @@ import React from "react";
 import { ROUTES } from "./routes";
 import { UserRole } from "@@/drizzle/schemas/auth";
 import {
+    type SessionRole,
+    SessionRoles,
     type UpdateSessionPayload,
     UpdateSessionType,
 } from "./server/auth/types";
@@ -17,7 +19,7 @@ export type AppContextType = {
     cycles: any;
     cyclesAreLoading: boolean;
     selectRole: (role: UserRole) => Promise<void>;
-    selectedRole: UserRole | null;
+    selectedRole: SessionRole;
 };
 
 const AppContext = React.createContext<AppContextType>({
@@ -26,7 +28,7 @@ const AppContext = React.createContext<AppContextType>({
     cycles: null,
     cyclesAreLoading: false,
     selectRole: async () => {},
-    selectedRole: null,
+    selectedRole: SessionRoles[UserRole.STUDENT],
 });
 
 export const AppProvider = React.memo(
@@ -56,41 +58,15 @@ export const AppProvider = React.memo(
         }
 
         async function selectRole(role: UserRole) {
-            console.log("role", role);
-
             const _newSession = await update({
                 type: UpdateSessionType.ACCESS,
                 access: role,
             });
-
-            console.log("newSession", _newSession);
-            setRedirect(ROUTES.dashboard.url);
-            router.push(ROUTES.dashboard.url);
             router.refresh();
         }
 
         const selectedRole = React.useMemo(() => {
-            let r: UserRole | undefined;
-
-            if (!session) return null;
-
-            if (session?.own.sessionRole === UserRole.ADMIN) {
-                r = session.own.accesibleRoles.find(
-                    (ro) => ro === UserRole.ADMIN,
-                );
-            } else if (session?.own.sessionRole === UserRole.TEACHER) {
-                r = session.own.accesibleRoles.find(
-                    (ro) => ro === UserRole.TEACHER,
-                );
-            } else if (session?.own.sessionRole === UserRole.STUDENT) {
-                r = session?.own.accesibleRoles.find(
-                    (ro) => ro === UserRole.STUDENT,
-                );
-            }
-
-            if (!r) return null;
-
-            return r;
+            return SessionRoles[session?.own.sessionRole ?? UserRole.STUDENT];
         }, [session]);
 
         React.useEffect(() => {

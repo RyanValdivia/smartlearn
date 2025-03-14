@@ -10,7 +10,6 @@ import {
     FULL_TEXT_SEARCH_PARAM_NAME,
     PAGINATION_PARAM_NAME,
 } from "@/core/constants";
-import { UserRole } from "@@/drizzle/schemas/auth";
 import React from "react";
 
 export default async function Page({
@@ -25,7 +24,7 @@ export default async function Page({
     return (
         <MainLayout>
             <div className="flex items-center justify-between">
-                <MainLayoutTitle>Estudiantes</MainLayoutTitle>
+                <MainLayoutTitle>Usuarios</MainLayoutTitle>
                 <SearchBarContainer>
                     <SearchBar
                         inputProps={{
@@ -36,11 +35,7 @@ export default async function Page({
             </div>
             <MainLayoutSection>
                 <React.Suspense fallback={<TableSkeleton />}>
-                    <UsersTable
-                        page={page}
-                        fullTextSearch={fullTextSearch}
-                        role={UserRole.STUDENT}
-                    />
+                    <UsersTable page={page} fullTextSearch={fullTextSearch} />
                 </React.Suspense>
             </MainLayoutSection>
         </MainLayout>

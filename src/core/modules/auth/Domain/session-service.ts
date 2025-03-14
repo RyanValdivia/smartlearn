@@ -1,5 +1,6 @@
-import { type Session } from "@/core/api/session";
+import { type Session } from "@/core/api/sessions/types";
+import { type GetByTokenSessionParams } from "../../../api/sessions/types";
 
 export interface ISessionsService {
-    findByToken(token: string): Promise<Session | null>;
+    findByToken(params: GetByTokenSessionParams): Promise<Session | null>;
 }

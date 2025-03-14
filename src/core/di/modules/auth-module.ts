@@ -6,7 +6,7 @@ import { AuthController } from "@/core/modules/auth/Application/Controllers/auth
 import { UsersService } from "@/core/modules/auth/Application/Services/user-service";
 import { UsersController } from "@/core/modules/auth/Application/Controllers/user-controller";
 import { AccountsRepository } from "@/core/modules/auth/Infraestructure/account-repository";
-import { SessionsRepository } from "@/core/modules/teachers/Infraestructure/session-repository";
+import { SessionsRepository } from "@/core/modules/auth/Infraestructure/session-repository";
 import { SessionsService } from "@/core/modules/auth/Application/Services/session-service";
 import { SessionsController } from "@/core/modules/auth/Application/Controllers/session-controller";
 

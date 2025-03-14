@@ -1,4 +1,4 @@
-import { type Account, type CreateAccount } from "../../../api/account";
+import { type Account, type CreateAccount } from "../../../api/accounts/account";
 
 export interface IAccountsRepository {
     createAccount(input: CreateAccount): Promise<Account>;

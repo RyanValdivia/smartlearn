@@ -2,7 +2,7 @@ import { type IAccountsRepository } from "../../Domain/account-repository";
 import { type IUsersRepository } from "../../Domain/user-repository";
 import { type IAuthService } from "../../Domain/auth-service";
 import { UserNotFoundError } from "../../Errors/errors";
-import { type Account } from "../../../../api/account";
+import { type Account } from "../../../../api/accounts/account";
 import { verifyPassword } from "../../../../api/hash";
 import { type LogIn } from "@/core/api/users/types";
 import { type User } from "@/core/api/users/types";

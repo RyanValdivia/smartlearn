@@ -1,11 +1,24 @@
-import { type Session } from "@/core/api/session";
+import { type Session } from "@/core/api/sessions/types";
+import { type Teacher } from "@/core/api/teachers/types";
 
-import { type Student, type Teacher } from "@/core/api/users/types";
-import { type User } from "@/core/api/users/types";
+import { type Student, type User } from "@/core/api/users/types";
 import { UserRole } from "@@/drizzle/schemas/auth";
-import { GraduationCap, ShieldUser, User as UserIcon } from "lucide-react";
+import {
+    GraduationCap,
+    type LucideProps,
+    ShieldUser,
+    User as UserIcon,
+} from "lucide-react";
 
-export const adminRole = {
+export type SessionRole = {
+    label: string;
+    access: UserRole;
+    logo: React.ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+    >;
+};
+
+export const adminRole: SessionRole = {
     label: "Administrador",
     access: UserRole.ADMIN,
     logo: ShieldUser,

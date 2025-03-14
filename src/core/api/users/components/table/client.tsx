@@ -15,7 +15,7 @@ export function UsersTable({
 }: {
     page: number;
     fullTextSearch: string;
-    role: UserRole;
+    role?: UserRole;
 }) {
     const { data } = useUsers({
         variables: {

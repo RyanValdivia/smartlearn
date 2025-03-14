@@ -8,10 +8,16 @@ import {
 import { z } from "zod";
 import { type TypedAppRouter } from "../../../utils/types";
 import { type GetManyUsersParams, type UserAPI } from "./types";
-import { apiResponseSchema } from "../api-response";
+import { apiResponsePaginationSchema } from "../api-response";
 import { type ZodInferSchema } from "../types";
+import { studentsTable } from "@@/drizzle/schemas/student";
 
 export const userSchema = createSelectSchema(usersTable).omit({
+    createdAt: true,
+    updatedAt: true,
+});
+
+export const studentSchema = createSelectSchema(studentsTable).omit({
     createdAt: true,
     updatedAt: true,
 });
@@ -56,7 +62,7 @@ export const userRouter = contract.router({
         query: userQueryFilters,
         summary: "Obtener una lista de Usuarios separado por filtro",
         responses: contract.responses({
-            200: apiResponseSchema(userSchema.array()),
+            200: apiResponsePaginationSchema(userSchema.array()),
         }),
     },
 } satisfies TypedAppRouter<UserAPI>);

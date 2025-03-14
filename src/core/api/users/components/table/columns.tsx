@@ -1,11 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SessionRoles } from "@/core/server/auth/types";
+import { type UserRole } from "@@/drizzle/schemas/auth";
 import { createColumnHelper } from "@tanstack/react-table";
 
 export type UserTableItem = {
     id: string;
     name: string;
     email: string;
-    role: string;
+    role: UserRole;
     dni: number;
     imagen: string | null;
 };
@@ -21,6 +23,11 @@ export const columns = [
     }),
     helper.accessor("role", {
         header: "Rol",
+        cell: ({ getValue }) => {
+            const value = getValue() as UserTableItem["role"];
+            const role = SessionRoles[value].label;
+            return role;
+        },
     }),
     helper.accessor("dni", {
         header: "DNI",

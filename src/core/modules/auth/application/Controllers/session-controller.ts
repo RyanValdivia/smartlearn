@@ -17,9 +17,11 @@ export class SessionsController {
                 );
             }
 
-            const token = parse.data;
+            const params = parse.data;
 
-            const session = await this.sessionsService.findByToken(token.token);
+            const session = await this.sessionsService.findByToken({
+                token: params.token,
+            });
 
             if (!session) {
                 return CommonResponse.badRequest("No se encontró la sesión");

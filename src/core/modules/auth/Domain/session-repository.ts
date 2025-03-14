@@ -1,5 +1,8 @@
-import { type Session } from "@/core/api/session";
+import {
+    type GetByTokenSessionParams,
+    type Session,
+} from "@/core/api/sessions/types";
 
 export interface ISessionsRepository {
-    findByToken(token: string): Promise<Session | null>;
+    findByToken(params: GetByTokenSessionParams): Promise<Session | null>;
 }

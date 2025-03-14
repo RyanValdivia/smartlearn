@@ -1,12 +1,17 @@
 import { type z } from "zod";
-import type { userSchema, createUserSchema, updateUserSchema } from "./schemas";
+import type {
+    userSchema,
+    createUserSchema,
+    updateUserSchema,
+    studentSchema,
+} from "./schemas";
 import type { logInSchema } from "./forms";
 import { type APIPaginationResponse } from "..";
 import { type PaginationParams } from "@/utils/types";
 import { type UserRole } from "@@/drizzle/schemas/auth";
 
 export type User = z.infer<typeof userSchema>;
-
+export type Student = z.infer<typeof studentSchema>;
 export type CreateUser = z.infer<typeof createUserSchema>;
 
 export type UpdateUser = z.infer<typeof updateUserSchema>;

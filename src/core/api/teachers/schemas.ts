@@ -6,7 +6,7 @@ import { type UserAPI } from "../users/types";
 import { z } from "zod";
 import { type ZodInferSchema } from "../types";
 import { type GetManyTeachersParams } from "./types";
-import { apiResponseSchema } from "../api-response";
+import { apiResponsePaginationSchema } from "../api-response";
 import { userSchema } from "../users/schemas";
 
 export const teacherSchema = createSelectSchema(teachersTable)
@@ -47,7 +47,7 @@ export const teacherRouter = contract.router({
         query: teacherQueryFilters,
         summary: "Obtener una lista de Profesores",
         responses: contract.responses({
-            200: apiResponseSchema(teacherSchema.array()),
+            200: apiResponsePaginationSchema(teacherSchema.array()),
         }),
     },
 } satisfies TypedAppRouter<UserAPI>);

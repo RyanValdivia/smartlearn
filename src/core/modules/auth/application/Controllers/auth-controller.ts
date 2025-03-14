@@ -1,5 +1,5 @@
 import { type IAuthService } from "../../Domain/auth-service";
-import { type Account } from "../../../../api/account";
+import { type Account } from "../../../../api/accounts/account";
 import { type User } from "@/core/api/users/types";
 import { type Account as NextAccount } from "next-auth";
 
