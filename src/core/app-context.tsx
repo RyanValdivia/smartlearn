@@ -2,7 +2,6 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { ROUTES } from "./routes";
-import { UserRole } from "@@/drizzle/schemas/auth";
 import {
     type SessionRole,
     SessionRoles,
@@ -11,6 +10,7 @@ import {
 } from "./server/auth/types";
 import { toast } from "sonner";
 import { useEventListener, useLocalStorage } from "usehooks-ts";
+import { UserRole } from "@prisma/client";
 export type AppContextType = {
     selectedCycleId: number | null;
     selectCycle: (id: number) => Promise<void>;

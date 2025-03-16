@@ -1,47 +1,49 @@
 import { contract } from "@/core/ts-rest";
-import { UserRole, usersTable } from "@@/drizzle/schemas/auth";
-import {
-    createSelectSchema,
-    createInsertSchema,
-    createUpdateSchema,
-} from "drizzle-zod";
+
 import { z } from "zod";
 import { type TypedAppRouter } from "../../../utils/types";
-import { type GetManyUsersParams, type UserAPI } from "./types";
+import {
+    type UserFromAPI,
+    type GetManyUsersParams,
+    type UserAPI,
+    type UpdateUser,
+} from "./types";
 import { apiResponsePaginationSchema } from "../api-response";
 import { type ZodInferSchema } from "../types";
-import { studentsTable } from "@@/drizzle/schemas/student";
+import { UserRole } from "@prisma/client";
+import { createdAtSchema, updatedAtSchema } from "@/core/utils";
 
-export const userSchema = createSelectSchema(usersTable).omit({
-    createdAt: true,
-    updatedAt: true,
+export const userSchema = z.object<ZodInferSchema<UserFromAPI>>({
+    id: z.string().cuid(),
+    email: z.string().email().nullable(),
+    name: z.string(),
+    emailVerified: z.string().datetime().nullable(),
+    image: z.string().nullable(),
+    dni: z.string(),
+    password: z.string().nullable(),
+    role: z.nativeEnum(UserRole),
+    teacherId: z.string().cuid().nullable(),
+    studentId: z.string().cuid().nullable(),
+    createdAt: createdAtSchema,
+    updatedAt: updatedAtSchema,
 });
 
-export const studentSchema = createSelectSchema(studentsTable).omit({
-    createdAt: true,
-    updatedAt: true,
+export const updateUserSchema = z.object<ZodInferSchema<UpdateUser>>({
+    name: z.string().optional(),
+    email: z.string().email().nullable().optional(),
+    image: z.string().nullable().optional(),
+    dni: z.string().optional(),
+    password: z.string().nullable().optional(),
+    role: z.nativeEnum(UserRole).optional(),
 });
 
-export const createUserSchema = createInsertSchema(usersTable)
-    .omit({
-        id: true,
-        createdAt: true,
-        updatedAt: true,
-        emailVerified: true,
-    })
-    .extend({
-        emailVerified: z
-            .string()
-            .date()
-            .optional()
-            .nullable()
-            .transform((v) => (v ? new Date(v) : null)),
-    });
-
-export const updateUserSchema = createUpdateSchema(usersTable).omit({
+export const createUserSchema = userSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
+    emailVerified: true,
+    teacherId: true,
+    studentId: true,
 });
 
 export const userQueryFilters = z.object<

@@ -1,14 +1,16 @@
-import { type Session } from "@/core/api/sessions/types";
-import { type Teacher } from "@/core/api/teachers/types";
-
-import { type Student, type User } from "@/core/api/users/types";
-import { UserRole } from "@@/drizzle/schemas/auth";
+import { type StudentFromAPI } from "@/core/api/students/types";
+import { type TeacherFromAPI } from "@/core/api/teachers/types";
+import { type UserFromAPI } from "@/core/api/users/types";
+import { type Session, UserRole } from "@prisma/client";
 import {
     GraduationCap,
     type LucideProps,
     ShieldUser,
     User as UserIcon,
 } from "lucide-react";
+import { type Jsonify } from "type-fest";
+
+export type SessionFromAPI = Jsonify<Session>;
 
 export type SessionRole = {
     label: string;
@@ -50,12 +52,12 @@ export const roleAccessMap = {
 
 export type OwnSession = Session & {
     accesibleRoles: UserRole[];
-    cycleId: number;
+    cycleId: number | null;
 };
 
-export type SessionUser = Omit<User, "password"> & {
-    teacher: Teacher | null;
-    student: Student | null;
+export type SessionUser = Omit<UserFromAPI, "password"> & {
+    teacher: TeacherFromAPI | null;
+    student: StudentFromAPI | null;
 };
 
 export enum UpdateSessionType {
@@ -85,20 +87,20 @@ export type UpdateSessionPayload =
     | UpdateSessionCycle;
 
 type AdminAccess = {
-    access: UserRole.ADMIN;
+    access: UserRole;
     cycleId: null;
     studentId: null;
     teacherId: null;
 };
 
 type TeacherAccess = {
-    access: UserRole.TEACHER;
+    access: UserRole;
     teacherId: string;
     studentId: null;
 };
 
 type StudentAccess = {
-    access: UserRole.STUDENT;
+    access: UserRole;
     cycleId: number;
     studentId: string;
     teacherId: null;

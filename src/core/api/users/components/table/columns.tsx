@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SessionRoles } from "@/core/server/auth/types";
-import { type UserRole } from "@@/drizzle/schemas/auth";
+import { type UserRole } from "@prisma/client";
 import { createColumnHelper } from "@tanstack/react-table";
 
 export type UserTableItem = {

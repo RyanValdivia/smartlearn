@@ -1,98 +1,39 @@
-import { type PaginationResponse } from "@/core/api";
 import {
-    type TeacherQueryFilters,
+    type TeacherFromAPI,
     type CreateTeacher,
-    type GetManyTeachersParams,
-    type Teacher,
 } from "@/core/api/teachers/types";
 import { type ITeachersRepository } from "../Domain/teacher-repository";
-import { db } from "@@/drizzle/client";
-import { teachersTable } from "@@/drizzle/schemas/teacher";
-import { type PaginationParams } from "@/utils/types";
-import { and, eq, exists, ilike, or, count } from "drizzle-orm";
-import { UserRole, usersTable } from "@@/drizzle/schemas/auth";
-import { MAX_PAGINATION_SIZE } from "@/core/constants";
+import { db } from "@/core/server/db";
+import { jsonify } from "@/lib/utils";
+import { UserRole } from "@prisma/client";
 
 export class TeachersRepository implements ITeachersRepository {
-    async getMany(
-        params?: GetManyTeachersParams,
-    ): Promise<PaginationResponse<Teacher[]>> {
-        const { filters } = params || {};
+    async createTeacher(input: CreateTeacher): Promise<TeacherFromAPI> {
+        const user = await db.user.findUnique({
+            where: {
+                id: input.userId,
+            },
+        });
 
-        const [teachers, totalResult] = await Promise.all([
-            db
-                .select({
-                    teacher: teachersTable,
-                    user: usersTable,
-                })
-                .from(teachersTable)
-                .innerJoin(usersTable, eq(teachersTable.userId, usersTable.id))
-                .where(filters ? this._createWhere(filters) : undefined)
-                .limit(MAX_PAGINATION_SIZE)
-                .offset(
-                    filters?.page
-                        ? (filters.page - 1) * MAX_PAGINATION_SIZE
-                        : 0,
-                ),
-            db
-                .select({ count: count() })
-                .from(teachersTable)
-                .where(
-                    filters?.fullTextSearch
-                        ? or(
-                              ilike(usersTable.name, filters.fullTextSearch),
-                              ilike(usersTable.email, filters.fullTextSearch),
-                              ilike(usersTable.dni, filters.fullTextSearch),
-                          )
-                        : undefined,
-                ),
-        ]);
+        if (!user) {
+            throw new Error("User not found");
+        }
 
-        return {
-            data: teachers.map((teacher) => ({
-                user: teacher.user,
-                id: teacher.teacher.id,
-                userId: teacher.teacher.userId,
-            })),
-            total: totalResult[0].count,
-        };
-    }
+        await db.user.update({
+            where: {
+                id: input.userId,
+            },
+            data: {
+                role: UserRole.TEACHER,
+            },
+        });
 
-    async createTeacher(input: CreateTeacher): Promise<Teacher> {
-        const [teacher] = await db
-            .insert(teachersTable)
-            .values(input)
-            .returning();
+        const teacher = await db.teacher.create({
+            data: {
+                userId: input.userId,
+            },
+        });
 
-        const [user] = await db
-            .select()
-            .from(usersTable)
-            .where(eq(usersTable.id, teacher.userId));
-
-        return {
-            id: teacher.id,
-            userId: teacher.userId,
-            user,
-        };
-    }
-
-    private _createWhere(filters: PaginationParams<TeacherQueryFilters>) {
-        return and(
-            eq(usersTable.role, UserRole.TEACHER),
-            exists(
-                db
-                    .select()
-                    .from(teachersTable)
-                    .where(eq(teachersTable.userId, usersTable.id)),
-            ),
-
-            filters.fullTextSearch
-                ? or(
-                      ilike(usersTable.name, filters.fullTextSearch),
-                      ilike(usersTable.email, filters.fullTextSearch),
-                      ilike(usersTable.dni, filters.fullTextSearch),
-                  )
-                : undefined,
-        );
+        return jsonify(teacher);
     }
 }

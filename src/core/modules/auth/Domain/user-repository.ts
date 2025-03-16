@@ -3,16 +3,18 @@ import {
     type UpdateUser,
     type CreateUser,
     type GetManyUsersParams,
-    type User,
+    type UserFromAPI,
 } from "@/core/api/users/types";
 
 export interface IUsersRepository {
-    getMany(params?: GetManyUsersParams): Promise<PaginationResponse<User[]>>;
-    createUser(input: CreateUser): Promise<User>;
-    updateUser(id: string, input: UpdateUser): Promise<User>;
+    getMany(
+        params?: GetManyUsersParams,
+    ): Promise<PaginationResponse<UserFromAPI[]>>;
+    createUser(input: CreateUser): Promise<UserFromAPI>;
+    updateUser(id: string, input: UpdateUser): Promise<UserFromAPI>;
     deleteUser(id: string): Promise<void>;
 
     existsUserByEmail(email: string): Promise<boolean>;
-    findUserByDni(dni: string): Promise<User | null>;
-    findUserByEmail(email: string): Promise<User | null>;
+    findUserByDni(dni: string): Promise<UserFromAPI | null>;
+    findUserByEmail(email: string): Promise<UserFromAPI | null>;
 }

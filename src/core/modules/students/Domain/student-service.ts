@@ -1,6 +1,6 @@
 import { type PaginationResponse } from "@/core/api";
 import {
-    type Student,
+    type StudentFromAPI,
     type GetManyStudentsParams,
     type CreateStudent,
 } from "@/core/api/students/types";
@@ -8,7 +8,7 @@ import {
 export interface IStudentsService {
     getMany(
         params: GetManyStudentsParams,
-    ): Promise<PaginationResponse<Student[]>>;
+    ): Promise<PaginationResponse<StudentFromAPI[]>>;
 
-    createStudent(input: CreateStudent): Promise<Student>;
+    createStudent(input: CreateStudent): Promise<StudentFromAPI>;
 }

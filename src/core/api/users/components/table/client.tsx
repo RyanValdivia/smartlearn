@@ -2,11 +2,11 @@
 import { useUsers } from "../../queries";
 import { DataTable, type TablePaginationProps } from "@/components/data-table";
 import { columns, type UserTableItem } from "./columns";
-import { type User } from "../../types";
+import { type UserFromAPI } from "../../types";
 import React from "react";
 import { type PaginationResponse } from "@/core/api";
 import { MAX_PAGINATION_SIZE } from "@/core/constants";
-import { type UserRole } from "@@/drizzle/schemas/auth";
+import { type UserRole } from "@prisma/client";
 
 export function UsersTable({
     page,
@@ -27,7 +27,7 @@ export function UsersTable({
         },
     });
 
-    const { data: users, total }: PaginationResponse<User[]> =
+    const { data: users, total }: PaginationResponse<UserFromAPI[]> =
         React.useMemo(() => {
             if (data) {
                 return data.response;

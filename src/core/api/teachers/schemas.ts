@@ -1,34 +1,32 @@
 import { contract } from "@/core/ts-rest";
 import { type TypedAppRouter } from "@/utils/types";
-import { teachersTable } from "@@/drizzle/schemas/teacher";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type UserAPI } from "../users/types";
 import { z } from "zod";
 import { type ZodInferSchema } from "../types";
-import { type GetManyTeachersParams } from "./types";
+import { type TeacherFromAPI, type GetManyTeachersParams } from "./types";
 import { apiResponsePaginationSchema } from "../api-response";
-import { userSchema } from "../users/schemas";
+import { createdAtSchema, updatedAtSchema } from "@/core/utils";
 
-export const teacherSchema = createSelectSchema(teachersTable)
+export const teacherSchema = z.object<ZodInferSchema<TeacherFromAPI>>({
+    id: z.string().cuid(),
+    userId: z.string().cuid(),
+    createdAt: createdAtSchema,
+    updatedAt: updatedAtSchema,
+});
+
+export const createTeacherSchema = teacherSchema.omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+});
+
+export const updateTeacherSchema = teacherSchema
     .omit({
+        id: true,
         createdAt: true,
         updatedAt: true,
     })
-    .extend({
-        user: userSchema,
-    });
-
-export const createTeacherSchema = createInsertSchema(teachersTable).omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-});
-
-export const updateTeacherSchema = createInsertSchema(teachersTable).omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-});
+    .optional();
 
 export const teacherQueryFilters = z.object<
     ZodInferSchema<GetManyTeachersParams["filters"]>

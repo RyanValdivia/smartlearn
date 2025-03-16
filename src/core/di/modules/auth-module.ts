@@ -6,9 +6,6 @@ import { AuthController } from "@/core/modules/auth/Application/Controllers/auth
 import { UsersService } from "@/core/modules/auth/Application/Services/user-service";
 import { UsersController } from "@/core/modules/auth/Application/Controllers/user-controller";
 import { AccountsRepository } from "@/core/modules/auth/Infraestructure/account-repository";
-import { SessionsRepository } from "@/core/modules/auth/Infraestructure/session-repository";
-import { SessionsService } from "@/core/modules/auth/Application/Services/session-service";
-import { SessionsController } from "@/core/modules/auth/Application/Controllers/session-controller";
 
 export function createAuthModule() {
     const authModule = createModule();
@@ -21,9 +18,6 @@ export function createAuthModule() {
         authModule
             .bind(DI_SYMBOLS.IAccountsRepository)
             .toClass(AccountsRepository);
-        authModule
-            .bind(DI_SYMBOLS.ISessionsRepository)
-            .toClass(SessionsRepository);
 
         // Services
         authModule
@@ -35,9 +29,6 @@ export function createAuthModule() {
         authModule
             .bind(DI_SYMBOLS.IUsersService)
             .toClass(UsersService, [DI_SYMBOLS.IUsersRepository]);
-        authModule
-            .bind(DI_SYMBOLS.ISessionsService)
-            .toClass(SessionsService, [DI_SYMBOLS.ISessionsRepository]);
 
         // Controllers
         authModule
@@ -46,9 +37,6 @@ export function createAuthModule() {
         authModule
             .bind(DI_SYMBOLS.UsersController)
             .toClass(UsersController, [DI_SYMBOLS.IUsersService]);
-        authModule
-            .bind(DI_SYMBOLS.SessionsController)
-            .toClass(SessionsController, [DI_SYMBOLS.ISessionsService]);
     }
 
     return authModule;

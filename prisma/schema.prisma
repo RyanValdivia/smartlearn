@@ -40,8 +40,10 @@ model Session {
   userId       String
   expiresAt    DateTime
   sessionRole  UserRole
+  cycleId      Int?
 
-  user User @relation(fields: [userId], references: [id])
+  cycle Cycle? @relation(fields: [cycleId], references: [id])
+  user  User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -62,9 +64,9 @@ model User {
   id            String    @id @default(cuid())
   email         String?   @unique
   emailVerified DateTime?
-  name          String?
+  name          String
   image         String?
-  dni           String?
+  dni           String    @unique
   password      String?
   role          UserRole  @default(STUDENT)
   teacherId     String?   @unique
@@ -132,6 +134,7 @@ model Cycle {
   startDate     DateTime
   endDate       DateTime
 
+  Session  Session[]
   sections Section[]
 
   createdAt DateTime @default(now())

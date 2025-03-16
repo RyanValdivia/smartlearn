@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { type CreateUserForm, type LogIn } from "./types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type ZodInferSchema } from "../types";
-import { UserRole } from "@@/drizzle/schemas/auth";
+import { type CreateUser, type LogIn } from "./types";
+import { UserRole } from "@prisma/client";
 
 export function useLogInForm() {
     const form = useForm<LogIn>({
@@ -39,7 +39,7 @@ export const logInSchema = z.object({
         }),
 });
 
-export const createUserFormSchema = z.object<ZodInferSchema<CreateUserForm>>({
+export const createUserFormSchema = z.object<ZodInferSchema<CreateUser>>({
     dni: z.string().length(8, { message: "El DNI debe tener 8 caracteres" }),
     name: z
         .string()
@@ -50,13 +50,13 @@ export const createUserFormSchema = z.object<ZodInferSchema<CreateUserForm>>({
     password: z
         .string()
         .length(8, { message: "El DNI debe tener 8 caracteres" })
-        .nullable()
-        .optional(),
-    email: z.string().nullable().optional(),
-    emailVerified: z.string().date().nullable().optional(),
-    image: z.string().nullable().optional(),
-    role: z.nativeEnum(UserRole).optional(),
+        .nullable(),
+    email: z.string().nullable(),
+    image: z.string().nullable(),
+    role: z.nativeEnum(UserRole),
 });
+
+export type CreateUserForm = z.infer<typeof createUserFormSchema>;
 
 export function useCreateUserForm() {
     const form = useForm<CreateUserForm>({
@@ -65,7 +65,6 @@ export function useCreateUserForm() {
             name: "",
             password: "",
             email: "",
-            emailVerified: "",
             image: "",
             role: UserRole.STUDENT,
         },

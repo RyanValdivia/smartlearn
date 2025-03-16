@@ -1,6 +1,6 @@
+import { type AccountFromAPI } from "@/core/api/accounts/account";
 import { type IAuthService } from "../../Domain/auth-service";
-import { type Account } from "../../../../api/accounts/account";
-import { type User } from "@/core/api/users/types";
+import { type UserFromAPI } from "@/core/api/users/types";
 import { type Account as NextAccount } from "next-auth";
 
 interface Credentials {
@@ -11,7 +11,9 @@ interface Credentials {
 export class AuthController {
     constructor(private readonly authService: IAuthService) {}
 
-    async logIn(credentials: Credentials | undefined): Promise<User | null> {
+    async logIn(
+        credentials: Credentials | undefined,
+    ): Promise<UserFromAPI | null> {
         if (!credentials) {
             return null;
         }
@@ -30,7 +32,7 @@ export class AuthController {
         return this.authService.userAlreadyExists(email);
     }
 
-    async linkAccount(userId: string, account: Account): Promise<void> {
+    async linkAccount(userId: string, account: AccountFromAPI): Promise<void> {
         return this.authService.linkAccount(userId, account);
     }
 

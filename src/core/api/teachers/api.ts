@@ -2,7 +2,7 @@ import { APIError, type APIPaginationResponse } from "..";
 import { APIAccessor, type APIAccessorParams } from "../types";
 import { teacherRouter } from "./schemas";
 import {
-    type Teacher,
+    type TeacherFromAPI,
     type GetManyTeachersParams,
     type TeacherAPI,
 } from "./types";
@@ -17,7 +17,7 @@ export class TeacherClass
 
     async getMany(
         params: GetManyTeachersParams,
-    ): Promise<APIPaginationResponse<Teacher[]>> {
+    ): Promise<APIPaginationResponse<TeacherFromAPI[]>> {
         const res = await this._client.getMany({
             headers: {
                 "content-type": "application/json",

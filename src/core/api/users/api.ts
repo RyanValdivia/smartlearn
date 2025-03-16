@@ -1,7 +1,11 @@
 import { APIError, type APIPaginationResponse } from "..";
 import { APIAccessor, type APIAccessorParams } from "../types";
 import { userRouter } from "./schemas";
-import { type UserAPI, type GetManyUsersParams, type User } from "./types";
+import {
+    type UserAPI,
+    type GetManyUsersParams,
+    type UserFromAPI,
+} from "./types";
 
 export class UserClass
     extends APIAccessor<typeof userRouter>
@@ -13,7 +17,7 @@ export class UserClass
 
     async getMany(
         params: GetManyUsersParams,
-    ): Promise<APIPaginationResponse<User[]>> {
+    ): Promise<APIPaginationResponse<UserFromAPI[]>> {
         const res = await this._client.getMany({
             headers: {
                 "content-type": "application/json",

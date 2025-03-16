@@ -1,6 +1,9 @@
-import { type Account, type CreateAccount } from "../../../api/accounts/account";
+import {
+    type AccountFromAPI,
+    type CreateAccount,
+} from "../../../api/accounts/account";
 
 export interface IAccountsRepository {
-    createAccount(input: CreateAccount): Promise<Account>;
-    findAccountByUserId(userId: string): Promise<Account | null>;
+    createAccount(input: CreateAccount): Promise<AccountFromAPI>;
+    findAccountByUserId(userId: string): Promise<AccountFromAPI | null>;
 }

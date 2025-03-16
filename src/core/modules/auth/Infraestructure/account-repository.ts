@@ -1,27 +1,31 @@
-import { db } from "@@/drizzle/client";
+import {
+    type CreateAccount,
+    type AccountFromAPI,
+} from "@/core/api/accounts/account";
 import { type IAccountsRepository } from "../Domain/account-repository";
-import { type CreateAccount, type Account } from "../../../api/accounts/account";
-import { accountsTable } from "@@/drizzle/schemas/auth";
-import { eq } from "drizzle-orm";
+import { db } from "@/core/server/db";
+import { jsonify } from "@/lib/utils";
 
 export class AccountsRepository implements IAccountsRepository {
-    async createAccount(input: CreateAccount): Promise<Account> {
-        console.log("input", input);
-        const [account] = await db
-            .insert(accountsTable)
-            .values(input)
-            .returning();
+    async createAccount(input: CreateAccount): Promise<AccountFromAPI> {
+        const account = await db.account.create({
+            data: input,
+        });
 
-        return account;
+        return jsonify(account);
     }
 
-    async findAccountByUserId(userId: string): Promise<Account | null> {
-        const [account] = await db
-            .select()
-            .from(accountsTable)
-            .where(eq(accountsTable.userId, userId))
-            .limit(1);
+    async findAccountByUserId(userId: string): Promise<AccountFromAPI | null> {
+        const account = await db.account.findMany({
+            where: {
+                userId,
+            },
+        });
 
-        return account;
+        if (account.length === 0) {
+            return null;
+        }
+        
+        return jsonify(account[0]);
     }
 }

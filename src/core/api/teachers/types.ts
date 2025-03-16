@@ -1,17 +1,14 @@
-import { type z } from "zod";
-import {
-    type updateTeacherSchema,
-    type createTeacherSchema,
-    type teacherSchema,
-} from "./schemas";
 import { type PaginationParams } from "@/utils/types";
 import { type APIPaginationResponse } from "..";
+import { type Jsonify } from "type-fest";
+import { type Teacher } from "@prisma/client";
 
-export type Teacher = z.infer<typeof teacherSchema>;
+export type TeacherFromAPI = Jsonify<Teacher>;
 
-export type CreateTeacher = z.input<typeof createTeacherSchema>;
-
-export type UpdateTeacher = z.input<typeof updateTeacherSchema>;
+export type CreateTeacher = Omit<
+    TeacherFromAPI,
+    "id" | "createdAt" | "updatedAt"
+>;
 
 export type TeacherQueryFilters = {
     fullTextSearch?: string;
@@ -24,5 +21,5 @@ export type GetManyTeachersParams = {
 export type TeacherAPI = {
     getMany: (
         params: GetManyTeachersParams,
-    ) => Promise<APIPaginationResponse<Teacher[]>>;
+    ) => Promise<APIPaginationResponse<TeacherFromAPI[]>>;
 };

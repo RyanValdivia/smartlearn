@@ -10,7 +10,7 @@ import {
     FULL_TEXT_SEARCH_PARAM_NAME,
     PAGINATION_PARAM_NAME,
 } from "@/core/constants";
-import { UserRole } from "@@/drizzle/schemas/auth";
+import { UserRole } from "@prisma/client";
 import React from "react";
 
 export default async function Page({

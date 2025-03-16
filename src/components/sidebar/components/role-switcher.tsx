@@ -20,11 +20,11 @@ import {
 import { COMPANY_NAME } from "@/core/constants";
 import { useAppContext } from "@/core/app-context";
 import { SessionRoles } from "@/core/server/auth/types";
-import { type UserRole } from "@@/drizzle/schemas/auth";
+import { type UserRole } from "@prisma/client";
 
 export function RoleSwitcher({ roles }: { roles: UserRole[] }) {
     const { selectRole, selectedRole } = useAppContext();
-    
+
     const { isMobile } = useSidebar();
 
     return (

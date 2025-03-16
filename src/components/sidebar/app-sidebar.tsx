@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/sidebar";
 import { RoleSwitcher } from "./components/role-switcher";
 import { type AdapterUser } from "next-auth/adapters";
-import { UserRole } from "@@/drizzle/schemas/auth";
 import { NavRoutes } from "./components/nav-routes";
 import { type Route, ROUTES } from "@/core/routes";
+import { UserRole } from "@prisma/client";
 const data = {
     basicRoutes: [
         ROUTES.dashboard,

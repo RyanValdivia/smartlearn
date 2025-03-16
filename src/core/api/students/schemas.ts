@@ -1,21 +1,33 @@
-import { studentsTable } from "@@/drizzle/schemas/student";
-import {
-    createInsertSchema,
-    createSelectSchema,
-    createUpdateSchema,
-} from "drizzle-zod";
 import { type ZodInferSchema } from "../types";
 import { z } from "zod";
-import { type StudentAPI, type GetManyStudentsParams } from "./types";
+import {
+    type StudentAPI,
+    type GetManyStudentsParams,
+    type StudentFromAPI,
+    type UpdateStudent,
+} from "./types";
 import { contract } from "@/core/ts-rest";
 import { type TypedAppRouter } from "@/utils/types";
 import { apiResponsePaginationSchema } from "../api-response";
+import { createdAtSchema, updatedAtSchema } from "@/core/utils";
 
-export const studentSchema = createSelectSchema(studentsTable);
+export const studentSchema = z.object<ZodInferSchema<StudentFromAPI>>({
+    id: z.string().cuid(),
+    userId: z.string().cuid(),
+    sectionId: z.number().int().nullable(),
+    createdAt: createdAtSchema,
+    updatedAt: updatedAtSchema,
+});
 
-export const createStudentSchema = createInsertSchema(studentsTable);
+export const createStudentSchema = studentSchema.omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true,
+});
 
-export const updateStudentSchema = createUpdateSchema(studentsTable);
+export const updateStudentSchema = z.object<ZodInferSchema<UpdateStudent>>({
+    sectionId: z.number().int().nullable().optional(),
+});
 
 export const studentQueryFilters = z.object<
     ZodInferSchema<GetManyStudentsParams["filters"]>
