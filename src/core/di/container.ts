@@ -6,8 +6,10 @@ import { createTeacherModule } from "./modules/teacher-module";
 
 const container = createContainer();
 
-container.load(Symbol.for("AuthModule"), createAuthModule());
-container.load(Symbol.for("TeacherModule"), createTeacherModule());
+export function initializeDI() {
+    container.load(Symbol.for("AuthModule"), createAuthModule());
+    container.load(Symbol.for("TeacherModule"), createTeacherModule());
+}
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(
     symbol: K,
