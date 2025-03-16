@@ -32,6 +32,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Session {
@@ -54,6 +55,7 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+  @@map("verification_tokens")
 }
 
 model User {
@@ -90,6 +92,8 @@ model Teacher {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("teachers")
 }
 
 model Student {
@@ -103,6 +107,8 @@ model Student {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("students")
 }
 
 model StudentEnrollment {
@@ -114,6 +120,7 @@ model StudentEnrollment {
   section Section @relation(fields: [sectionId], references: [id])
 
   @@id([studentId, sectionId])
+  @@map("student_enrollments")
 }
 
 model Cycle {
@@ -129,6 +136,8 @@ model Cycle {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("cycles")
 }
 
 model Section {
@@ -141,6 +150,11 @@ model Section {
   lectures    Lecture[]
 
   cycle Cycle @relation(fields: [cycleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sections")
 }
 
 model Subject {
@@ -152,6 +166,8 @@ model Subject {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("subjects")
 }
 
 //TODO tareas y evaluaciones, calificaciones y campos 
@@ -167,6 +183,8 @@ model Lecture {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("lectures")
 }
 
 enum UserRole {
