@@ -16,7 +16,7 @@ export class TeachersService implements ITeachersService {
         return this.teachersRepository.getMany(params);
     }
 
-    createTeacher(userId: string, input: CreateTeacher): Promise<Teacher> {
-        return this.teachersRepository.createTeacher(userId, input);
+    createTeacher(input: CreateTeacher): Promise<Teacher> {
+        return this.teachersRepository.createTeacher(input);
     }
 }

@@ -7,37 +7,46 @@ import { type UsersController } from "../modules/auth/Application/Controllers/us
 import { type ISessionsRepository } from "../modules/auth/Domain/session-repository";
 import { type ISessionsService } from "../modules/auth/Domain/session-service";
 import { type SessionsController } from "../modules/auth/Application/Controllers/session-controller";
+import { type ITeachersRepository } from "../modules/teachers/Domain/teacher-repository";
+import { type ITeachersService } from "../modules/teachers/Domain/teacher-service";
+import { type TeachersController } from "../modules/teachers/Application/Controllers/teacher-controller";
 
 export const DI_SYMBOLS = {
     // Repositories
     IUsersRepository: Symbol.for("IUserRepository"),
     IAccountsRepository: Symbol.for("IAccountsRepository"),
     ISessionsRepository: Symbol.for("ISessionsRepository"),
+    ITeachersRepository: Symbol.for("ITeachersRepository"),
 
     // Services
     IAuthService: Symbol.for("IAuthService"),
     IUsersService: Symbol.for("IUsersService"),
     ISessionsService: Symbol.for("ISessionsService"),
+    ITeachersService: Symbol.for("ITeachersService"),
 
     // Controllers
     AuthController: Symbol.for("AuthController"),
     UsersController: Symbol.for("UsersController"),
     SessionsController: Symbol.for("SessionsController"),
+    TeachersController: Symbol.for("TeachersController"),
 };
 
-export interface DI_RETURN_TYPES {
+export default interface DI_RETURN_TYPES {
     // Repositories
     IUsersRepository: IUsersRepository;
     IAccountsRepository: IAccountsRepository;
     ISessionsRepository: ISessionsRepository;
+    ITeachersRepository: ITeachersRepository;
 
     // Services
     IAuthService: IAuthService;
     IUsersService: IUsersService;
     ISessionsService: ISessionsService;
+    ITeachersService: ITeachersService;
 
     // Controllers
     AuthController: AuthController;
     UsersController: UsersController;
     SessionsController: SessionsController;
+    TeachersController: TeachersController;
 }
