@@ -1,15 +1,31 @@
-import { createContainer } from "@evyweb/ioctopus";
-import type DI_RETURN_TYPES from "./types";
-import { DI_SYMBOLS } from "./types";
-import { createAuthModule } from "./modules/auth-module";
-import { createTeacherModule } from "./modules/teacher-module";
+import "reflect-metadata";
 
-const container = createContainer();
+import { Container } from "inversify";
+import { type DI_RETURN_TYPES, DI_SYMBOLS } from "./types";
+import { type IUsersRepository } from "../modules/auth/Domain/user-repository";
+import { UsersRepository } from "../modules/auth/Infraestructure/user-repository";
+import { type IUsersService } from "../modules/auth/Domain/user-service";
+import { UsersService } from "../modules/auth/Application/Services/user-service";
+import { UsersController } from "../modules/auth/Application/Controllers/user-controller";
 
-export function initializeDI() {
-    container.load(Symbol.for("AuthModule"), createAuthModule());
-    container.load(Symbol.for("TeacherModule"), createTeacherModule());
-}
+const container = new Container();
+
+container
+    .bind<IUsersRepository>(DI_SYMBOLS.IUsersRepository)
+    .to(UsersRepository)
+    .inSingletonScope();
+
+container
+    .bind<IUsersService>(DI_SYMBOLS.IUsersService)
+    .to(UsersService)
+    .inSingletonScope();
+
+container
+    .bind<UsersController>(DI_SYMBOLS.UsersController)
+    .to(UsersController)
+    .inSingletonScope();
+
+export { container };
 
 export function getInjection<K extends keyof typeof DI_SYMBOLS>(
     symbol: K,
