@@ -88,9 +88,8 @@ model Teacher {
   id     String @id @default(cuid())
   userId String @unique
 
-  user User @relation(fields: [userId], references: [id])
-
-  lecture Lecture[]
+  user     User      @relation(fields: [userId], references: [id])
+  lectures Lecture[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -103,9 +102,9 @@ model Student {
   userId    String @unique
   sectionId Int?
 
-  enrollments StudentEnrollment[]
-
   user User @relation(fields: [userId], references: [id])
+
+  enrollments StudentEnrollment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -114,27 +113,29 @@ model Student {
 }
 
 model StudentEnrollment {
+  id         Int      @id @default(autoincrement())
   studentId  String
-  sectionId  Int
+  lectureId  Int
   enrolledAt DateTime @default(now())
 
   student Student @relation(fields: [studentId], references: [id])
-  section Section @relation(fields: [sectionId], references: [id])
+  lecture Lecture @relation(fields: [lectureId], references: [id])
+  grades  Grade[]
 
-  @@id([studentId, sectionId])
+  @@unique([studentId, lectureId])
   @@map("student_enrollments")
 }
 
 model Cycle {
-  id            Int       @id @default(autoincrement())
-  name          String
-  description   String
-  mode          CycleMode
-  montlyTuition Float
-  startDate     DateTime
-  endDate       DateTime
+  id             Int       @id @default(autoincrement())
+  name           String
+  description    String
+  mode           CycleMode
+  monthlyTuition Float
+  startDate      DateTime
+  endDate        DateTime
 
-  Session  Session[]
+  session  Session[]
   sections Section[]
 
   createdAt DateTime @default(now())
@@ -149,8 +150,7 @@ model Section {
   studentLimit Int
   cycleId      Int
 
-  enrollments StudentEnrollment[]
-  lectures    Lecture[]
+  lectures Lecture[]
 
   cycle Cycle @relation(fields: [cycleId], references: [id])
 
@@ -180,6 +180,9 @@ model Lecture {
   teacherId String
   subjectId Int
 
+  tasks       Task[]
+  enrollments StudentEnrollment[]
+
   section Section @relation(fields: [sectionId], references: [id])
   teacher Teacher @relation(fields: [teacherId], references: [id])
   subject Subject @relation(fields: [subjectId], references: [id])
@@ -188,6 +191,60 @@ model Lecture {
   updatedAt DateTime @updatedAt
 
   @@map("lectures")
+}
+
+model Unit {
+  id    Int    @id @default(autoincrement())
+  name  String
+  alias String
+
+  strategies EvaluationStrategy[]
+
+  @@map("units")
+}
+
+model EvaluationStrategy {
+  id     Int    @id @default(autoincrement())
+  name   String
+  alias  String
+  unitId Int
+
+  grade Grade[]
+
+  unit Unit @relation(fields: [unitId], references: [id])
+
+  @@map("evaluation_strategy")
+}
+
+model Task {
+  id        Int @id @default(autoincrement())
+  lectureId Int
+
+  grades Grade[]
+
+  lecture Lecture @relation(fields: [lectureId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("tasks")
+}
+
+model Grade {
+  id           Int   @id @default(autoincrement())
+  value        Float
+  taskId       Int
+  enrollmentId Int
+  strategyId   Int
+
+  task       Task               @relation(fields: [taskId], references: [id])
+  strategy   EvaluationStrategy @relation(fields: [strategyId], references: [id])
+  enrollment StudentEnrollment  @relation(fields: [enrollmentId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("grades")
 }
 
 enum UserRole {
