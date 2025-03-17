@@ -55,7 +55,7 @@ export function LogInForm() {
                     )}
                 />
                 <Button className="w-full" type="submit">
-                    Submit
+                    Iniciar sesión
                 </Button>
             </form>
         </Form>

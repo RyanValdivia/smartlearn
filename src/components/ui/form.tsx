@@ -14,6 +14,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
+import { AnimatePresence, motion } from "motion/react";
 
 const Form = FormProvider;
 
@@ -89,8 +90,8 @@ FormItem.displayName = "FormItem";
 const FormLabel = React.forwardRef<
     React.ElementRef<typeof LabelPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
->(({ className, ...props }, ref) => {
-    const { error, formItemId } = useFormField();
+>(({ className, children }, ref) => {
+    const { error, formItemId, ...props } = useFormField();
 
     return (
         <Label
@@ -98,7 +99,9 @@ const FormLabel = React.forwardRef<
             className={cn(error && "text-destructive", className)}
             htmlFor={formItemId}
             {...props}
-        />
+        >
+            {children}
+        </Label>
     );
 });
 FormLabel.displayName = "FormLabel";
@@ -146,26 +149,32 @@ FormDescription.displayName = "FormDescription";
 const FormMessage = React.forwardRef<
     HTMLParagraphElement,
     React.HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
+>(({ className, children }, ref) => {
     const { error, formMessageId } = useFormField();
     const body = error ? String(error?.message ?? "") : children;
 
-    if (!body) {
-        return null;
-    }
-
     return (
-        <p
-            ref={ref}
-            id={formMessageId}
-            className={cn(
-                "text-[0.8rem] font-medium text-destructive",
-                className,
+        <AnimatePresence>
+            {body && (
+                <motion.p
+                    ref={ref}
+                    id={formMessageId}
+                    className={cn(
+                        "text-[0.8rem] font-medium text-destructive",
+                        className,
+                    )}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{
+                        opacity: 1,
+                        height: "auto",
+                        x: [0, -5, 5, -5, 5, 0],
+                    }}
+                    exit={{ opacity: 0, height: 0, margin: 0 }}
+                >
+                    {body}
+                </motion.p>
             )}
-            {...props}
-        >
-            {body}
-        </p>
+        </AnimatePresence>
     );
 });
 FormMessage.displayName = "FormMessage";
