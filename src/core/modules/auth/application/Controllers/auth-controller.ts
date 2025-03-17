@@ -1,7 +1,9 @@
 import { type AccountFromAPI } from "@/core/api/accounts/account";
-import { type IAuthService } from "../../Domain/auth-service";
 import { type UserFromAPI } from "@/core/api/users/types";
 import { type Account as NextAccount } from "next-auth";
+import { container } from "@/core/di/Inversify.config";
+import { type IAuthService } from "../../Domain/auth-service";
+import { DI_SYMBOLS } from "@/core/di/types";
 
 interface Credentials {
     username: string;
@@ -9,7 +11,10 @@ interface Credentials {
 }
 
 export class AuthController {
-    constructor(private readonly authService: IAuthService) {}
+    private _authService: IAuthService;
+    constructor() {
+        this._authService = container.get(DI_SYMBOLS.IAuthService);
+    }
 
     async logIn(
         credentials: Credentials | undefined,
@@ -18,7 +23,7 @@ export class AuthController {
             return null;
         }
 
-        return this.authService.logIn({
+        return this._authService.logIn({
             dni: credentials.username,
             password: credentials.password,
         });
@@ -29,15 +34,15 @@ export class AuthController {
             return false;
         }
 
-        return this.authService.userAlreadyExists(email);
+        return this._authService.userAlreadyExists(email);
     }
 
     async linkAccount(userId: string, account: AccountFromAPI): Promise<void> {
-        return this.authService.linkAccount(userId, account);
+        return this._authService.linkAccount(userId, account);
     }
 
     async signIn(userEmail: string | null | undefined, account: NextAccount) {
-        return this.authService.signIn(userEmail, {
+        return this._authService.signIn(userEmail, {
             access_token: account.access_token || null,
             expires_at: account.expires_at || null,
             type: account.type,

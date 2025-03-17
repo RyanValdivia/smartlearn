@@ -6,9 +6,14 @@ import {
 } from "@/core/api/teachers/types";
 import { type ITeachersRepository } from "../../Domain/teacher-repository";
 import { type ITeachersService } from "../../Domain/teacher-service";
-
+import { inject, injectable } from "inversify";
+import { DI_SYMBOLS } from "@/core/di/types";
+@injectable()
 export class TeachersService implements ITeachersService {
-    constructor(private readonly teachersRepository: ITeachersRepository) {}
+    constructor(
+        @inject(DI_SYMBOLS.ITeachersRepository)
+        private _teachersRepository: ITeachersRepository,
+    ) {}
 
     // getMany(
     //     params: GetManyTeachersParams,
@@ -17,6 +22,6 @@ export class TeachersService implements ITeachersService {
     // }
 
     createTeacher(input: CreateTeacher): Promise<TeacherFromAPI> {
-        return this.teachersRepository.createTeacher(input);
+        return this._teachersRepository.createTeacher(input);
     }
 }

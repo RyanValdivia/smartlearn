@@ -7,11 +7,19 @@ import {
 import { type IUsersRepository } from "../Domain/user-repository";
 import { type PaginationResponse } from "@/core/api";
 import { MAX_PAGINATION_SIZE } from "@/core/constants";
-import { db } from "@/core/server/db";
 import { jsonify } from "@/lib/utils";
+import { inject, injectable } from "inversify";
+import { DI_SYMBOLS } from "@/core/di/types";
+import { type PrismaClient } from "@prisma/client";
+
+@injectable()
 export class UsersRepository implements IUsersRepository {
+    constructor(
+        @inject(DI_SYMBOLS.PrismaClient) private _client: PrismaClient,
+    ) {}
+
     async existsUserByEmail(email: string): Promise<boolean> {
-        const user = await db.user.findUnique({
+        const user = await this._client.user.findUnique({
             where: {
                 email,
             },
@@ -25,7 +33,7 @@ export class UsersRepository implements IUsersRepository {
     }
 
     async findUserByDni(dni: string): Promise<UserFromAPI | null> {
-        const user = await db.user.findUnique({
+        const user = await this._client.user.findUnique({
             where: {
                 dni,
             },
@@ -35,7 +43,7 @@ export class UsersRepository implements IUsersRepository {
     }
 
     async findUserByEmail(email: string): Promise<UserFromAPI | null> {
-        const user = await db.user.findUnique({
+        const user = await this._client.user.findUnique({
             where: {
                 email,
             },
@@ -50,11 +58,11 @@ export class UsersRepository implements IUsersRepository {
         const { filters } = params || {};
 
         if (!filters) {
-            const users = await db.user.findMany();
+            const users = await this._client.user.findMany();
             return { data: jsonify(users), total: users.length };
         }
 
-        const users = await db.user.findMany({
+        const users = await this._client.user.findMany({
             where: {
                 OR: [
                     { name: { contains: filters?.fullTextSearch } },
@@ -67,7 +75,7 @@ export class UsersRepository implements IUsersRepository {
             skip: (filters.page - 1) * MAX_PAGINATION_SIZE,
         });
 
-        const total = await db.user.count({
+        const total = await this._client.user.count({
             where: {
                 OR: [
                     { name: { contains: filters?.fullTextSearch } },
@@ -82,14 +90,14 @@ export class UsersRepository implements IUsersRepository {
     }
 
     async createUser(input: CreateUser): Promise<UserFromAPI> {
-        const user = await db.user.create({
+        const user = await this._client.user.create({
             data: input,
         });
         return jsonify(user);
     }
 
     async updateUser(id: string, input: UpdateUser): Promise<UserFromAPI> {
-        const user = await db.user.findUnique({
+        const user = await this._client.user.findUnique({
             where: {
                 id,
             },
@@ -99,7 +107,7 @@ export class UsersRepository implements IUsersRepository {
             throw new Error("User not found");
         }
 
-        const updatedUser = await db.user.update({
+        const updatedUser = await this._client.user.update({
             where: {
                 id,
             },
@@ -110,7 +118,7 @@ export class UsersRepository implements IUsersRepository {
     }
 
     async deleteUser(id: string): Promise<void> {
-        const user = await db.user.findUnique({
+        const user = await this._client.user.findUnique({
             where: {
                 id,
             },
@@ -120,7 +128,7 @@ export class UsersRepository implements IUsersRepository {
             throw new Error("User not found");
         }
 
-        await db.user.delete({
+        await this._client.user.delete({
             where: {
                 id,
             },

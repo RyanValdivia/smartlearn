@@ -3,9 +3,14 @@ import { type IUsersService } from "../../Domain/user-service";
 import { CommonResponse } from "@/utils/common-response";
 import { type NextRequest } from "next/server";
 import { isAdminServerAuthSession } from "@/core/server/auth";
+import { container } from "@/core/di/Inversify.config";
+import { DI_SYMBOLS } from "@/core/di/types";
 
 export class UsersController {
-    constructor(private readonly usersService: IUsersService) {}
+    private _usersService: IUsersService;
+    constructor() {
+        this._usersService = container.get(DI_SYMBOLS.IUsersService);
+    }
 
     async getMany(req: NextRequest): Promise<Response> {
         try {
@@ -29,7 +34,7 @@ export class UsersController {
             }
             const queries = parse.data;
 
-            const { data: users, total } = await this.usersService.getMany({
+            const { data: users, total } = await this._usersService.getMany({
                 params: {
                     filters: queries,
                 },
@@ -61,7 +66,7 @@ export class UsersController {
 
             const user = parse.data;
 
-            await this.usersService.createUser(user);
+            await this._usersService.createUser(user);
 
             return CommonResponse.successful({
                 message: "Usuario creado correctamente",

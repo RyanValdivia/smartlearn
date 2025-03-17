@@ -5,9 +5,14 @@ import {
     // teacherQueryFilters,
 } from "@/core/api/teachers/schemas";
 import { CommonResponse } from "@/utils/common-response";
+import { container } from "@/core/di/Inversify.config";
+import { DI_SYMBOLS } from "@/core/di/types";
 
 export class TeachersController {
-    constructor(private readonly teachersService: ITeachersService) {}
+    private _teachersService: ITeachersService;
+    constructor() {
+        this._teachersService = container.get(DI_SYMBOLS.ITeachersService);
+    }
 
     // async getMany(req: NextRequest): Promise<Response> {
     //     try {
@@ -55,7 +60,7 @@ export class TeachersController {
                 );
             }
 
-            const teacher = await this.teachersService.createTeacher(
+            const teacher = await this._teachersService.createTeacher(
                 parse.data,
             );
 

@@ -3,12 +3,17 @@ import {
     type AccountFromAPI,
 } from "@/core/api/accounts/account";
 import { type IAccountsRepository } from "../Domain/account-repository";
-import { db } from "@/core/server/db";
 import { jsonify } from "@/lib/utils";
-
+import { inject, injectable } from "inversify";
+import { DI_SYMBOLS } from "@/core/di/types";
+import { type PrismaClient } from "@prisma/client";
+@injectable()
 export class AccountsRepository implements IAccountsRepository {
+    constructor(
+        @inject(DI_SYMBOLS.PrismaClient) private _client: PrismaClient,
+    ) {}
     async createAccount(input: CreateAccount): Promise<AccountFromAPI> {
-        const account = await db.account.create({
+        const account = await this._client.account.create({
             data: input,
         });
 
@@ -16,7 +21,7 @@ export class AccountsRepository implements IAccountsRepository {
     }
 
     async findAccountByUserId(userId: string): Promise<AccountFromAPI | null> {
-        const account = await db.account.findMany({
+        const account = await this._client.account.findMany({
             where: {
                 userId,
             },
@@ -25,7 +30,7 @@ export class AccountsRepository implements IAccountsRepository {
         if (account.length === 0) {
             return null;
         }
-        
+
         return jsonify(account[0]);
     }
 }

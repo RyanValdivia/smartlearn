@@ -6,19 +6,25 @@ import {
     type CreateUser,
     type GetManyUsersParams,
 } from "@/core/api/users/types";
+import { inject, injectable } from "inversify";
+import { DI_SYMBOLS } from "@/core/di/types";
 
+@injectable()
 export class UsersService implements IUsersService {
-    constructor(private readonly usersRepository: IUsersRepository) {}
+    constructor(
+        @inject(DI_SYMBOLS.IUsersRepository)
+        private _usersRepository: IUsersRepository,
+    ) {}
 
     getMany({
         params,
     }: {
         params: GetManyUsersParams;
     }): Promise<PaginationResponse<UserFromAPI[]>> {
-        return this.usersRepository.getMany(params);
+        return this._usersRepository.getMany(params);
     }
 
     createUser(input: CreateUser): Promise<UserFromAPI> {
-        return this.usersRepository.createUser(input);
+        return this._usersRepository.createUser(input);
     }
 }

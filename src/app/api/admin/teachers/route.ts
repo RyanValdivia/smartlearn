@@ -1,8 +1,5 @@
-import { getInjection } from "@/core/di/container";
+import { TeachersController } from "@/core/modules/teachers/Application/Controllers/teacher-controller";
 import { type NextRequest } from "next/server";
 
-const controller = getInjection("TeachersController");
-
-// export const GET = (req: NextRequest) => controller.getMany(req);
-
+const controller  = new TeachersController();
 export const POST = (req: NextRequest) => controller.create(req);

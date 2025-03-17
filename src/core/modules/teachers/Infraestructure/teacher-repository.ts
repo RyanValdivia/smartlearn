@@ -3,13 +3,17 @@ import {
     type CreateTeacher,
 } from "@/core/api/teachers/types";
 import { type ITeachersRepository } from "../Domain/teacher-repository";
-import { db } from "@/core/server/db";
 import { jsonify } from "@/lib/utils";
-import { UserRole } from "@prisma/client";
-
+import { type PrismaClient, UserRole } from "@prisma/client";
+import { inject, injectable } from "inversify";
+import { DI_SYMBOLS } from "@/core/di/types";
+@injectable()
 export class TeachersRepository implements ITeachersRepository {
+    constructor(
+        @inject(DI_SYMBOLS.PrismaClient) private _client: PrismaClient,
+    ) {}
     async createTeacher(input: CreateTeacher): Promise<TeacherFromAPI> {
-        const user = await db.user.findUnique({
+        const user = await this._client.user.findUnique({
             where: {
                 id: input.userId,
             },
@@ -19,7 +23,7 @@ export class TeachersRepository implements ITeachersRepository {
             throw new Error("User not found");
         }
 
-        await db.user.update({
+        await this._client.user.update({
             where: {
                 id: input.userId,
             },
@@ -28,7 +32,7 @@ export class TeachersRepository implements ITeachersRepository {
             },
         });
 
-        const teacher = await db.teacher.create({
+        const teacher = await this._client.teacher.create({
             data: {
                 userId: input.userId,
             },

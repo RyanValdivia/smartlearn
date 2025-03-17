@@ -17,7 +17,6 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import { getInjection } from "@/core/di/container";
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/core/routes";
 import { getSessionTokenCookie } from "./utils";
@@ -26,6 +25,7 @@ import { logger } from "@/core/logger";
 import prisma from "@@/prisma/seed";
 import { db } from "../db";
 import { UserRole } from "@prisma/client";
+import { AuthController } from "@/core/modules/auth/Application/Controllers/auth-controller";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -55,7 +55,7 @@ declare module "next-auth/adapters" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
-const authController = getInjection("AuthController");
+const authController = new AuthController();
 //TODO SESSION TIME OUT
 export const authOptions = {
     providers: [
