@@ -4,15 +4,21 @@ import tseslint from "typescript-eslint";
 import stylistic from "@stylistic/eslint-plugin";
 import prettier from "eslint-config-prettier";
 import pluginQuery from "@tanstack/eslint-plugin-query";
-import pluginNext from "eslint-plugin-next";
+import { FlatCompat } from "@eslint/eslintrc";
 
 const skipLint = false;
+
+const compat = new FlatCompat({
+    baseDirectory: import.meta.dirname,
+});
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    pluginNext.configs.recommended,
+    ...compat.config({
+        extends: ["next"],
+    }),
     {
         files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
         languageOptions: { globals: globals.browser },
