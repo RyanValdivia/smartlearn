@@ -4,12 +4,15 @@ import tseslint from "typescript-eslint";
 import stylistic from "@stylistic/eslint-plugin";
 import prettier from "eslint-config-prettier";
 import pluginQuery from "@tanstack/eslint-plugin-query";
+import pluginNext from "eslint-plugin-next";
+
 const skipLint = false;
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
+    pluginNext.configs.recommended,
     {
         files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
         languageOptions: { globals: globals.browser },
