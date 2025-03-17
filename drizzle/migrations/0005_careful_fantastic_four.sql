@@ -1,1 +1,0 @@
-ALTER TABLE "sessions" ADD COLUMN "sessionRole" "user_role" NOT NULL;

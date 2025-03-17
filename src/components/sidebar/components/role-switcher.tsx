@@ -19,21 +19,13 @@ import {
 } from "@/components/ui/sidebar";
 import { COMPANY_NAME } from "@/core/constants";
 import { useAppContext } from "@/core/app-context";
-import { UserRole } from "@@/drizzle/schemas/auth";
 import { SessionRoles } from "@/core/server/auth/types";
+import { type UserRole } from "@prisma/client";
 
 export function RoleSwitcher({ roles }: { roles: UserRole[] }) {
     const { selectRole, selectedRole } = useAppContext();
 
     const { isMobile } = useSidebar();
-
-    const [activeRole, setActiveRole] = React.useState(
-        SessionRoles[selectedRole ?? UserRole.STUDENT],
-    );
-
-    if (!activeRole) {
-        return null;
-    }
 
     return (
         <SidebarMenu>
@@ -45,11 +37,11 @@ export function RoleSwitcher({ roles }: { roles: UserRole[] }) {
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                                <activeRole.logo className="size-4" />
+                                <selectedRole.logo className="size-4" />
                             </div>
                             <div className="grid flex-1 text-left text-sm leading-tight">
                                 <span className="truncate font-semibold">
-                                    {activeRole.access}
+                                    {selectedRole.access}
                                 </span>
                                 <span className="truncate text-xs">
                                     {COMPANY_NAME}
@@ -74,7 +66,6 @@ export function RoleSwitcher({ roles }: { roles: UserRole[] }) {
                                     key={ro.access}
                                     onClick={async () => {
                                         await selectRole(ro.access);
-                                        setActiveRole(SessionRoles[ro.access]);
                                     }}
                                     className="gap-2 p-2"
                                 >

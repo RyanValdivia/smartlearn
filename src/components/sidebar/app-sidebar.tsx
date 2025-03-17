@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Frame, Map, UserIcon } from "lucide-react";
+import { Frame, Map } from "lucide-react";
 
 import { NavMain } from "@/components/sidebar/components/nav-main";
 import { NavUser } from "@/components/sidebar/components/nav-user";
@@ -14,9 +14,9 @@ import {
 } from "@/components/ui/sidebar";
 import { RoleSwitcher } from "./components/role-switcher";
 import { type AdapterUser } from "next-auth/adapters";
-import { UserRole } from "@@/drizzle/schemas/auth";
 import { NavRoutes } from "./components/nav-routes";
-import { ROUTES } from "@/core/routes";
+import { type Route, ROUTES } from "@/core/routes";
+import { UserRole } from "@prisma/client";
 const data = {
     basicRoutes: [
         ROUTES.dashboard,
@@ -34,13 +34,7 @@ const data = {
         },
     ],
 };
-const panelAdmin = [
-    {
-        title: "Usuarios",
-        icon: UserIcon,
-        items: ROUTES.admin.subRoutes,
-    },
-];
+const panelAdmin: Route[] = ROUTES.admin.subRoutes;
 
 export function AppSidebar({
     accessibleRoles,
@@ -59,7 +53,7 @@ export function AppSidebar({
             </SidebarHeader>
             <SidebarContent>
                 {sessionRole === UserRole.ADMIN && (
-                    <NavMain items={panelAdmin} label={"Panel Admin"} />
+                    <NavMain route={panelAdmin} label={"Panel Admin"} />
                 )}
                 <NavRoutes items={data.basicRoutes} />
             </SidebarContent>

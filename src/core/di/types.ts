@@ -1,34 +1,22 @@
-import { type IAccountsRepository } from "../modules/auth/Domain/account-repository";
-import { type IUsersRepository } from "../modules/auth/Domain/user-repository";
-import { type IAuthService } from "../modules/auth/Domain/auth-service";
-import { type IUsersService } from "../modules/auth/Domain/user-service";
-import { type AuthController } from "../modules/auth/Application/Controllers/auth-controller";
-import { type UsersController } from "../modules/auth/Application/Controllers/user-controller";
-
+/* 
+TODO separar por modelo
+//modelo
+    IModeloRepository :  Symbol.for("IModeloRepository"),
+    IModeloService :  Symbol.for("IModeloService"),
+*/
 export const DI_SYMBOLS = {
-    // Repositories
-    IUsersRepository: Symbol.for("IUserRepository"),
-    IAccountsRepository: Symbol.for("IAccountsRepository"),
-
-    // Services
-    IAuthService: Symbol.for("IAuthService"),
+    PrismaClient: Symbol.for("PrismaClient"),
+    // User
+    IUsersRepository: Symbol.for("IUsersRepository"),
     IUsersService: Symbol.for("IUsersService"),
 
-    // Controllers
-    AuthController: Symbol.for("AuthController"),
-    UsersController: Symbol.for("UsersController"),
+    //Account
+    IAccountsRepository: Symbol.for("IAccountsRepository"),
+
+    //Auth
+    IAuthService: Symbol.for("IAuthService"),
+
+    //Teacher
+    ITeachersService: Symbol.for("ITeachersService"),
+    ITeachersRepository: Symbol.for("ITeachersRepository"),
 };
-
-export interface DI_RETURN_TYPES {
-    // Repositories
-    IUsersRepository: IUsersRepository;
-    IAccountsRepository: IAccountsRepository;
-
-    // Services
-    IAuthService: IAuthService;
-    IUsersService: IUsersService;
-
-    // Controllers
-    AuthController: AuthController;
-    UsersController: UsersController;
-}

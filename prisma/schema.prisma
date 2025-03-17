@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  sessionToken String   @id
+  userId       String
+  expiresAt    DateTime
+  sessionRole  UserRole
+  cycleId      Int?
+
+  cycle Cycle? @relation(fields: [cycleId], references: [id])
+  user  User   @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+  @@map("verification_tokens")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String?   @unique
+  emailVerified DateTime?
+  name          String
+  image         String?
+  dni           String    @unique
+  password      String?
+  role          UserRole  @default(STUDENT)
+  teacherId     String?   @unique
+  studentId     String?   @unique
+
+  teacher Teacher?
+  student Student?
+
+  accounts Account[]
+  sessions Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Teacher {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  user User @relation(fields: [userId], references: [id])
+
+  lecture Lecture[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("teachers")
+}
+
+model Student {
+  id        String @id @default(cuid())
+  userId    String @unique
+  sectionId Int?
+
+  enrollments StudentEnrollment[]
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("students")
+}
+
+model StudentEnrollment {
+  studentId  String
+  sectionId  Int
+  enrolledAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id])
+  section Section @relation(fields: [sectionId], references: [id])
+
+  @@id([studentId, sectionId])
+  @@map("student_enrollments")
+}
+
+model Cycle {
+  id            Int       @id @default(autoincrement())
+  name          String
+  description   String
+  mode          CycleMode
+  montlyTuition Float
+  startDate     DateTime
+  endDate       DateTime
+
+  Session  Session[]
+  sections Section[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cycles")
+}
+
+model Section {
+  id           Int    @id @default(autoincrement())
+  name         String
+  studentLimit Int
+  cycleId      Int
+
+  enrollments StudentEnrollment[]
+  lectures    Lecture[]
+
+  cycle Cycle @relation(fields: [cycleId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("sections")
+}
+
+model Subject {
+  id          Int    @id @default(autoincrement())
+  name        String
+  description String
+
+  lectures Lecture[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("subjects")
+}
+
+//TODO tareas y evaluaciones, calificaciones y campos 
+model Lecture {
+  id        Int    @id @default(autoincrement())
+  sectionId Int
+  teacherId String
+  subjectId Int
+
+  section Section @relation(fields: [sectionId], references: [id])
+  teacher Teacher @relation(fields: [teacherId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("lectures")
+}
+
+enum UserRole {
+  STUDENT
+  ADMIN
+  TEACHER
+}
+
+enum CycleMode {
+  HIBRID
+  REMOTE
+  IN_PERSON
+}

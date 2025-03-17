@@ -10,26 +10,22 @@ import {
     type UpdateSessionPayload,
     type OwnSession,
     type SessionUser,
+    type SessionFromAPI,
 } from "./types";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import {
-    accountsTable,
-    sessionsTable,
-    type UserRole,
-    usersTable,
-    verificationTokensTable,
-} from "@@/drizzle/schemas/auth";
-import { getInjection } from "@/core/di/container";
-import { type Session } from "../../api/session";
+
 import { redirect } from "next/navigation";
 import { ROUTES } from "@/core/routes";
-import { db } from "@@/drizzle/client";
-import { eq } from "drizzle-orm";
 import { getSessionTokenCookie } from "./utils";
 import { cookies } from "next/headers";
 import { logger } from "@/core/logger";
+import prisma from "@@/prisma/seed";
+import { db } from "../db";
+import { UserRole } from "@prisma/client";
+import { AuthController } from "@/core/modules/auth/Application/Controllers/auth-controller";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -51,7 +47,7 @@ declare module "next-auth" {
 
 declare module "next-auth/adapters" {
     interface AdapterUser extends SessionUser {}
-    interface AdapterSession extends Session {}
+    interface AdapterSession extends SessionFromAPI {}
 }
 
 /**
@@ -59,7 +55,7 @@ declare module "next-auth/adapters" {
  *
  * @see https://next-auth.js.org/configuration/options
  */
-const authController = getInjection("AuthController");
+const authController = new AuthController();
 //TODO SESSION TIME OUT
 export const authOptions = {
     providers: [
@@ -78,12 +74,7 @@ export const authOptions = {
             },
         }),
     ],
-    adapter: DrizzleAdapter(db, {
-        usersTable: usersTable,
-        accountsTable: accountsTable,
-        sessionsTable: sessionsTable,
-        verificationTokensTable: verificationTokensTable,
-    }),
+    adapter: PrismaAdapter(prisma),
     callbacks: {
         async signIn({ user, account }) {
             return await authController.signIn(user.email, account!);
@@ -98,19 +89,27 @@ export const authOptions = {
                 return session;
             }
 
-            const s = await db.query.sessionsTable.findFirst({
-                where: eq(sessionsTable.sessionToken, sessionToken),
+            const s = await db.session.findUnique({
+                where: {
+                    sessionToken,
+                },
             });
 
+            if (!s) {
+                logger.error("Session not found");
+                session.error = "SessionTokenNotFound";
+
+                return session;
+            }
             const accessibleRoles = roleAccessMap[user.role];
 
             session.own = {
                 ...session.own,
                 accesibleRoles: accessibleRoles,
-                cycleId: s?.cycleId || 0,
+                cycleId: s.cycleId,
                 sessionToken,
                 userId: user.id,
-                sessionRole: s?.sessionRole || null,
+                sessionRole: s.sessionRole,
             } satisfies OwnSession;
 
             if (trigger === "update" && newSession) {
@@ -119,24 +118,38 @@ export const authOptions = {
                 if (updatePayload.type === "ACCESS") {
                     const role = updatePayload.access;
 
-                    const updatedSession: {
-                        sessionRole: UserRole | null;
-                    }[] = await db
-                        .update(sessionsTable)
-                        .set({
+                    const updatedSession = await db.session.update({
+                        where: {
+                            sessionToken,
+                        },
+                        data: {
                             sessionRole: role,
-                        })
-                        .where(eq(sessionsTable.sessionToken, sessionToken))
-                        .returning({
-                            sessionRole: sessionsTable.sessionRole,
-                        });
+                        },
+                    });
 
                     session.own = {
                         ...session.own,
-                        sessionRole: updatedSession[0].sessionRole,
+                        sessionRole: updatedSession.sessionRole,
                     };
-                    //TODO UPDATE CYCLEID
-                    //TODO UPDATE USERID
+                    return session;
+                }
+
+                if (updatePayload.type === "CYCLE") {
+                    const cycleId = updatePayload.cycleId;
+
+                    const updatedSession = await db.session.update({
+                        where: {
+                            sessionToken,
+                        },
+                        data: {
+                            cycleId: cycleId,
+                        },
+                    });
+
+                    session.own = {
+                        ...session.own,
+                        cycleId: updatedSession.cycleId,
+                    };
                     return session;
                 }
             }
@@ -158,6 +171,17 @@ export const authOptions = {
 export const getServerAuthSession = React.cache(() =>
     getServerSession(authOptions),
 );
+
+export const isAdminServerAuthSession = async () => {
+    const session = await getServerAuthSession();
+    if (!session) {
+        return false;
+    }
+    if (session.own.sessionRole !== UserRole.ADMIN) {
+        return false;
+    }
+    return true;
+};
 
 export async function getSession() {
     const session = await getServerAuthSession();

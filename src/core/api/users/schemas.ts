@@ -1,54 +1,49 @@
 import { contract } from "@/core/ts-rest";
-import { usersTable } from "@@/drizzle/schemas/auth";
-import { studentsTable } from "@@/drizzle/schemas/student";
-import { teachersTable } from "@@/drizzle/schemas/teacher";
-import { createSelectSchema, createInsertSchema } from "drizzle-zod";
+
 import { z } from "zod";
 import { type TypedAppRouter } from "../../../utils/types";
-import { type GetManyUsersParams, type UserAPI } from "./types";
-import { apiResponseSchema } from "../api-response";
+import {
+    type UserFromAPI,
+    type GetManyUsersParams,
+    type UserAPI,
+    type UpdateUser,
+} from "./types";
+import { apiResponsePaginationSchema } from "../api-response";
 import { type ZodInferSchema } from "../types";
+import { UserRole } from "@prisma/client";
+import { createdAtSchema, updatedAtSchema } from "@/core/utils";
 
-export const userSchema = createSelectSchema(usersTable).omit({
-    createdAt: true,
-    updatedAt: true,
+export const userSchema = z.object<ZodInferSchema<UserFromAPI>>({
+    id: z.string().cuid(),
+    email: z.string().email().nullable(),
+    name: z.string(),
+    emailVerified: z.string().datetime().nullable(),
+    image: z.string().nullable(),
+    dni: z.string(),
+    password: z.string().nullable(),
+    role: z.nativeEnum(UserRole),
+    teacherId: z.string().cuid().nullable(),
+    studentId: z.string().cuid().nullable(),
+    createdAt: createdAtSchema,
+    updatedAt: updatedAtSchema,
 });
 
-export const createUserSchema = createInsertSchema(usersTable).omit({
+export const updateUserSchema = z.object<ZodInferSchema<UpdateUser>>({
+    name: z.string().optional(),
+    email: z.string().email().nullable().optional(),
+    image: z.string().nullable().optional(),
+    dni: z.string().optional(),
+    password: z.string().nullable().optional(),
+    role: z.nativeEnum(UserRole).optional(),
+});
+
+export const createUserSchema = userSchema.omit({
     id: true,
     createdAt: true,
     updatedAt: true,
-});
-
-export const teacherSchema = createSelectSchema(teachersTable).omit({
-    createdAt: true,
-    updatedAt: true,
-});
-
-export const studentSchema = createSelectSchema(studentsTable).omit({
-    createdAt: true,
-    updatedAt: true,
-});
-export const logInSchema = z.object({
-    dni: z.string().length(8, { message: "El DNI debe tener 8 caracteres" }),
-    password: z
-        .string()
-        .min(8, { message: "La contraseña debe tener al menos 8 caracteres" })
-        .max(20, {
-            message: "La contraseña debe tener como máximo 20 caracteres",
-        })
-        .refine((password) => /[A-Z]/.test(password), {
-            message: "La contraseña debe tener al menos una mayúscula",
-        })
-        .refine((password) => /[a-z]/.test(password), {
-            message: "La contraseña debe tener al menos una minúscula",
-        })
-        .refine((password) => /[0-9]/.test(password), {
-            message: "La contraseña debe tener al menos un número",
-        })
-        .refine((password) => /[!@#$%^&*]/.test(password), {
-            message: "La contraseña debe tener al menos un caracter especial",
-        }),
+    emailVerified: true,
+    teacherId: true,
+    studentId: true,
 });
 
 export const userQueryFilters = z.object<
@@ -56,6 +51,7 @@ export const userQueryFilters = z.object<
 >({
     fullTextSearch: z.string().trim().optional(),
     page: z.coerce.number().int(),
+    role: z.nativeEnum(UserRole).optional(),
 });
 
 export const userRouter = contract.router({
@@ -68,7 +64,7 @@ export const userRouter = contract.router({
         query: userQueryFilters,
         summary: "Obtener una lista de Usuarios separado por filtro",
         responses: contract.responses({
-            200: apiResponseSchema(userSchema.array()),
+            200: apiResponsePaginationSchema(userSchema.array()),
         }),
     },
 } satisfies TypedAppRouter<UserAPI>);

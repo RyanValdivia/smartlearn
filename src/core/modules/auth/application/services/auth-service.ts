@@ -2,23 +2,28 @@ import { type IAccountsRepository } from "../../Domain/account-repository";
 import { type IUsersRepository } from "../../Domain/user-repository";
 import { type IAuthService } from "../../Domain/auth-service";
 import { UserNotFoundError } from "../../Errors/errors";
-import { type Account } from "../../../../api/account";
 import { verifyPassword } from "../../../../api/hash";
-import { type LogIn } from "@/core/api/users/types";
-import { type User } from "@/core/api/users/types";
+import { type UserFromAPI, type LogIn } from "@/core/api/users/types";
+import { type AccountFromAPI } from "@/core/api/accounts/account";
+import { inject, injectable } from "inversify";
+import { DI_SYMBOLS } from "@/core/di/types";
 
+@injectable()
 export class AuthService implements IAuthService {
     constructor(
-        private readonly usersRepository: IUsersRepository,
-        private readonly accountsRepository: IAccountsRepository,
+        @inject(DI_SYMBOLS.IUsersRepository)
+        private _usersRepository: IUsersRepository,
+
+        @inject(DI_SYMBOLS.IAccountsRepository)
+        private _accountsRepository: IAccountsRepository,
     ) {}
 
     async userAlreadyExists(email: string): Promise<boolean> {
-        return this.usersRepository.existsUserByEmail(email);
+        return this._usersRepository.existsUserByEmail(email);
     }
 
-    async logIn(input: LogIn): Promise<User> {
-        const user = await this.usersRepository.findUserByDni(input.dni);
+    async logIn(input: LogIn): Promise<UserFromAPI> {
+        const user = await this._usersRepository.findUserByDni(input.dni);
 
         if (!user) {
             throw new UserNotFoundError();
@@ -33,12 +38,12 @@ export class AuthService implements IAuthService {
         return user;
     }
 
-    async linkAccount(userId: string, account: Account): Promise<void> {
-        if (await this.accountsRepository.findAccountByUserId(userId)) {
+    async linkAccount(userId: string, account: AccountFromAPI): Promise<void> {
+        if (await this._accountsRepository.findAccountByUserId(userId)) {
             throw new Error("Account already exists");
         }
 
-        await this.accountsRepository.createAccount({
+        await this._accountsRepository.createAccount({
             ...account,
             userId,
         });
@@ -46,9 +51,9 @@ export class AuthService implements IAuthService {
 
     async signIn(
         userEmail: string | null | undefined,
-        account: Account,
+        account: AccountFromAPI,
     ): Promise<boolean> {
-        const user = await this.usersRepository.findUserByEmail(
+        const user = await this._usersRepository.findUserByEmail(
             userEmail || "",
         );
 
@@ -56,7 +61,7 @@ export class AuthService implements IAuthService {
             return false;
         }
 
-        const userAccount = await this.accountsRepository.findAccountByUserId(
+        const userAccount = await this._accountsRepository.findAccountByUserId(
             user.id,
         );
 

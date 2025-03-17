@@ -1,1 +1,0 @@
-ALTER TABLE "users" ALTER COLUMN "dni" SET NOT NULL;

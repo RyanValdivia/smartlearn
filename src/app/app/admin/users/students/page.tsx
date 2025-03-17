@@ -10,7 +10,9 @@ import {
     FULL_TEXT_SEARCH_PARAM_NAME,
     PAGINATION_PARAM_NAME,
 } from "@/core/constants";
+import { UserRole } from "@prisma/client";
 import React from "react";
+
 export default async function Page({
     searchParams,
 }: {
@@ -19,10 +21,11 @@ export default async function Page({
     const params = await searchParams;
     const fullTextSearch = params[FULL_TEXT_SEARCH_PARAM_NAME] ?? "";
     const page = parseInt(params[PAGINATION_PARAM_NAME] ?? "1", 10);
+
     return (
         <MainLayout>
             <div className="flex items-center justify-between">
-                <MainLayoutTitle>Usuarios</MainLayoutTitle>
+                <MainLayoutTitle>Estudiantes</MainLayoutTitle>
                 <SearchBarContainer>
                     <SearchBar
                         inputProps={{
@@ -33,7 +36,11 @@ export default async function Page({
             </div>
             <MainLayoutSection>
                 <React.Suspense fallback={<TableSkeleton />}>
-                    <UsersTable page={page} fullTextSearch={fullTextSearch} />
+                    <UsersTable
+                        page={page}
+                        fullTextSearch={fullTextSearch}
+                        role={UserRole.STUDENT}
+                    />
                 </React.Suspense>
             </MainLayoutSection>
         </MainLayout>
