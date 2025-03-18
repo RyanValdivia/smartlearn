@@ -3,11 +3,6 @@
 import { ChevronRight } from "lucide-react";
 
 import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
     SidebarGroup,
     SidebarGroupLabel,
     SidebarMenu,
@@ -19,6 +14,12 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { type Route } from "@/core/routes";
+import {
+    CollapsibleAnimated,
+    CollapsibleContentAnimated,
+    CollapsibleTriggerAnimated,
+} from "@/components/ui/collapsible-animated";
+import { Button } from "@/components/ui/button";
 
 export function NavMain({ route, label }: { label: string; route: Route[] }) {
     return (
@@ -26,12 +27,7 @@ export function NavMain({ route, label }: { label: string; route: Route[] }) {
             <SidebarGroupLabel>{label}</SidebarGroupLabel>
             <SidebarMenu>
                 {route.map((item) => (
-                    <Collapsible
-                        key={item.name}
-                        asChild
-                        // defaultOpen={item.isActive}
-                        className="group/collapsible"
-                    >
+                    <CollapsibleAnimated key={item.name}>
                         <SidebarMenuItem>
                             <div className="grid grid-cols-6">
                                 <SidebarMenuButton
@@ -43,16 +39,17 @@ export function NavMain({ route, label }: { label: string; route: Route[] }) {
                                         <span>{item.name}</span>
                                     </Link>
                                 </SidebarMenuButton>
-                                <CollapsibleTrigger className="" asChild>
+                                <CollapsibleTriggerAnimated>
                                     <SidebarMenuButton
                                         className="flex justify-center"
                                         tooltip={item.name}
+                                        asChild
                                     >
-                                        <ChevronRight className=" transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                        <ChevronRight className="transform-rotate-90" />
                                     </SidebarMenuButton>
-                                </CollapsibleTrigger>
+                                </CollapsibleTriggerAnimated>
                             </div>
-                            <CollapsibleContent>
+                            <CollapsibleContentAnimated>
                                 <SidebarMenuSub>
                                     {item.subRoutes?.map((subItem) => (
                                         <SidebarMenuSubItem key={subItem.name}>
@@ -64,9 +61,9 @@ export function NavMain({ route, label }: { label: string; route: Route[] }) {
                                         </SidebarMenuSubItem>
                                     ))}
                                 </SidebarMenuSub>
-                            </CollapsibleContent>
+                            </CollapsibleContentAnimated>
                         </SidebarMenuItem>
-                    </Collapsible>
+                    </CollapsibleAnimated>
                 ))}
             </SidebarMenu>
         </SidebarGroup>

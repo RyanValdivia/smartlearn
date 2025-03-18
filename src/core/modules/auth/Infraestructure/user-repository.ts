@@ -38,7 +38,6 @@ export class UsersRepository implements IUsersRepository {
                 dni,
             },
         });
-
         return jsonify(user);
     }
 

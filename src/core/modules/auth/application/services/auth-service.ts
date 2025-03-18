@@ -13,7 +13,6 @@ export class AuthService implements IAuthService {
     constructor(
         @inject(DI_SYMBOLS.IUsersRepository)
         private _usersRepository: IUsersRepository,
-
         @inject(DI_SYMBOLS.IAccountsRepository)
         private _accountsRepository: IAccountsRepository,
     ) {}
@@ -24,7 +23,7 @@ export class AuthService implements IAuthService {
 
     async logIn(input: LogIn): Promise<UserFromAPI> {
         const user = await this._usersRepository.findUserByDni(input.dni);
-
+        
         if (!user) {
             throw new UserNotFoundError();
         }
