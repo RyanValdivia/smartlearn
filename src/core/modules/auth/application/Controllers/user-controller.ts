@@ -59,8 +59,8 @@ export class UsersController {
             const parse = createUserSchema.safeParse(await req.json());
             if (!parse.success) {
                 throw new Error(
-                    "Hubo un error en la validación de los datos " +
-                        parse.error.cause,
+                    "Hubo un error en la validación de los datos " + "\n" +
+                        parse.error
                 );
             }
 
@@ -72,12 +72,12 @@ export class UsersController {
                 message: "Usuario creado correctamente",
                 data: user,
             });
-        } catch {
+        } catch (e: any) {
             //TODO implementar un error handler
             // return ErrorHandler.handle({ error });
 
             return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos",
+                "Hubo un error en la validación de los datos " + e.message,
             );
         }
     }
