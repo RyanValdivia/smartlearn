@@ -1,7 +1,4 @@
-import { type StudentFromAPI } from "@/core/api/students/types";
-import { type TeacherFromAPI } from "@/core/api/teachers/types";
-import { type UserFromAPI } from "@/core/api/users/types";
-import { type Session, UserRole } from "@prisma/client";
+import { type Session, Student, Teacher, User, UserRole } from "@prisma/client";
 import {
     GraduationCap,
     type LucideProps,
@@ -55,9 +52,9 @@ export type OwnSession = Session & {
     cycleId: number | null;
 };
 
-export type SessionUser = Omit<UserFromAPI, "password"> & {
-    teacher: TeacherFromAPI | null;
-    student: StudentFromAPI | null;
+export type SessionUser = Omit<User, "password"> & {
+    teacher: Teacher | null;
+    student: Student | null;
 };
 
 export enum UpdateSessionType {

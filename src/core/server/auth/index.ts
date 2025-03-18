@@ -24,8 +24,9 @@ import { cookies } from "next/headers";
 import { logger } from "@/core/logger";
 import prisma from "@@/prisma/seed";
 import { db } from "../db";
-import { UserRole } from "@prisma/client";
+import { Session, UserRole } from "@prisma/client";
 import { AuthController } from "@/core/modules/auth/Application/Controllers/auth-controller";
+import { CustomPrismaAdapter } from "./custom-adapter";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -46,8 +47,8 @@ declare module "next-auth" {
 }
 
 declare module "next-auth/adapters" {
-    interface AdapterUser extends SessionUser {}
-    interface AdapterSession extends SessionFromAPI {}
+    export interface AdapterUser extends SessionUser {}
+    export interface AdapterSession extends Session {}
 }
 
 /**
@@ -74,7 +75,7 @@ export const authOptions = {
             },
         }),
     ],
-    adapter: PrismaAdapter(prisma),
+    adapter: CustomPrismaAdapter(prisma),
     callbacks: {
         async signIn({ user, account }) {
             console.log(account);

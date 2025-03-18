@@ -38,7 +38,7 @@ model Account {
 model Session {
   sessionToken String   @id
   userId       String
-  expires      Int
+  expires      DateTime
   sessionRole  UserRole
   cycleId      Int?
 
