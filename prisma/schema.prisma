@@ -38,7 +38,7 @@ model Account {
 model Session {
   sessionToken String   @id
   userId       String
-  expiresAt    DateTime
+  expires      Int
   sessionRole  UserRole
   cycleId      Int?
 
@@ -164,6 +164,7 @@ model Section {
 model Subject {
   id          Int    @id @default(autoincrement())
   name        String
+  alias       String @unique
   description String
 
   lectures Lecture[]
@@ -196,7 +197,7 @@ model Lecture {
 model Unit {
   id      Int    @id @default(autoincrement())
   name    String
-  alias   String
+  alias   String @unique
   cycleId Int
 
   cycle Cycle @relation(fields: [cycleId], references: [id])
@@ -206,10 +207,9 @@ model Unit {
   @@map("units")
 }
 
-//TODO add weight to evaluation strategy
 model EvaluationStrategy {
   id     Int    @id @default(autoincrement())
-  name   String 
+  name   String
   alias  String @unique
   unitId Int
 
@@ -221,8 +221,11 @@ model EvaluationStrategy {
 }
 
 model Task {
-  id        Int @id @default(autoincrement())
-  lectureId Int
+  id         Int     @id @default(autoincrement())
+  name       String
+  lectureId  Int
+  weight     Float?
+  isWeighted Boolean @default(false)
 
   grades Grade[]
 

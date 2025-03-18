@@ -56,7 +56,10 @@ export class UsersController {
 
     async create(req: NextRequest): Promise<Response> {
         try {
+            const json = await req.json();
+            console.log(json);
             const parse = createUserSchema.safeParse(await req.json());
+            console.log();
             if (!parse.success) {
                 throw new Error(
                     "Hubo un error en la validación de los datos " + "\n" +
