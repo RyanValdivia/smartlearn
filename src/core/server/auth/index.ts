@@ -77,6 +77,7 @@ export const authOptions = {
     adapter: PrismaAdapter(prisma),
     callbacks: {
         async signIn({ user, account }) {
+            console.log(account);
             return await authController.signIn(user.email, account!);
         },
         async session({ session, user, trigger, newSession }) {
