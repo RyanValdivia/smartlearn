@@ -137,6 +137,7 @@ model Cycle {
 
   session  Session[]
   sections Section[]
+  Unit     Unit[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -173,7 +174,6 @@ model Subject {
   @@map("subjects")
 }
 
-//TODO tareas y evaluaciones, calificaciones y campos 
 model Lecture {
   id        Int    @id @default(autoincrement())
   sectionId Int
@@ -194,19 +194,23 @@ model Lecture {
 }
 
 model Unit {
-  id    Int    @id @default(autoincrement())
-  name  String
-  alias String
+  id      Int    @id @default(autoincrement())
+  name    String
+  alias   String
+  cycleId Int
+
+  cycle Cycle @relation(fields: [cycleId], references: [id])
 
   strategies EvaluationStrategy[]
 
   @@map("units")
 }
 
+//TODO add weight to evaluation strategy
 model EvaluationStrategy {
   id     Int    @id @default(autoincrement())
-  name   String
-  alias  String
+  name   String 
+  alias  String @unique
   unitId Int
 
   grade Grade[]
@@ -231,8 +235,9 @@ model Task {
 }
 
 model Grade {
-  id           Int   @id @default(autoincrement())
-  value        Float
+  id    Int   @id @default(autoincrement())
+  value Float
+
   taskId       Int
   enrollmentId Int
   strategyId   Int
