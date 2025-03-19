@@ -1,5 +1,5 @@
 import { UsersController } from "@/core/modules/auth/Application/Controllers/user-controller";
-import { NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 
 const controller = new UsersController();
 

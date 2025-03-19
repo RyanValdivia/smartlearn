@@ -5,7 +5,7 @@ import {
     type UserFromAPI,
     type CreateUser,
     type GetManyUsersParams,
-    UpdateUser,
+    type UpdateUser,
 } from "@/core/api/users/types";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";

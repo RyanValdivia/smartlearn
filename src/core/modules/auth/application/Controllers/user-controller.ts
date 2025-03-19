@@ -125,12 +125,12 @@ export class UsersController {
                 message: "Usuario creado correctamente",
                 data: user,
             });
-        } catch (e: any) {
+        } catch {
             //TODO implementar un error handler
             // return ErrorHandler.handle({ error });
 
             return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos " + e.message,
+                "Hubo un error en la validación de los datos ",
             );
         }
     }
@@ -163,12 +163,12 @@ export class UsersController {
                 message: "Usuario actualizado correctamente",
                 data: user,
             });
-        } catch (e: any) {
+        } catch {
             //TODO implementar un error handler
             // return ErrorHandler.handle({ error });
 
             return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos " + e.message,
+                "Hubo un error en la validación de los datos ",
             );
         }
     }
@@ -201,12 +201,12 @@ export class UsersController {
                 message: "Usuario eliminado correctamente",
                 data: user,
             });
-        } catch (e: any) {
+        } catch {
             //TODO implementar un error handler
             // return ErrorHandler.handle({ error });
 
             return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos " + e.message,
+                "Hubo un error en la validación de los datos ",
             );
         }
     }

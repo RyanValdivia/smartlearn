@@ -1,4 +1,4 @@
-import { type Session, Student, Teacher, User, UserRole } from "@prisma/client";
+import { type Session, type Student, type Teacher, type User, UserRole } from "@prisma/client";
 import {
     GraduationCap,
     type LucideProps,

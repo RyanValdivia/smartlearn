@@ -10,9 +10,7 @@ import {
     type UpdateSessionPayload,
     type OwnSession,
     type SessionUser,
-    type SessionFromAPI,
 } from "./types";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
@@ -24,7 +22,7 @@ import { cookies } from "next/headers";
 import { logger } from "@/core/logger";
 import prisma from "@@/prisma/seed";
 import { db } from "../db";
-import { Session, UserRole } from "@prisma/client";
+import { type Session, UserRole } from "@prisma/client";
 import { AuthController } from "@/core/modules/auth/Application/Controllers/auth-controller";
 import { CustomPrismaAdapter } from "./custom-adapter";
 /**

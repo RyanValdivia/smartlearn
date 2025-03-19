@@ -18,7 +18,7 @@ import {
     SheetTitle,
 } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion, MotionProps } from "motion/react";
+import { motion, type MotionProps } from "motion/react";
 import {
     Tooltip,
     TooltipContent,

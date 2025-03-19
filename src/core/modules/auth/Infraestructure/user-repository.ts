@@ -71,7 +71,7 @@ export class UsersRepository implements IUsersRepository {
     }
 
     async createUser(input: CreateUser): Promise<UserFromAPI> {
-        let password = input.password ? await hashPassword(input.password) : "";
+        const password = input.password ? await hashPassword(input.password) : "";
 
         const user = await this._client.user.create({
             data: {

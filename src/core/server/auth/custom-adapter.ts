@@ -1,6 +1,10 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient, UserRole } from "@prisma/client";
-import { Adapter, AdapterUser, AdapterSession } from "next-auth/adapters";
+import { type PrismaClient } from "@prisma/client";
+import {
+    type Adapter,
+    type AdapterUser,
+    type AdapterSession,
+} from "next-auth/adapters";
 
 export function CustomPrismaAdapter(prisma: PrismaClient): Adapter {
     return {

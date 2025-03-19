@@ -3,7 +3,7 @@ import {
     type UserFromAPI,
     type CreateUser,
     type GetManyUsersParams,
-    UpdateUser,
+    type UpdateUser,
 } from "@/core/api/users/types";
 
 export interface IUsersService {

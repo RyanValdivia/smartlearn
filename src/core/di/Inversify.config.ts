@@ -15,6 +15,10 @@ import { AccountsRepository } from "../modules/auth/Infraestructure/account-repo
 import { type ITeachersRepository } from "../modules/teachers/Domain/teacher-repository";
 import { TeachersRepository } from "../modules/teachers/Infraestructure/teacher-repository";
 import { type ITeachersService } from "../modules/teachers/Domain/teacher-service";
+import { type IStudentsRepository } from "../modules/students/Domain/student-repository";
+import { StudentsRepository } from "../modules/students/Infraestructure/student-repository";
+import { type IStudentsService } from "../modules/students/Domain/student-service";
+import { StudentsService } from "../modules/students/Application/Services/student-service";
 
 const container = new Container();
 // prisma
@@ -50,6 +54,18 @@ container
 container
     .bind<ITeachersService>(DI_SYMBOLS.ITeachersService)
     .to(TeachersRepository)
+    .inSingletonScope();
+
+//student
+
+container
+    .bind<IStudentsRepository>(DI_SYMBOLS.IStudentsRepository)
+    .to(StudentsRepository)
+    .inSingletonScope();
+
+container
+    .bind<IStudentsService>(DI_SYMBOLS.IStudentsService)
+    .to(StudentsService)
     .inSingletonScope();
 
 export { container };
