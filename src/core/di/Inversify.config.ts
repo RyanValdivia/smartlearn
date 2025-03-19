@@ -51,4 +51,5 @@ container
     .bind<ITeachersService>(DI_SYMBOLS.ITeachersService)
     .to(TeachersRepository)
     .inSingletonScope();
+
 export { container };

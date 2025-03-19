@@ -4,6 +4,7 @@ import { type Account as NextAccount } from "next-auth";
 import { container } from "@/core/di/Inversify.config";
 import { type IAuthService } from "../../Domain/auth-service";
 import { DI_SYMBOLS } from "@/core/di/types";
+import { getSession } from "@/core/server/auth";
 
 interface Credentials {
     username: string;

@@ -11,45 +11,13 @@ import { jsonify } from "@/lib/utils";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
 import { type PrismaClient } from "@prisma/client";
+import { hashPassword } from "@/core/api/hash";
 
 @injectable()
 export class UsersRepository implements IUsersRepository {
     constructor(
         @inject(DI_SYMBOLS.PrismaClient) private _client: PrismaClient,
     ) {}
-
-    async existsUserByEmail(email: string): Promise<boolean> {
-        const user = await this._client.user.findUnique({
-            where: {
-                email,
-            },
-        });
-
-        if (!user) {
-            return false;
-        }
-
-        return true;
-    }
-
-    async findUserByDni(dni: string): Promise<UserFromAPI | null> {
-        const user = await this._client.user.findUnique({
-            where: {
-                dni,
-            },
-        });
-        return jsonify(user);
-    }
-
-    async findUserByEmail(email: string): Promise<UserFromAPI | null> {
-        const user = await this._client.user.findUnique({
-            where: {
-                email,
-            },
-        });
-
-        return jsonify(user);
-    }
 
     async getMany(
         params?: GetManyUsersParams,
@@ -88,9 +56,28 @@ export class UsersRepository implements IUsersRepository {
         return { data: jsonify(users), total };
     }
 
+    async getById(id: string): Promise<UserFromAPI> {
+        const user = await this._client.user.findUnique({
+            where: {
+                id: id,
+            },
+        });
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        return jsonify(user);
+    }
+
     async createUser(input: CreateUser): Promise<UserFromAPI> {
+        let password = input.password ? await hashPassword(input.password) : "";
+
         const user = await this._client.user.create({
-            data: input,
+            data: {
+                ...input,
+                password,
+            },
         });
         return jsonify(user);
     }
@@ -116,7 +103,7 @@ export class UsersRepository implements IUsersRepository {
         return jsonify(updatedUser);
     }
 
-    async deleteUser(id: string): Promise<void> {
+    async deleteUser(id: string): Promise<UserFromAPI> {
         const user = await this._client.user.findUnique({
             where: {
                 id,
@@ -132,5 +119,40 @@ export class UsersRepository implements IUsersRepository {
                 id,
             },
         });
+
+        return jsonify(user);
+    }
+
+    async existsUserByEmail(email: string): Promise<boolean> {
+        const user = await this._client.user.findUnique({
+            where: {
+                email,
+            },
+        });
+
+        if (!user) {
+            return false;
+        }
+
+        return true;
+    }
+
+    async findUserByDni(dni: string): Promise<UserFromAPI | null> {
+        const user = await this._client.user.findUnique({
+            where: {
+                dni,
+            },
+        });
+        return jsonify(user);
+    }
+
+    async findUserByEmail(email: string): Promise<UserFromAPI | null> {
+        const user = await this._client.user.findUnique({
+            where: {
+                email,
+            },
+        });
+
+        return jsonify(user);
     }
 }

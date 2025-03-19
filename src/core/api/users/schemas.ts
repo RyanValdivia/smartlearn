@@ -13,6 +13,10 @@ import { type ZodInferSchema } from "../types";
 import { UserRole } from "@prisma/client";
 import { createdAtSchema, updatedAtSchema } from "@/core/utils";
 
+export const idSchema = z.object({
+    id: z.string().cuid(),
+});
+
 export const userSchema = z.object<ZodInferSchema<UserFromAPI>>({
     id: z.string().cuid(),
     email: z.string().email().nullable(),
@@ -28,13 +32,17 @@ export const userSchema = z.object<ZodInferSchema<UserFromAPI>>({
     updatedAt: updatedAtSchema,
 });
 
-export const updateUserSchema = z.object<ZodInferSchema<UpdateUser>>({
-    name: z.string().optional(),
-    email: z.string().email().nullable().optional(),
-    image: z.string().nullable().optional(),
-    dni: z.string().optional(),
-    password: z.string().nullable().optional(),
-    role: z.nativeEnum(UserRole).optional(),
+export const updateUserSchema = z.object({
+    id: z.string().cuid(),
+    data: z.object<ZodInferSchema<UpdateUser>>({
+        name: z.string().optional(),
+        email: z.string().email().nullable().optional(),
+        image: z.string().nullable().optional(),
+        dni: z.string().optional(),
+        password: z.string().nullable().optional(),
+        role: z.nativeEnum(UserRole).optional(),
+        id: z.string().cuid(),
+    }),
 });
 
 export const createUserSchema = userSchema.omit({
