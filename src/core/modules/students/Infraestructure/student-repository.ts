@@ -3,6 +3,7 @@ import { type IStudentsRepository } from "../Domain/student-repository";
 import { DI_SYMBOLS } from "@/core/di/types";
 import { type PrismaClient, type Student, UserRole } from "@prisma/client";
 import { type CreateStudent } from "@/core/api/students/types";
+import { hashPassword } from "@/core/api/hash";
 
 @injectable()
 export class StudentsRepository implements IStudentsRepository {
@@ -11,30 +12,16 @@ export class StudentsRepository implements IStudentsRepository {
     ) {}
 
     async createStudent(input: CreateStudent): Promise<Student> {
-        const user = this._client.user.findUnique({
-            where: {
-                id: input.userId,
-            },
-        });
-
-        if (!user) {
-            throw new Error("User not found");
-        }
-
-        await this._client.user.update({
-            where: {
-                id: input.userId,
-            },
-            data: {
-                role: UserRole.STUDENT,
-            },
-        });
+        const password = await hashPassword(input.password);
 
         return await this._client.student.create({
             data: {
                 user: {
-                    connect: {
-                        id: input.userId,
+                    create: {
+                        dni: input.dni,
+                        password: password,
+                        name: input.name,
+                        role: UserRole.STUDENT,
                     },
                 },
             },

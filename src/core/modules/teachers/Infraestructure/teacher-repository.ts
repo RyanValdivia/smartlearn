@@ -10,30 +10,14 @@ export class TeachersRepository implements ITeachersRepository {
     ) {}
 
     async createTeacher(input: CreateTeacher): Promise<Teacher> {
-        const user = await this._client.user.findUnique({
-            where: {
-                id: input.userId,
-            },
-        });
-
-        if (!user) {
-            throw new Error("User not found");
-        }
-
-        await this._client.user.update({
-            where: {
-                id: input.userId,
-            },
-            data: {
-                role: UserRole.TEACHER,
-            },
-        });
-
         return await this._client.teacher.create({
             data: {
                 user: {
-                    connect: {
-                        id: input.userId,
+                    create: {
+                        dni: input.dni,
+                        email: input.email,
+                        name: input.name,
+                        role: UserRole.TEACHER,
                     },
                 },
             },

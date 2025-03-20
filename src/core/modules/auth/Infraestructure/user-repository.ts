@@ -70,20 +70,6 @@ export class UsersRepository implements IUsersRepository {
         return user;
     }
 
-    async createUser(input: CreateUser): Promise<User> {
-        const password = input.password
-            ? await hashPassword(input.password)
-            : "";
-
-        const user = await this._client.user.create({
-            data: {
-                ...input,
-                password,
-            },
-        });
-        return user;
-    }
-
     async updateUser(id: string, input: UpdateUser): Promise<User> {
         const user = await this._client.user.findUnique({
             where: {

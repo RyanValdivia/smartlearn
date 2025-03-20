@@ -30,10 +30,6 @@ export class UsersService implements IUsersService {
         return this._usersRepository.getById(id);
     }
 
-    createUser(input: CreateUser): Promise<User> {
-        return this._usersRepository.createUser(input);
-    }
-
     updateUser(id: string, input: UpdateUser): Promise<User> {
         return this._usersRepository.updateUser(id, input);
     }

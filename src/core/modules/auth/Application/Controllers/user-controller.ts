@@ -97,45 +97,6 @@ export class UsersController {
         }
     }
 
-    async create(req: NextRequest): Promise<Response> {
-        try {
-            const isAdmin = await isAdminServerAuthSession();
-
-            if (!isAdmin) {
-                return CommonResponse.unauthorized();
-            }
-
-            const json = await req.json();
-
-            const parse = createUserSchema.safeParse(json);
-
-            if (!parse.success) {
-                console.log(parse.error);
-                throw new Error(
-                    "Hubo un error en la validación de los datos " +
-                        "\n" +
-                        parse.error,
-                );
-            }
-
-            const input = parse.data;
-
-            const user = await this._usersService.createUser(input);
-
-            return CommonResponse.successful({
-                message: "Usuario creado correctamente",
-                data: jsonify(user),
-            });
-        } catch {
-            //TODO implementar un error handler
-            // return ErrorHandler.handle({ error });
-
-            return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos ",
-            );
-        }
-    }
-
     async update(req: NextRequest): Promise<Response> {
         try {
             const isAdmin = await isAdminServerAuthSession();

@@ -1,8 +1,8 @@
 import { type AccountFromAPI } from "@/core/api/accounts/account";
-import { type UserFromAPI, type LogIn } from "@/core/api/users/types";
+import { type UserFromAPI, type LogIn, User } from "@/core/api/users/types";
 
 export interface IAuthService {
-    logIn(input: LogIn): Promise<UserFromAPI>;
+    logIn(input: LogIn): Promise<User>;
 
     signIn(
         userEmail: string | null | undefined,

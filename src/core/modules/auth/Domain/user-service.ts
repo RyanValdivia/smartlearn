@@ -15,8 +15,6 @@ export interface IUsersService {
 
     getById(id: string): Promise<User>;
 
-    createUser(input: CreateUser): Promise<User>;
-
     updateUser(id: string, input: UpdateUser): Promise<User>;
 
     deleteUser(id: string): Promise<User>;
