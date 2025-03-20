@@ -10,6 +10,7 @@ import { type NextRequest } from "next/server";
 import { isAdminServerAuthSession } from "@/core/server/auth";
 import { container } from "@/core/di/Inversify.config";
 import { DI_SYMBOLS } from "@/core/di/types";
+import { jsonify } from "@/lib/utils";
 
 export class UsersController {
     private _usersService: IUsersService;
@@ -46,7 +47,7 @@ export class UsersController {
             });
 
             return CommonResponse.successful({
-                data: users,
+                data: jsonify(users),
                 total,
             });
         } catch {
@@ -84,7 +85,7 @@ export class UsersController {
             const user = await this._usersService.getById(id);
 
             return CommonResponse.successful({
-                data: user,
+                data: jsonify(user),
             });
         } catch {
             //TODO implementar un error handler
@@ -123,7 +124,7 @@ export class UsersController {
 
             return CommonResponse.successful({
                 message: "Usuario creado correctamente",
-                data: user,
+                data: jsonify(user),
             });
         } catch {
             //TODO implementar un error handler
@@ -161,7 +162,7 @@ export class UsersController {
 
             return CommonResponse.successful({
                 message: "Usuario actualizado correctamente",
-                data: user,
+                data: jsonify(user),
             });
         } catch {
             //TODO implementar un error handler
@@ -199,7 +200,7 @@ export class UsersController {
 
             return CommonResponse.successful({
                 message: "Usuario eliminado correctamente",
-                data: user,
+                data: jsonify(user),
             });
         } catch {
             //TODO implementar un error handler

@@ -1,9 +1,9 @@
 import { type PaginationResponse } from "@/core/api";
 import {
-    type UserFromAPI,
     type CreateUser,
     type GetManyUsersParams,
     type UpdateUser,
+    User,
 } from "@/core/api/users/types";
 
 export interface IUsersService {
@@ -11,13 +11,13 @@ export interface IUsersService {
         params,
     }: {
         params: GetManyUsersParams;
-    }): Promise<PaginationResponse<UserFromAPI[]>>;
+    }): Promise<PaginationResponse<User[]>>;
 
-    getById(id: string): Promise<UserFromAPI>;
+    getById(id: string): Promise<User>;
 
-    createUser(input: CreateUser): Promise<UserFromAPI>;
+    createUser(input: CreateUser): Promise<User>;
 
-    updateUser(id: string, input: UpdateUser): Promise<UserFromAPI>;
+    updateUser(id: string, input: UpdateUser): Promise<User>;
 
-    deleteUser(id: string): Promise<UserFromAPI>;
+    deleteUser(id: string): Promise<User>;
 }

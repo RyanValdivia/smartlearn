@@ -6,6 +6,7 @@ import {
     type CreateUser,
     type GetManyUsersParams,
     type UpdateUser,
+    User,
 } from "@/core/api/users/types";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
@@ -21,23 +22,23 @@ export class UsersService implements IUsersService {
         params,
     }: {
         params: GetManyUsersParams;
-    }): Promise<PaginationResponse<UserFromAPI[]>> {
+    }): Promise<PaginationResponse<User[]>> {
         return this._usersRepository.getMany(params);
     }
 
-    getById(id: string): Promise<UserFromAPI> {
+    getById(id: string): Promise<User> {
         return this._usersRepository.getById(id);
     }
 
-    createUser(input: CreateUser): Promise<UserFromAPI> {
+    createUser(input: CreateUser): Promise<User> {
         return this._usersRepository.createUser(input);
     }
 
-    updateUser(id: string, input: UpdateUser): Promise<UserFromAPI> {
+    updateUser(id: string, input: UpdateUser): Promise<User> {
         return this._usersRepository.updateUser(id, input);
     }
 
-    deleteUser(id: string): Promise<UserFromAPI> {
+    deleteUser(id: string): Promise<User> {
         return this._usersRepository.deleteUser(id);
     }
 }
