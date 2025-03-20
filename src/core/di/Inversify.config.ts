@@ -4,12 +4,10 @@ import { Container } from "inversify";
 import { type IUsersRepository } from "../modules/auth/Domain/user-repository";
 import { UsersRepository } from "../modules/auth/Infraestructure/user-repository";
 import { type IUsersService } from "../modules/auth/Domain/user-service";
-import { UsersService } from "../modules/auth/Application/Services/user-service";
 import { DI_SYMBOLS } from "./types";
 import { type PrismaClient } from "@prisma/client";
 import { db } from "../server/db";
 import { type IAuthService } from "../modules/auth/Domain/auth-service";
-import { AuthService } from "../modules/auth/Application/Services/auth-service";
 import { type IAccountsRepository } from "../modules/auth/Domain/account-repository";
 import { AccountsRepository } from "../modules/auth/Infraestructure/account-repository";
 import { type ITeachersRepository } from "../modules/teachers/Domain/teacher-repository";
@@ -19,6 +17,8 @@ import { type IStudentsRepository } from "../modules/students/Domain/student-rep
 import { StudentsRepository } from "../modules/students/Infraestructure/student-repository";
 import { type IStudentsService } from "../modules/students/Domain/student-service";
 import { StudentsService } from "../modules/students/Application/Services/student-service";
+import { AuthService } from "../modules/auth/Application/services/auth-service";
+import { UsersService } from "../modules/auth/Application/services/user-service";
 
 const container = new Container();
 // prisma
