@@ -1,13 +1,10 @@
-// import { type PaginationResponse } from "@/core/api";
-import {
-    type TeacherFromAPI,
-    type CreateTeacher,
-    // type GetManyTeachersParams,
-} from "@/core/api/teachers/types";
+import { type CreateTeacher } from "@/core/api/teachers/types";
 import { type ITeachersRepository } from "../../Domain/teacher-repository";
 import { type ITeachersService } from "../../Domain/teacher-service";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
+import { type Teacher } from "@prisma/client";
+
 @injectable()
 export class TeachersService implements ITeachersService {
     constructor(
@@ -15,13 +12,11 @@ export class TeachersService implements ITeachersService {
         private _teachersRepository: ITeachersRepository,
     ) {}
 
-    // getMany(
-    //     params: GetManyTeachersParams,
-    // ): Promise<PaginationResponse<Teacher[]>> {
-    //     return this.teachersRepository.getMany(params);
-    // }
-
-    createTeacher(input: CreateTeacher): Promise<TeacherFromAPI> {
+    createTeacher(input: CreateTeacher): Promise<Teacher> {
         return this._teachersRepository.createTeacher(input);
+    }
+
+    deleteTeacher(id: string): Promise<Teacher> {
+        return this._teachersRepository.deleteTeacher(id);
     }
 }

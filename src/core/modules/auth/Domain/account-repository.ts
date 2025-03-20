@@ -5,5 +5,6 @@ import {
 
 export interface IAccountsRepository {
     createAccount(input: CreateAccount): Promise<AccountFromAPI>;
+
     findAccountByUserId(userId: string): Promise<AccountFromAPI | null>;
 }

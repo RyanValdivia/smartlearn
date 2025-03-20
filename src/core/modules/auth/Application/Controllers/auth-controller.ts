@@ -42,6 +42,7 @@ export class AuthController {
     }
 
     async signIn(userEmail: string | null | undefined, account: NextAccount) {
+        console.log("desde el controllador", account);
         return this._authService.signIn(userEmail, {
             access_token: account.access_token || null,
             expires_at: account.expires_at || null,

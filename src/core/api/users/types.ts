@@ -1,6 +1,5 @@
 import { type z } from "zod";
 
-import type { logInSchema } from "./forms";
 import { type APIPaginationResponse } from "..";
 import { type PaginationParams } from "@/utils/types";
 import { type Jsonify } from "type-fest";
@@ -11,9 +10,13 @@ export type UserFromAPI = Jsonify<User>;
 
 export type CreateUser = z.infer<typeof createUserSchema>;
 
-export type UpdateUser = Partial<CreateUser>;
+export type UpdateUser = Partial<CreateUser> & {
+    id: string;
+};
 
-export type LogIn = z.infer<typeof logInSchema>;
+export type LogIn = Pick<User, "dni"> & {
+    password: string;
+};
 
 export type UserQueryFilters = {
     fullTextSearch?: string;

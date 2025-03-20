@@ -4,7 +4,13 @@ import tseslint from "typescript-eslint";
 import stylistic from "@stylistic/eslint-plugin";
 import prettier from "eslint-config-prettier";
 import pluginQuery from "@tanstack/eslint-plugin-query";
+import { FlatCompat } from "@eslint/eslintrc";
+
 const skipLint = false;
+
+const compat = new FlatCompat({
+    baseDirectory: import.meta.dirname,
+});
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -72,4 +78,7 @@ export default [
     },
     prettier,
     ...pluginQuery.configs["flat/recommended"],
+    ...compat.config({
+        extends: ["next"],
+    }),
 ];

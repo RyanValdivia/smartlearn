@@ -4,17 +4,21 @@ import { Container } from "inversify";
 import { type IUsersRepository } from "../modules/auth/Domain/user-repository";
 import { UsersRepository } from "../modules/auth/Infraestructure/user-repository";
 import { type IUsersService } from "../modules/auth/Domain/user-service";
-import { UsersService } from "../modules/auth/Application/Services/user-service";
 import { DI_SYMBOLS } from "./types";
 import { type PrismaClient } from "@prisma/client";
 import { db } from "../server/db";
 import { type IAuthService } from "../modules/auth/Domain/auth-service";
-import { AuthService } from "../modules/auth/Application/Services/auth-service";
 import { type IAccountsRepository } from "../modules/auth/Domain/account-repository";
 import { AccountsRepository } from "../modules/auth/Infraestructure/account-repository";
 import { type ITeachersRepository } from "../modules/teachers/Domain/teacher-repository";
 import { TeachersRepository } from "../modules/teachers/Infraestructure/teacher-repository";
 import { type ITeachersService } from "../modules/teachers/Domain/teacher-service";
+import { type IStudentsRepository } from "../modules/students/Domain/student-repository";
+import { StudentsRepository } from "../modules/students/Infraestructure/student-repository";
+import { type IStudentsService } from "../modules/students/Domain/student-service";
+import { StudentsService } from "../modules/students/Application/Services/student-service";
+import { AuthService } from "../modules/auth/Application/services/auth-service";
+import { UsersService } from "../modules/auth/Application/services/user-service";
 
 const container = new Container();
 // prisma
@@ -51,4 +55,17 @@ container
     .bind<ITeachersService>(DI_SYMBOLS.ITeachersService)
     .to(TeachersRepository)
     .inSingletonScope();
+
+//student
+
+container
+    .bind<IStudentsRepository>(DI_SYMBOLS.IStudentsRepository)
+    .to(StudentsRepository)
+    .inSingletonScope();
+
+container
+    .bind<IStudentsService>(DI_SYMBOLS.IStudentsService)
+    .to(StudentsService)
+    .inSingletonScope();
+
 export { container };

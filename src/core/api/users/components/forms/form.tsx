@@ -10,9 +10,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { type z } from "zod";
 import { type logInSchema, useLogInForm } from "../../forms";
+import { signIn } from "next-auth/react";
 
-function onSubmit(values: z.infer<typeof logInSchema>) {
-    console.log(values);
+async function onSubmit(values: z.infer<typeof logInSchema>) {
+    const x = await signIn("credentials", {
+        username: values.dni,
+        password: values.password,
+    });
+    console.log(x);
 }
 
 export function LogInForm() {
@@ -55,7 +60,7 @@ export function LogInForm() {
                     )}
                 />
                 <Button className="w-full" type="submit">
-                    Submit
+                    Iniciar sesión
                 </Button>
             </form>
         </Form>

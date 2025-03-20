@@ -17,26 +17,9 @@ export function useLogInForm() {
     return { form };
 }
 
-export const logInSchema = z.object({
-    dni: z.string().length(8, { message: "El DNI debe tener 8 caracteres" }),
-    password: z
-        .string()
-        .min(8, { message: "La contraseña debe tener al menos 8 caracteres" })
-        .max(20, {
-            message: "La contraseña debe tener como máximo 20 caracteres",
-        })
-        .refine((password) => /[A-Z]/.test(password), {
-            message: "La contraseña debe tener al menos una mayúscula",
-        })
-        .refine((password) => /[a-z]/.test(password), {
-            message: "La contraseña debe tener al menos una minúscula",
-        })
-        .refine((password) => /[0-9]/.test(password), {
-            message: "La contraseña debe tener al menos un número",
-        })
-        .refine((password) => /[!@#$%^&*]/.test(password), {
-            message: "La contraseña debe tener al menos un caracter especial",
-        }),
+export const logInSchema = z.object<ZodInferSchema<LogIn>>({
+    dni: z.string().min(1, { message: "Ingresa tu DNI" }),
+    password: z.string().min(1, { message: "Ingresa tu contraseña" }),
 });
 
 export const createUserFormSchema = z.object<ZodInferSchema<CreateUser>>({
