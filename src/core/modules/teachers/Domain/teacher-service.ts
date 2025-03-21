@@ -1,8 +1,8 @@
-import {
-    type CreateTeacher,
-    type TeacherFromAPI,
-} from "@/core/api/teachers/types";
+import { type CreateTeacher } from "@/core/api/teachers/types";
+import { type Teacher } from "@prisma/client";
 
 export interface ITeachersService {
-    createTeacher(input: CreateTeacher): Promise<TeacherFromAPI>;
+    createTeacher(input: CreateTeacher): Promise<Teacher>;
+
+    deleteTeacher(id: string): Promise<Teacher>;
 }

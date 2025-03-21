@@ -10,7 +10,9 @@ export type UserFromAPI = Jsonify<User>;
 
 export type CreateUser = z.infer<typeof createUserSchema>;
 
-export type UpdateUser = Partial<CreateUser>;
+export type UpdateUser = Partial<CreateUser> & {
+    id: string;
+};
 
 export type LogIn = Pick<User, "dni"> & {
     password: string;

@@ -16,9 +16,6 @@ const compat = new FlatCompat({
 export default [
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    ...compat.config({
-        extends: ["next"],
-    }),
     {
         files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
         languageOptions: { globals: globals.browser },
@@ -81,4 +78,7 @@ export default [
     },
     prettier,
     ...pluginQuery.configs["flat/recommended"],
+    ...compat.config({
+        extends: ["next"],
+    }),
 ];

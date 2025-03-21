@@ -10,7 +10,8 @@ import { MAX_PAGINATION_SIZE } from "@/core/constants";
 import { jsonify } from "@/lib/utils";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
-import { type PrismaClient } from "@prisma/client";
+import { User, type PrismaClient } from "@prisma/client";
+import { hashPassword } from "@/core/api/hash";
 
 @injectable()
 export class UsersRepository implements IUsersRepository {
@@ -18,47 +19,14 @@ export class UsersRepository implements IUsersRepository {
         @inject(DI_SYMBOLS.PrismaClient) private _client: PrismaClient,
     ) {}
 
-    async existsUserByEmail(email: string): Promise<boolean> {
-        const user = await this._client.user.findUnique({
-            where: {
-                email,
-            },
-        });
-
-        if (!user) {
-            return false;
-        }
-
-        return true;
-    }
-
-    async findUserByDni(dni: string): Promise<UserFromAPI | null> {
-        const user = await this._client.user.findUnique({
-            where: {
-                dni,
-            },
-        });
-        return jsonify(user);
-    }
-
-    async findUserByEmail(email: string): Promise<UserFromAPI | null> {
-        const user = await this._client.user.findUnique({
-            where: {
-                email,
-            },
-        });
-
-        return jsonify(user);
-    }
-
     async getMany(
         params?: GetManyUsersParams,
-    ): Promise<PaginationResponse<UserFromAPI[]>> {
+    ): Promise<PaginationResponse<User[]>> {
         const { filters } = params || {};
 
         if (!filters) {
             const users = await this._client.user.findMany();
-            return { data: jsonify(users), total: users.length };
+            return { data: users, total: users.length };
         }
 
         const users = await this._client.user.findMany({
@@ -85,17 +53,24 @@ export class UsersRepository implements IUsersRepository {
             },
         });
 
-        return { data: jsonify(users), total };
+        return { data: users, total };
     }
 
-    async createUser(input: CreateUser): Promise<UserFromAPI> {
-        const user = await this._client.user.create({
-            data: input,
+    async getById(id: string): Promise<User> {
+        const user = await this._client.user.findUnique({
+            where: {
+                id: id,
+            },
         });
-        return jsonify(user);
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        return user;
     }
 
-    async updateUser(id: string, input: UpdateUser): Promise<UserFromAPI> {
+    async updateUser(id: string, input: UpdateUser): Promise<User> {
         const user = await this._client.user.findUnique({
             where: {
                 id,
@@ -113,10 +88,10 @@ export class UsersRepository implements IUsersRepository {
             data: input,
         });
 
-        return jsonify(updatedUser);
+        return updatedUser;
     }
 
-    async deleteUser(id: string): Promise<void> {
+    async deleteUser(id: string): Promise<User> {
         const user = await this._client.user.findUnique({
             where: {
                 id,
@@ -132,5 +107,40 @@ export class UsersRepository implements IUsersRepository {
                 id,
             },
         });
+
+        return user;
+    }
+
+    async existsUserByEmail(email: string): Promise<boolean> {
+        const user = await this._client.user.findUnique({
+            where: {
+                email,
+            },
+        });
+
+        if (!user) {
+            return false;
+        }
+
+        return true;
+    }
+
+    async findUserByDni(dni: string): Promise<User | null> {
+        const user = await this._client.user.findUnique({
+            where: {
+                dni,
+            },
+        });
+        return user;
+    }
+
+    async findUserByEmail(email: string): Promise<User | null> {
+        const user = await this._client.user.findUnique({
+            where: {
+                email,
+            },
+        });
+
+        return user;
     }
 }

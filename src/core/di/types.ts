@@ -19,4 +19,9 @@ export const DI_SYMBOLS = {
     //Teacher
     ITeachersService: Symbol.for("ITeachersService"),
     ITeachersRepository: Symbol.for("ITeachersRepository"),
+
+    //Student
+    IStudentsService: Symbol.for("IStudentsService"),
+    IStudentsRepository: Symbol.for("IStudentsRepository"),
+    StudentsController: Symbol.for("StudentsController"),
 };

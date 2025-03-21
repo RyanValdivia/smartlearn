@@ -1,14 +1,8 @@
-import { type PaginationResponse } from "@/core/api";
-import {
-    type StudentFromAPI,
-    type GetManyStudentsParams,
-    type CreateStudent,
-} from "@/core/api/students/types";
+import { type CreateStudent } from "@/core/api/students/types";
+import { type Student } from "@prisma/client";
 
 export interface IStudentsService {
-    getMany(
-        params: GetManyStudentsParams,
-    ): Promise<PaginationResponse<StudentFromAPI[]>>;
+    createStudent(input: CreateStudent): Promise<Student>;
 
-    createStudent(input: CreateStudent): Promise<StudentFromAPI>;
+    deleteStudent(id: string): Promise<Student>;
 }

@@ -4,6 +4,7 @@ import { type Account as NextAccount } from "next-auth";
 import { container } from "@/core/di/Inversify.config";
 import { type IAuthService } from "../../Domain/auth-service";
 import { DI_SYMBOLS } from "@/core/di/types";
+import { jsonify } from "@/lib/utils";
 
 interface Credentials {
     username: string;
@@ -23,10 +24,12 @@ export class AuthController {
             return null;
         }
 
-        return this._authService.logIn({
+        const user = await this._authService.logIn({
             dni: credentials.username,
             password: credentials.password,
         });
+
+        return jsonify(user);
     }
 
     async userAlreadyExists(email: string | null | undefined) {
@@ -42,7 +45,6 @@ export class AuthController {
     }
 
     async signIn(userEmail: string | null | undefined, account: NextAccount) {
-        console.log("desde el controllador", account);
         return this._authService.signIn(userEmail, {
             access_token: account.access_token || null,
             expires_at: account.expires_at || null,

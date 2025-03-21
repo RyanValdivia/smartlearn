@@ -7,9 +7,7 @@ import { type createStudentSchema } from "./schemas";
 
 export type StudentFromAPI = Jsonify<Student>;
 
-export type CreateStudent = z.input<typeof createStudentSchema>;
-
-export type UpdateStudent = Partial<Omit<CreateStudent, "userId">>;
+export type CreateStudent = z.infer<typeof createStudentSchema>;
 
 export type StudentQueryFilters = {
     fullTextSearch?: string;

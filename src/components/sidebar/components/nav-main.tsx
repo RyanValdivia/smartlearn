@@ -19,7 +19,6 @@ import {
     CollapsibleContentAnimated,
     CollapsibleTriggerAnimated,
 } from "@/components/ui/collapsible-animated";
-import { Button } from "@/components/ui/button";
 
 export function NavMain({ route, label }: { label: string; route: Route[] }) {
     return (

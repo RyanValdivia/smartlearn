@@ -1,20 +1,17 @@
-import { type NextRequest } from "next/server";
-import { type ITeachersService } from "../../Domain/teacher-service";
-import {
-    createTeacherSchema,
-    // teacherQueryFilters,
-} from "@/core/api/teachers/schemas";
-import { CommonResponse } from "@/utils/common-response";
 import { container } from "@/core/di/Inversify.config";
 import { DI_SYMBOLS } from "@/core/di/types";
-import { idSchema } from "@/core/api/users/schemas";
+import { type IStudentsService } from "../../Domain/student-service";
+import { type NextRequest } from "next/server";
 import { isAdminServerAuthSession } from "@/core/server/auth";
+import { CommonResponse } from "@/utils/common-response";
+import { createStudentSchema } from "@/core/api/students/schemas";
+import { idSchema } from "@/core/api/users/schemas";
 import { jsonify } from "@/lib/utils";
 
-export class TeachersController {
-    private _teachersService: ITeachersService;
+export class StudentsController {
+    private _studentsService: IStudentsService;
     constructor() {
-        this._teachersService = container.get(DI_SYMBOLS.ITeachersService);
+        this._studentsService = container.get(DI_SYMBOLS.IStudentsService);
     }
 
     async create(req: NextRequest): Promise<Response> {
@@ -27,7 +24,7 @@ export class TeachersController {
 
             const json = await req.json();
 
-            const parse = createTeacherSchema.safeParse(json);
+            const parse = createStudentSchema.safeParse(json);
 
             if (!parse.success) {
                 throw new Error(
@@ -36,13 +33,13 @@ export class TeachersController {
                 );
             }
 
-            const teacher = await this._teachersService.createTeacher(
+            const student = await this._studentsService.createStudent(
                 parse.data,
             );
 
             return CommonResponse.successful({
-                data: jsonify(teacher),
-                message: "Profesor creado exitosamente",
+                data: jsonify(student),
+                message: "Estudiante creado exitosamente",
             });
         } catch {
             //TODO implementar un error handler
@@ -73,13 +70,13 @@ export class TeachersController {
                 );
             }
 
-            const teacher = await this._teachersService.deleteTeacher(
+            const student = await this._studentsService.deleteStudent(
                 parse.data.id,
             );
 
             return CommonResponse.successful({
-                data: jsonify(teacher),
-                message: "Profesor eliminado exitosamente",
+                data: jsonify(student),
+                message: "Estudiante eliminado exitosamente",
             });
         } catch {
             //TODO implementar un error handler

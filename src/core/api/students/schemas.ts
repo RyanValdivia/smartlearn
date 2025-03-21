@@ -4,7 +4,6 @@ import {
     type StudentAPI,
     type GetManyStudentsParams,
     type StudentFromAPI,
-    type UpdateStudent,
 } from "./types";
 import { contract } from "@/core/ts-rest";
 import { type TypedAppRouter } from "@/utils/types";
@@ -19,14 +18,10 @@ export const studentSchema = z.object<ZodInferSchema<StudentFromAPI>>({
     updatedAt: updatedAtSchema,
 });
 
-export const createStudentSchema = studentSchema.omit({
-    id: true,
-    createdAt: true,
-    updatedAt: true,
-});
-
-export const updateStudentSchema = z.object<ZodInferSchema<UpdateStudent>>({
-    sectionId: z.number().int().nullable().optional(),
+export const createStudentSchema = z.object({
+    name: z.string(),
+    dni: z.string(),
+    password: z.string(),
 });
 
 export const studentQueryFilters = z.object<

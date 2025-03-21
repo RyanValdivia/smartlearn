@@ -3,7 +3,7 @@ import { type IUsersRepository } from "../../Domain/user-repository";
 import { type IAuthService } from "../../Domain/auth-service";
 import { UserNotFoundError } from "../../Errors/errors";
 import { verifyPassword } from "../../../../api/hash";
-import { type UserFromAPI, type LogIn } from "@/core/api/users/types";
+import { type UserFromAPI, type LogIn, User } from "@/core/api/users/types";
 import { type AccountFromAPI } from "@/core/api/accounts/account";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
@@ -21,9 +21,9 @@ export class AuthService implements IAuthService {
         return this._usersRepository.existsUserByEmail(email);
     }
 
-    async logIn(input: LogIn): Promise<UserFromAPI> {
+    async logIn(input: LogIn): Promise<User> {
         const user = await this._usersRepository.findUserByDni(input.dni);
-        
+
         if (!user) {
             throw new UserNotFoundError();
         }
