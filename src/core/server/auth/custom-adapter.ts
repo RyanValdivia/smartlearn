@@ -134,23 +134,11 @@ export function CustomPrismaAdapter(prisma: PrismaClient): Adapter {
             };
         },
         updateSession: async (data) => {
-            const user = await prisma.user.findUnique({
-                where: {
-                    id: data.userId,
-                },
-            });
-
-            if (!user) {
-                throw new Error("User not found");
-            }
-
             return prisma.session.update({
                 where: {
                     sessionToken: data.sessionToken,
                 },
-                data: {
-                    sessionRole: user.role,
-                },
+                data,
             });
         },
         deleteSession: async (sessionToken) => {
