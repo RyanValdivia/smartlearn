@@ -90,6 +90,17 @@ class CommonResponseClass {
     badRequest(message: string): Response {
         return Response.json({ message }, { status: 400 });
     }
+
+    notFound(message = "No encontrado"): Response {
+        return Response.json({ message }, { status: 404 });
+    }
+
+    serverError(): Response {
+        return Response.json(
+            { message: "Error interno del servidor" },
+            { status: 500 },
+        );
+    }
 }
 
 export const CommonResponse = new CommonResponseClass();

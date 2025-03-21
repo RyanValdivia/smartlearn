@@ -10,6 +10,7 @@ import { isAdminServerAuthSession } from "@/core/server/auth";
 import { container } from "@/core/di/Inversify.config";
 import { DI_SYMBOLS } from "@/core/di/types";
 import { jsonify } from "@/lib/utils";
+import { handleError, ValidationError } from "../../Errors/errors";
 
 export class UsersController {
     private _usersService: IUsersService;
@@ -32,11 +33,9 @@ export class UsersController {
             const parse = userQueryFilters.safeParse(urlParams);
 
             if (!parse.success) {
-                throw new Error(
-                    "Hubo un error en la validación de los datos " +
-                        parse.error.cause,
-                );
+                throw new ValidationError(parse.error.message);
             }
+
             const queries = parse.data;
 
             const { data: users, total } = await this._usersService.getMany({
@@ -49,20 +48,15 @@ export class UsersController {
                 data: jsonify(users),
                 total,
             });
-        } catch {
-            //TODO implementar un error handler
-            // return ErrorHandler.handle({ error });con
-
-            return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos",
-            );
+        } catch (error) {
+            return handleError(error);
         }
     }
 
     async getOne(
         _req: NextRequest,
         { params }: { params: Promise<{ id: string }> },
-    ) {
+    ): Promise<Response> {
         try {
             const isAdmin = await isAdminServerAuthSession();
 
@@ -73,10 +67,7 @@ export class UsersController {
             const parse = idSchema.safeParse(await params);
 
             if (!parse.success) {
-                throw new Error(
-                    "Hubo un error en la validación de los datos " +
-                        parse.error,
-                );
+                throw new ValidationError(parse.error.message);
             }
 
             const id = parse.data.id;
@@ -86,13 +77,8 @@ export class UsersController {
             return CommonResponse.successful({
                 data: jsonify(user),
             });
-        } catch {
-            //TODO implementar un error handler
-            // return ErrorHandler.handle({ error });
-
-            return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos",
-            );
+        } catch (error) {
+            return handleError(error);
         }
     }
 
@@ -109,11 +95,7 @@ export class UsersController {
             const parse = updateUserSchema.safeParse(json);
 
             if (!parse.success) {
-                throw new Error(
-                    "Hubo un error en la validación de los datos " +
-                        "\n" +
-                        parse.error,
-                );
+                throw new ValidationError(parse.error.message);
             }
 
             const { id, data } = parse.data;
@@ -124,13 +106,8 @@ export class UsersController {
                 message: "Usuario actualizado correctamente",
                 data: jsonify(user),
             });
-        } catch {
-            //TODO implementar un error handler
-            // return ErrorHandler.handle({ error });
-
-            return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos ",
-            );
+        } catch (error) {
+            return handleError(error);
         }
     }
 
@@ -147,11 +124,7 @@ export class UsersController {
             const parse = idSchema.safeParse(json);
 
             if (!parse.success) {
-                throw new Error(
-                    "Hubo un error en la validación de los datos " +
-                        "\n" +
-                        parse.error,
-                );
+                throw new ValidationError(parse.error.message);
             }
 
             const id = parse.data.id;
@@ -162,13 +135,8 @@ export class UsersController {
                 message: "Usuario eliminado correctamente",
                 data: jsonify(user),
             });
-        } catch {
-            //TODO implementar un error handler
-            // return ErrorHandler.handle({ error });
-
-            return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos ",
-            );
+        } catch (error) {
+            return handleError(error);
         }
     }
 }

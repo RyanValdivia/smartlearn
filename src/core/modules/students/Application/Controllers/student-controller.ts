@@ -7,6 +7,7 @@ import { CommonResponse } from "@/utils/common-response";
 import { createStudentSchema } from "@/core/api/students/schemas";
 import { idSchema } from "@/core/api/users/schemas";
 import { jsonify } from "@/lib/utils";
+import { handleError, ValidationError } from "../../Errors/errors";
 
 export class StudentsController {
     private _studentsService: IStudentsService;
@@ -27,10 +28,7 @@ export class StudentsController {
             const parse = createStudentSchema.safeParse(json);
 
             if (!parse.success) {
-                throw new Error(
-                    "Hubo un error en la validación de los datos " +
-                        parse.error.cause,
-                );
+                throw new ValidationError(parse.error.message);
             }
 
             const student = await this._studentsService.createStudent(
@@ -41,13 +39,8 @@ export class StudentsController {
                 data: jsonify(student),
                 message: "Estudiante creado exitosamente",
             });
-        } catch {
-            //TODO implementar un error handler
-            // return ErrorHandler.handle({ error });
-
-            return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos",
-            );
+        } catch (error) {
+            return handleError(error);
         }
     }
 
@@ -64,10 +57,7 @@ export class StudentsController {
             const parse = idSchema.safeParse(json);
 
             if (!parse.success) {
-                throw new Error(
-                    "Hubo un error en la validación de los datos " +
-                        parse.error.cause,
-                );
+                throw new ValidationError(parse.error.message);
             }
 
             const student = await this._studentsService.deleteStudent(
@@ -78,13 +68,8 @@ export class StudentsController {
                 data: jsonify(student),
                 message: "Estudiante eliminado exitosamente",
             });
-        } catch {
-            //TODO implementar un error handler
-            // return ErrorHandler.handle({ error });
-
-            return CommonResponse.badRequest(
-                "Hubo un error en la validación de los datos",
-            );
+        } catch (error) {
+            return handleError(error);
         }
     }
 }

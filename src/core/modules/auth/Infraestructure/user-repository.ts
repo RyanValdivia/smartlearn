@@ -8,6 +8,7 @@ import { MAX_PAGINATION_SIZE } from "@/core/constants";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
 import { type User, type PrismaClient } from "@prisma/client";
+import { UserNotFoundError } from "../Errors/errors";
 
 @injectable()
 export class UsersRepository implements IUsersRepository {
@@ -60,7 +61,7 @@ export class UsersRepository implements IUsersRepository {
         });
 
         if (!user) {
-            throw new Error("User not found");
+            throw new UserNotFoundError();
         }
 
         return user;
@@ -74,7 +75,7 @@ export class UsersRepository implements IUsersRepository {
         });
 
         if (!user) {
-            throw new Error("User not found");
+            throw new UserNotFoundError();
         }
 
         const updatedUser = await this._client.user.update({
@@ -95,7 +96,7 @@ export class UsersRepository implements IUsersRepository {
         });
 
         if (!user) {
-            throw new Error("User not found");
+            throw new UserNotFoundError();
         }
 
         await this._client.user.delete({

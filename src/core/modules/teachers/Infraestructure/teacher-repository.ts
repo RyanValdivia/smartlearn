@@ -3,6 +3,7 @@ import { type ITeachersRepository } from "../Domain/teacher-repository";
 import { type PrismaClient, type Teacher, UserRole } from "@prisma/client";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
+import { TeacherNotFoundError, UserAlreadyExistsError } from "../Errors/errors";
 @injectable()
 export class TeachersRepository implements ITeachersRepository {
     constructor(
@@ -10,6 +11,16 @@ export class TeachersRepository implements ITeachersRepository {
     ) {}
 
     async createTeacher(input: CreateTeacher): Promise<Teacher> {
+        const user = await this._client.user.findUnique({
+            where: {
+                dni: input.dni,
+            },
+        });
+
+        if (user) {
+            throw new UserAlreadyExistsError();
+        }
+
         return await this._client.teacher.create({
             data: {
                 user: {
@@ -32,7 +43,7 @@ export class TeachersRepository implements ITeachersRepository {
         });
 
         if (!teacher) {
-            throw new Error("Teacher not found");
+            throw new TeacherNotFoundError();
         }
 
         return await this._client.teacher.delete({

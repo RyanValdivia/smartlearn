@@ -4,6 +4,7 @@ import { DI_SYMBOLS } from "@/core/di/types";
 import { type PrismaClient, type Student, UserRole } from "@prisma/client";
 import { type CreateStudent } from "@/core/api/students/types";
 import { hashPassword } from "@/core/api/hash";
+import { StudentNotFoundError, UserAlreadyExistsError } from "../Errors/errors";
 
 @injectable()
 export class StudentsRepository implements IStudentsRepository {
@@ -12,6 +13,16 @@ export class StudentsRepository implements IStudentsRepository {
     ) {}
 
     async createStudent(input: CreateStudent): Promise<Student> {
+        const user = await this._client.user.findUnique({
+            where: {
+                dni: input.dni,
+            },
+        });
+
+        if (user) {
+            throw new UserAlreadyExistsError();
+        }
+
         const password = await hashPassword(input.password);
 
         return await this._client.student.create({
@@ -36,7 +47,7 @@ export class StudentsRepository implements IStudentsRepository {
         });
 
         if (!student) {
-            throw new Error("Student not found");
+            throw new StudentNotFoundError();
         }
 
         return await this._client.student.delete({
