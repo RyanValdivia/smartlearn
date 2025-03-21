@@ -3,8 +3,12 @@ import { type IUsersRepository } from "../../Domain/user-repository";
 import { type IAuthService } from "../../Domain/auth-service";
 import { UserNotFoundError } from "../../Errors/errors";
 import { verifyPassword } from "../../../../api/hash";
-import { type UserFromAPI, type LogIn, User } from "@/core/api/users/types";
-import { type AccountFromAPI } from "@/core/api/accounts/account";
+import {
+    type LogIn,
+    type User,
+    type RegisterUser,
+} from "@/core/api/users/types";
+import { type CreateAccount } from "@/core/api/accounts/types";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
 
@@ -17,11 +21,7 @@ export class AuthService implements IAuthService {
         private _accountsRepository: IAccountsRepository,
     ) {}
 
-    async userAlreadyExists(email: string): Promise<boolean> {
-        return this._usersRepository.existsUserByEmail(email);
-    }
-
-    async logIn(input: LogIn): Promise<User> {
+    async logInCredentials(input: LogIn): Promise<User> {
         const user = await this._usersRepository.findUserByDni(input.dni);
 
         if (!user) {
@@ -37,36 +37,35 @@ export class AuthService implements IAuthService {
         return user;
     }
 
-    async linkAccount(userId: string, account: AccountFromAPI): Promise<void> {
-        if (await this._accountsRepository.findAccountByUserId(userId)) {
-            throw new Error("Account already exists");
-        }
-
-        await this._accountsRepository.createAccount({
-            ...account,
-            userId,
-        });
-    }
-
-    async signIn(
-        userEmail: string | null | undefined,
-        account: AccountFromAPI,
+    async logInGoogle(
+        user: RegisterUser,
+        account: CreateAccount,
     ): Promise<boolean> {
-        const user = await this._usersRepository.findUserByEmail(
-            userEmail || "",
+        console.log("amogus");
+        const foundUser = await this._usersRepository.findUserByEmail(
+            user.email || "",
         );
 
-        if (!user) {
+        if (!foundUser) {
             return false;
         }
 
         const userAccount = await this._accountsRepository.findAccountByUserId(
-            user.id,
+            foundUser.id,
         );
 
         if (!userAccount) {
-            await this.linkAccount(user.id, account);
+            await this._accountsRepository.createAccount({
+                ...account,
+                userId: foundUser.id,
+            });
         }
+
+        await this._usersRepository.updateUser(foundUser.id, {
+            email: user.email,
+            image: user.image,
+            name: user.name,
+        });
 
         return true;
     }

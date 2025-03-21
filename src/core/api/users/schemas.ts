@@ -41,7 +41,6 @@ export const updateUserSchema = z.object({
         dni: z.string().optional(),
         password: z.string().nullable().optional(),
         role: z.nativeEnum(UserRole).optional(),
-        id: z.string().cuid(),
     }),
 });
 

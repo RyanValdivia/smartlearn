@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     getServerSession,
     type DefaultSession,
@@ -65,18 +66,37 @@ export const authOptions = {
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                username: { label: "Username", type: "text" },
+                dni: { label: "Username", type: "text" },
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                return authController.logIn(credentials);
+                return authController.loginCredentials(credentials);
             },
         }),
     ],
     adapter: CustomPrismaAdapter(prisma),
     callbacks: {
-        async signIn({ user, account }) {
-            return await authController.signIn(user.email, account!);
+        async signIn({
+            account,
+            profile,
+            user,
+        }: {
+            account: any;
+            profile: any;
+            user: any;
+        }) {
+            if (!profile || !account) {
+                return false;
+            }
+            console.log(user);
+            return await authController.loginGoogle(
+                {
+                    email: profile.email || "",
+                    image: profile.picture || "",
+                    name: profile.name || "",
+                },
+                account,
+            );
         },
         async session({ session, user, trigger, newSession }) {
             const sessionToken = getSessionTokenCookie(await cookies());
@@ -158,7 +178,9 @@ export const authOptions = {
     },
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
-        // signIn: "/",
+        signIn: "/",
+        signOut: "/",
+        error: "/",
     },
 } as NextAuthOptions;
 

@@ -1,15 +1,11 @@
-import { type AccountFromAPI } from "@/core/api/accounts/account";
-import { type UserFromAPI, type LogIn, User } from "@/core/api/users/types";
-
+import { type RegisterAccount } from "@/core/api/accounts/types";
+import {
+    type LogIn,
+    type User,
+    type RegisterUser,
+} from "@/core/api/users/types";
 export interface IAuthService {
-    logIn(input: LogIn): Promise<User>;
+    logInCredentials(input: LogIn): Promise<User>;
 
-    signIn(
-        userEmail: string | null | undefined,
-        account: AccountFromAPI,
-    ): Promise<boolean>;
-
-    userAlreadyExists(email: string): Promise<boolean>;
-
-    linkAccount(userId: string, account: AccountFromAPI): Promise<void>;
+    logInGoogle(user: RegisterUser, account: RegisterAccount): Promise<boolean>;
 }

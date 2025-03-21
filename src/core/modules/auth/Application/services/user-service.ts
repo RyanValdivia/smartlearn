@@ -2,11 +2,9 @@ import { type PaginationResponse } from "@/core/api";
 import { type IUsersRepository } from "../../Domain/user-repository";
 import { type IUsersService } from "../../Domain/user-service";
 import {
-    type UserFromAPI,
-    type CreateUser,
     type GetManyUsersParams,
     type UpdateUser,
-    User,
+    type User,
 } from "@/core/api/users/types";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";

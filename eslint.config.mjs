@@ -78,7 +78,4 @@ export default [
     },
     prettier,
     ...pluginQuery.configs["flat/recommended"],
-    ...compat.config({
-        extends: ["next"],
-    }),
 ];

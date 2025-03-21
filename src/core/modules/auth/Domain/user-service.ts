@@ -1,9 +1,8 @@
 import { type PaginationResponse } from "@/core/api";
 import {
-    type CreateUser,
     type GetManyUsersParams,
     type UpdateUser,
-    User,
+    type User,
 } from "@/core/api/users/types";
 
 export interface IUsersService {

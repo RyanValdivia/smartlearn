@@ -1,9 +1,7 @@
-import { type PaginationParams } from "@/utils/types";
-import { type APIPaginationResponse } from "..";
 import { type Jsonify } from "type-fest";
 import { type Teacher } from "@prisma/client";
-import { z } from "zod";
-import { createTeacherSchema } from "./schemas";
+import { type z } from "zod";
+import { type createTeacherSchema } from "./schemas";
 
 export type TeacherFromAPI = Jsonify<Teacher>;
 

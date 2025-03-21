@@ -1,17 +1,13 @@
 import {
     type UpdateUser,
-    type CreateUser,
     type GetManyUsersParams,
-    type UserFromAPI,
 } from "@/core/api/users/types";
 import { type IUsersRepository } from "../Domain/user-repository";
 import { type PaginationResponse } from "@/core/api";
 import { MAX_PAGINATION_SIZE } from "@/core/constants";
-import { jsonify } from "@/lib/utils";
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "@/core/di/types";
-import { User, type PrismaClient } from "@prisma/client";
-import { hashPassword } from "@/core/api/hash";
+import { type User, type PrismaClient } from "@prisma/client";
 
 @injectable()
 export class UsersRepository implements IUsersRepository {

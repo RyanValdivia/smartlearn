@@ -1,5 +1,5 @@
 import { Slot } from "@radix-ui/react-slot";
-import { AnimatePresence, motion, MotionProps } from "motion/react";
+import { AnimatePresence, motion, type MotionProps } from "motion/react";
 import React, { createContext, useContext, useState } from "react";
 import { useSidebar } from "./sidebar";
 

@@ -1,7 +1,7 @@
 import {
     type AccountFromAPI,
     type CreateAccount,
-} from "../../../api/accounts/account";
+} from "../../../api/accounts/types";
 
 export interface IAccountsRepository {
     createAccount(input: CreateAccount): Promise<AccountFromAPI>;

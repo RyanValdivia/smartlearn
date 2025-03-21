@@ -10,13 +10,13 @@ export type UserFromAPI = Jsonify<User>;
 
 export type CreateUser = z.infer<typeof createUserSchema>;
 
-export type UpdateUser = Partial<CreateUser> & {
-    id: string;
-};
+export type UpdateUser = Partial<CreateUser>;
 
 export type LogIn = Pick<User, "dni"> & {
     password: string;
 };
+
+export type RegisterUser = Pick<User, "email" | "image" | "name">;
 
 export type UserQueryFilters = {
     fullTextSearch?: string;

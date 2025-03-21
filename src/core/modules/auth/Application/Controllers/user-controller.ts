@@ -1,5 +1,4 @@
 import {
-    createUserSchema,
     idSchema,
     updateUserSchema,
     userQueryFilters,

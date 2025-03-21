@@ -1,7 +1,7 @@
 import {
     type CreateAccount,
     type AccountFromAPI,
-} from "@/core/api/accounts/account";
+} from "@/core/api/accounts/types";
 import { type IAccountsRepository } from "../Domain/account-repository";
 import { jsonify } from "@/lib/utils";
 import { inject, injectable } from "inversify";

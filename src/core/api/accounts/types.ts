@@ -7,3 +7,5 @@ export type AccountFromAPI = Omit<
 >;
 
 export type CreateAccount = Omit<Account, "createdAt" | "updatedAt">;
+
+export type RegisterAccount = Omit<CreateAccount, "userId">;
