@@ -1,6 +1,6 @@
 import { Slot } from "@radix-ui/react-slot";
 import { AnimatePresence, motion, MotionProps } from "motion/react";
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { useSidebar } from "./sidebar";
 
 type CollapsibleContextType = {
@@ -35,15 +35,14 @@ export const CollapsibleTriggerAnimated = ({
     }) => {
     const { expanded, setExpanded } = useCollapsibleContext();
     const Comp = props.asChild ? Slot : "header";
-    const MotionComp = motion.create(Comp);
+    const MotionComp = React.useMemo(() => motion.create(Comp), [Comp]);
+
     const { state } = useSidebar();
 
     return (
         <MotionComp
             animate={{ rotate: expanded ? -270 : 360 }}
             transition={{ type: "spring" }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
             hidden={state === "collapsed"}
             onClick={() => setExpanded(!expanded)}
         >

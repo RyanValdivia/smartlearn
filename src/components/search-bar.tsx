@@ -6,6 +6,7 @@ import { FULL_TEXT_SEARCH_PARAM_NAME } from "@/core/constants";
 import { useMutateSearchParams } from "@/hooks/use-mutate-search";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
+import { MotionProps } from "motion/react";
 
 type SearchBarProps = {
     /** @default paramName = "s" */
@@ -13,7 +14,7 @@ type SearchBarProps = {
 
     formProps?: React.ComponentProps<"form">;
     inputProps?: React.ComponentProps<"input">;
-    buttonProps?: ButtonProps;
+    buttonProps?: ButtonProps & MotionProps;
 };
 
 const SEARCH_INPUT_ID = "search-input";

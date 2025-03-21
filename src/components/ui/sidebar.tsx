@@ -583,7 +583,8 @@ const SidebarMenuButton = React.forwardRef<
         asChild?: boolean;
         isActive?: boolean;
         tooltip?: string | React.ComponentProps<typeof TooltipContent>;
-    } & VariantProps<typeof sidebarMenuButtonVariants>
+    } & VariantProps<typeof sidebarMenuButtonVariants> &
+        MotionProps
 >(
     (
         {
@@ -598,10 +599,13 @@ const SidebarMenuButton = React.forwardRef<
         ref,
     ) => {
         const Comp = asChild ? Slot : "button";
+        const MotionComp = React.useMemo(() => motion.create(Comp), [Comp]);
         const { isMobile, state } = useSidebar();
 
         const button = (
-            <Comp
+            <MotionComp
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.9 }}
                 ref={ref}
                 data-sidebar="menu-button"
                 data-size={size}
@@ -762,16 +766,19 @@ const SidebarMenuSubButton = React.forwardRef<
         asChild?: boolean;
         size?: "sm" | "md";
         isActive?: boolean;
-    }
+    } & MotionProps
 >(({ asChild = false, size = "md", isActive, className, ...props }, ref) => {
     const Comp = asChild ? Slot : "a";
+    const MotionComp = React.useMemo(() => motion.create(Comp), [Comp]);
 
     return (
-        <Comp
+        <MotionComp
             ref={ref}
             data-sidebar="menu-sub-button"
             data-size={size}
             data-active={isActive}
+            whileHover={{ scale: 1.01 }}
+            whileTap={{ scale: 0.9 }}
             className={cn(
                 "flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-none ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
                 "data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground",
