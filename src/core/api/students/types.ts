@@ -1,9 +1,10 @@
 import { type PaginationParams } from "@/utils/types";
 import { type z } from "zod";
-import { type PaginationResponse } from "..";
+// import { type PaginationResponse } from "..";
 import { type Jsonify } from "type-fest";
 import { type Student } from "@prisma/client";
 import { type createStudentSchema } from "./schemas";
+import { type APIResponse } from "..";
 
 export type StudentFromAPI = Jsonify<Student>;
 
@@ -18,7 +19,8 @@ export type GetManyStudentsParams = {
 };
 
 export type StudentAPI = {
-    getMany: (
-        params: GetManyStudentsParams,
-    ) => Promise<PaginationResponse<StudentFromAPI[]>>;
+    // getMany: (
+    //     params: GetManyStudentsParams,
+    // ) => Promise<PaginationResponse<StudentFromAPI[]>>;
+    create: (params: CreateStudent) => Promise<APIResponse<StudentFromAPI>>;
 };

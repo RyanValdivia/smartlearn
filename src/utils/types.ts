@@ -5,6 +5,7 @@ import {
     type AppRouter,
     type InitClientArgs,
 } from "@ts-rest/core";
+import { type FieldValues, type UseFormProps } from "react-hook-form";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function enumToPgEnum<T extends Record<string, any>>(
@@ -12,6 +13,9 @@ export function enumToPgEnum<T extends Record<string, any>>(
 ): [T[keyof T], ...T[keyof T][]] {
     return Object.values(myEnum).map((value: any) => `${value}`) as any;
 }
+
+export type UseFormOptions<TFieldValues extends FieldValues = FieldValues> =
+    Omit<UseFormProps<TFieldValues, unknown>, "resolver">;
 
 export type TypedClient<
     T extends AppRouter,

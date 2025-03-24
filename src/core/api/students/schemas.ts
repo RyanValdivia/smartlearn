@@ -7,7 +7,10 @@ import {
 } from "./types";
 import { contract } from "@/core/ts-rest";
 import { type TypedAppRouter } from "@/utils/types";
-import { apiResponsePaginationSchema } from "../api-response";
+import {
+    // apiResponsePaginationSchema,
+    apiResponseSchema,
+} from "../api-response";
 import { createdAtSchema, updatedAtSchema } from "@/core/utils";
 
 export const studentSchema = z.object<ZodInferSchema<StudentFromAPI>>({
@@ -32,16 +35,28 @@ export const studentQueryFilters = z.object<
 });
 
 export const studentRouter = contract.router({
-    getMany: {
-        method: "GET",
+    // getMany: {
+    //     method: "GET",
+    //     path: "/api/admin/students",
+    //     headers: z.object({
+    //         "Content-Type": z.literal("application/json"),
+    //     }),
+    //     query: studentQueryFilters,
+    //     summary: "Obtener una lista de Estudiantes",
+    //     responses: contract.responses({
+    //         200: apiResponsePaginationSchema(studentSchema.array()),
+    //     }),
+    // },
+    create: {
+        method: "POST",
         path: "/api/admin/students",
         headers: z.object({
             "Content-Type": z.literal("application/json"),
         }),
-        query: studentQueryFilters,
-        summary: "Obtener una lista de Estudiantes",
+        body: createStudentSchema,
+        summary: "Crear un Estudiante",
         responses: contract.responses({
-            200: apiResponsePaginationSchema(studentSchema.array()),
+            201: apiResponseSchema(studentSchema),
         }),
     },
 } satisfies TypedAppRouter<StudentAPI>);

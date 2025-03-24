@@ -1,6 +1,7 @@
 import { createZodFetcher } from "zod-fetch";
 import { type APIAccessorParams } from "./types";
 import { UserClass } from "./users/api";
+import { StudentClass } from "./students/api";
 
 export class APIClass {
     private _params: APIAccessorParams;
@@ -13,6 +14,9 @@ export class APIClass {
 
     get users() {
         return new UserClass(this._params);
+    }
+    get students() {
+        return new StudentClass(this._params);
     }
 }
 
