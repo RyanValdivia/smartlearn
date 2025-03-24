@@ -59,13 +59,13 @@ export default function Footer() {
                 <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8" />
                 <span className="block text-sm text-gray-500 sm:text-center ">
                     © {year + " "}
-                    SprintCode™
+                    {COMPANY_NAME}™
                     <p>Si deseas una app como esta, contactanos en </p>
                     <a
                         href="https://link to portfolopio"
                         className="hover:underline"
                     >
-                        SprintCode
+                        {COMPANY_NAME}
                     </a>
                 </span>
             </div>
