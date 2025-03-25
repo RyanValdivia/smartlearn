@@ -74,4 +74,45 @@ export const userRouter = contract.router({
             200: apiResponsePaginationSchema(userSchema.array()),
         }),
     },
+
+    getOne: {
+        method: "GET",
+        path: "/api/admin/users/:id",
+        headers: z.object({
+            "Content-Type": z.literal("application/json"),
+        }),
+        pathParams: idSchema,
+        summary: "Obtener un Usuario por ID",
+        responses: contract.responses({
+            200: userSchema,
+        }),
+    },
+
+    delete: {
+        method: "DELETE",
+        path: "/api/admin/users",
+        headers: z.object({
+            "Content-Type": z.literal("application/json"),
+        }),
+        query: z.object({
+            id: idSchema,
+        }),
+        summary: "Eliminar un Usuario por ID",
+        responses: contract.responses({
+            200: z.undefined(),
+        }),
+    },
+
+    edit: {
+        method: "PUT",
+        path: "/api/admin/users",
+        headers: z.object({
+            "Content-Type": z.literal("application/json"),
+        }),
+        body: updateUserSchema,
+        summary: "Editar un Usuario por ID",
+        responses: contract.responses({
+            200: userSchema,
+        }),
+    },
 } satisfies TypedAppRouter<UserAPI>);

@@ -31,5 +31,12 @@ export type UserAPI = {
     getMany: (
         params: GetManyUsersParams,
     ) => Promise<APIPaginationResponse<UserFromAPI[]>>;
+
+    getOne: (id: string) => Promise<UserFromAPI | null>;
+
+    edit: (id: string, data: UpdateUser) => Promise<UserFromAPI>;
+
+    delete: (id: string) => Promise<void>;
 };
+
 export { User };
